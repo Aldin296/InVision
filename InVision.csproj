@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="blazor-dragdrop" Version="2.6.1" />
-    <PackageReference Include="Radzen.Blazor" Version="4.16.1" />
+    <PackageReference Include="Radzen.Blazor" Version="4.21.4" />
   </ItemGroup>
 
   <ItemGroup>

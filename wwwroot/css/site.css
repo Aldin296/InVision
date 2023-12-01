@@ -66,3 +66,10 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+/* Add this to your existing styles or create a new stylesheet */
+.kanban-card:hover {
+    cursor: pointer;
+    background-color: #f0f0f0; /* Ändere dies auf die gewünschte gräuliche Farbe */
+    transition: box-shadow 0.3s ease; /* Add a smooth transition for the hover effect */
+}

@@ -1,7 +1,8 @@
-﻿@page "/kanbanBoard"
+﻿@page "/kanbanBoard/{boardName}"
 @using InVision.Data
 @using InVision.Pages
 
+<h1>@boardName</h1>
 <div class="row">
     <div class="col">
         <RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid #AA4A44;  border-bottom: 2px solid #AA4A44">
@@ -69,6 +70,9 @@
 
 
 @code {
+    [Parameter]
+    public string boardName { get; set; }
+
 
     private TodoItem lastdropped { get; set; }
 

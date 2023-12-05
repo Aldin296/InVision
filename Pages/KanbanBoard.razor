@@ -1,6 +1,7 @@
 ﻿@page "/kanbanBoard/{boardName}"
 @using InVision.Data
 @using InVision.Pages
+@inject KBoardService service
 
 <h1>@boardName</h1>
 <div class="row">
@@ -73,19 +74,18 @@
     [Parameter]
     public string boardName { get; set; }
 
-
     private TodoItem lastdropped { get; set; }
 
-    public List<TodoItem> MyFirstList = new List<TodoItem>()
-{
-            new TodoItem(){Title = "Item 1", Description="abc"},
-            new TodoItem(){Title = "Item 2", Description="abc"},
-            new TodoItem(){Title = "Item 3", Description="abc"},
-            new TodoItem(){Title = "Item 4", Description="abc"},
-            new TodoItem(){Title = "Item 5", Description="abc"},
-            new TodoItem(){Title = "Item 6", Description="abc"},
-            new TodoItem(){Title = "Item 7", Description="abc"},
-    };
+    public List<TodoItem> MyFirstList = new List<TodoItem>();
+  
+
+    protected override async Task OnInitializedAsync()
+    {
+       // MyFirstList = await Task.Run(() => service.BoardList());
+
+    }
+
+   
 
     public List<TodoItem> MySecondList = new List<TodoItem>()
     {
@@ -96,5 +96,6 @@
 
     public List<TodoItem> MyThirdList = new List<TodoItem>()
     {
+        
     };
 }

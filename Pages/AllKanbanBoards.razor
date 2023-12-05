@@ -45,6 +45,8 @@ else
 
 @code {
     List<KBoard> boards;
+    private KBoard selectedBoard = null;
+
     protected override async Task OnInitializedAsync()
     {
         boards = await Task.Run(() => service.BoardList());
@@ -52,6 +54,8 @@ else
 
     private void OpenKanbanBoard()
     {
-        NavManager.NavigateTo("/kanbanBoard/lol");
+        KBoard board = selectedBoard;
+        service.selectedBoard = board;
+        NavManager.NavigateTo("/kanbanBoard/" + board.Name);
     }
 }

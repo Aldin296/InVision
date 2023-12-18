@@ -15,6 +15,7 @@ builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
 builder.Services.AddScoped<KBoardService>();
 builder.Services.AddBlazorDragDrop();
+builder.Services.AddSingleton<UserService>();
 
 
 var app = builder.Build();

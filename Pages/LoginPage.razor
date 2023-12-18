@@ -1,5 +1,6 @@
 ﻿@page "/"
 @layout LoginLayout
+@inject Data.UserService userservice
 
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;" >
@@ -10,7 +11,7 @@
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
         <RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px">
             <ChildContent>
-                <RadzenTextBox />
+                <RadzenTextBox @bind-Value="emailValue"/>
             </ChildContent>
         </RadzenFormField>
         <RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px">
@@ -24,17 +25,18 @@
         </RadzenFormField>
     </RadzenStack>
     <RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
-        <RadzenButton style="width: 150px">Login</RadzenButton>
+        <RadzenButton Click="LoginUser" style="width: 150px">Login</RadzenButton>
     </RadzenStack>
     <br />
     <div style="text-align:center;">
         <p>Dont have an account? </p>        
-        <RadzenLink Path="/regíster"> Register! </RadzenLink>
+        <RadzenLink Path="/register"> Register! </RadzenLink>
 
     </div>
 </RadzenCard>
 
 @code {
+    string emailValue = "";
     string value = "";
     string passwordValue = "";
     bool password = true;
@@ -42,5 +44,18 @@
     void TogglePassword()
     {
         password = !password;
+    }
+
+    async Task LoginUser()
+    {
+        bool loginSuccessful = await userservice.LoginUser(emailValue, passwordValue);
+        if (loginSuccessful)
+        {
+            Console.WriteLine("Angemeldet");
+        }
+        else
+        {
+            Console.WriteLine("Anmelden fehlgeschlagen");
+        }
     }
 }

@@ -21,7 +21,7 @@ else
             <br />
             <RadzenDataList WrapItems="true" AllowPaging="true" Data="@boards" TItem="KBoard">
                 <Template Context="kboard">
-                    <RadzenCard Style="width: 250px" @onclick=@OpenKanbanBoard class="kanban-card">
+                    <RadzenCard Style="width: 250px" @onclick="()=>OpenKanbanBoard(kboard)" class="kanban-card">
                         <RadzenRow>
                             <RadzenColumn Size="12" class="rz-text-align-start">
                                 <RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@kboard.Name</RadzenText>
@@ -45,17 +45,14 @@ else
 
 @code {
     List<KBoard> boards;
-    private KBoard selectedBoard = null;
 
     protected override async Task OnInitializedAsync()
     {
         boards = await Task.Run(() => service.BoardList());
     }
 
-    private void OpenKanbanBoard()
+    private void OpenKanbanBoard(KBoard selectedBoard)
     {
-        KBoard board = selectedBoard;
-        service.selectedBoard = board;
-        NavManager.NavigateTo("/kanbanBoard/" + board.Name);
+        NavManager.NavigateTo("/kanbanBoard/" + selectedBoard.Name);
     }
 }

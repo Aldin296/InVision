@@ -1,5 +1,5 @@
 ﻿@layout LoginLayout
-@page "/regíster"
+@page "/register"
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
     <div style="text-align:center;">
@@ -39,12 +39,39 @@
 </RadzenCard>
 
 @code {
-    string value = "";
-    string passwordValue = "";
-    bool password = true;
+    class Model
+    {
+        public string email { get; set; }
+        public string password { get; set; }
+    }
+    Model model = new Model();
+
+    string email_regex = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
+    string password_regex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+
+    bool email_valid = false;
+    bool password_valid = false;
+
+    string password_value = "";
+    bool password_visibility = true;
 
     void TogglePassword()
     {
-        password = !password;
+        password_visibility = !password_visibility;
+    }
+
+    void OnSubmit(Model model)
+    {
+        email_valid = true;
+        password_valid = true;
+        NavManager.NavigateTo("/index");
+        Console.WriteLine("valid submit");
+    }
+
+    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+    {
+        email_valid = false;
+        password_valid = false;
+        Console.WriteLine("invalid submit");
     }
 }

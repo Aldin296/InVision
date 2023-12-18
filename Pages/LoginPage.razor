@@ -1,46 +1,92 @@
 ﻿@page "/"
 @layout LoginLayout
+@inject NavigationManager NavManager
 
 
-<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;" >
-    <div style="text-align:center;">
-        <h2>Login Form</h2>
-    </div>
+<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
+	<div style="text-align:center;">
+		<h2>Login Form</h2>
+	</div>
 
-    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
-        <RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px">
-            <ChildContent>
-                <RadzenTextBox />
-            </ChildContent>
-        </RadzenFormField>
-        <RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px">
-            <ChildContent>
-                <RadzenTextBox @bind-Value="@passwordValue" Visible="@(!password)" />
-                <RadzenPassword @bind-Value="@passwordValue" Visible="@password" />
-            </ChildContent>
-            <End>
-                <RadzenButton Icon="@(password ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
-            </End>
-        </RadzenFormField>
-    </RadzenStack>
-    <RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
-        <RadzenButton style="width: 150px">Login</RadzenButton>
-    </RadzenStack>
-    <br />
-    <div style="text-align:center;">
-        <p>Dont have an account? </p>        
-        <RadzenLink Path="/regíster"> Register! </RadzenLink>
+	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
 
-    </div>
+		<div style="text-align:center">
+			<RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
+				<RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px; text-align:left">
+					<ChildContent>
+						<RadzenTextBox Name="email" @bind-Value=@model.email />
+						<RadzenRequiredValidator Component="email" Text="emai field is empty" Popup=true Style="margin-top: 50px" />
+						<RadzenEmailValidator Component="email" Text="email is not valid" Popup=true Style="margin-top: 50px" />
+					</ChildContent>
+				</RadzenFormField>
+
+				<RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px; text-align: left">
+					<ChildContent>
+						<RadzenTextBox Name="password" @bind-Value=@model.password />
+						<!-- Auskommentiert Aufgrund eines Bugs: bei visibility=false wird das feld als leer vom validator angesehen -->
+						<!--
+						<RadzenTextBox Name="password" @bind-Value="@passwordValue" @bind-Value=@model.password Visible="@(!password_visibility)" />
+						-->
+						<!--
+						<RadzenPassword @bind-Value="@passwordValue" @bind-bind-Value=@model.password Visible="@password_visibility" />
+						-->
+						<RadzenRequiredValidator Component="password" Text="password field is empty" Popup=true Style="margin-top: 50px" />
+						<RadzenRegexValidator Component="password" Text="password is not valid" Pattern="@password_regex" Popup=true Style="margin-top: 50px" />
+					</ChildContent>
+					<!--
+					<End>
+						<RadzenButton Icon="@(password_visibility ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
+					</End>
+					-->
+				</RadzenFormField>
+				<RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
+					<RadzenButton ButtonType="ButtonType.Submit" style="width: 150px">Login</RadzenButton>
+				</RadzenStack>
+			</RadzenTemplateForm>
+		</div>
+	</RadzenStack>
+	<br />
+	<div style="text-align:center;">
+		<p>Dont have an account? </p>
+		<RadzenLink Path="/register"> Register! </RadzenLink>
+
+	</div>
 </RadzenCard>
 
 @code {
-    string value = "";
-    string passwordValue = "";
-    bool password = true;
+	class Model
+	{
+		public string email { get; set; }
+		public string password { get; set; }
+	}
+	Model model = new Model();
 
-    void TogglePassword()
-    {
-        password = !password;
-    }
+	string email_regex = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
+	string password_regex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+
+	bool email_valid = false;
+	bool password_valid = false;
+
+	string password_value = "";
+	bool password_visibility = true;
+
+	void TogglePassword()
+	{
+		password_visibility = !password_visibility;
+	}
+
+	void OnSubmit(Model model)
+	{
+		email_valid = true;
+		password_valid = true;
+		NavManager.NavigateTo("/index");
+		Console.WriteLine("valid submit");
+	}
+
+	void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+	{
+		email_valid = false;
+		password_valid = false;
+		Console.WriteLine("invalid submit");
+	}
 }

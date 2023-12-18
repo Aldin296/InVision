@@ -14,7 +14,7 @@
 
         <Dropzone Items="MyFirstList" TItem="TodoItem" OnItemDrop="@((i)=>lastdropped = i)" Class="h-100">
             <ChildContent>
-                <div class="card" style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px">
+                <div class="card" style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px; max-width:370px">
                     <div class="card-body">
                         <RadzenText contenteditable="true">
                             <strong>@context.Title </strong>
@@ -26,8 +26,8 @@
             <Footer>
             </Footer>
         </Dropzone>
-
     </div>
+
     <div class="col">
         <RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid orange;  border-bottom: 2px solid orange">
             <RadzenText TextStyle="TextStyle.H6">
@@ -37,7 +37,7 @@
 
         <Dropzone Items="MySecondList" TItem="TodoItem" OnItemDrop="@((i)=>lastdropped = i)" Class="h-100">
             <ChildContent>
-                <div class="card" style="border-left: 6px solid orange; border-color: orange; border-radius: 0px">
+                <div class="card" style="border-left: 6px solid orange; border-color: orange; border-radius: 0px; max-width:370px">
                     <div class="card-body">
                         <RadzenText contenteditable="true">
                             <strong>@context.Title </strong>
@@ -50,6 +50,7 @@
             </Footer>
         </Dropzone>
     </div>
+
     <div class="col">
         <RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid green;  border-bottom: 2px solid green">
             <RadzenText TextStyle="TextStyle.H6">
@@ -57,7 +58,7 @@
             </RadzenText>
         </RadzenCard>
         <Dropzone Items="MyThirdList" TItem="TodoItem" OnItemDrop="@((i)=>lastdropped = i)" Class="h-100">
-            <div class="card" style="border-left: 6px solid green; border-color: green; border-radius: 0px">
+            <div class="card" style="border-left: 6px solid green; border-color: green; border-radius: 0px; max-width:370px">
                 <div class="card-body">
                     <RadzenText contenteditable="true">
                         <strong>@context.Title </strong>

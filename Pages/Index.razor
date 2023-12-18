@@ -13,7 +13,7 @@
 		<RadzenImage Path="Images/user.png" Style="width: 100px; height: 100px; border-radius: 50%;" />
 		<RadzenStack Gap="0">
 			<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">User</RadzenText>
-			<RadzenText TextStyle="TextStyle.Body1"><b>FirstName LastName</b></RadzenText>
+			<RadzenText TextStyle="TextStyle.Body1" @bind-Value="usernameValue"><b></b></RadzenText>
 			<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">E-Mail</RadzenText>
 			<RadzenText TextStyle="TextStyle.Body1"><b>E-Mail</b></RadzenText>
 		</RadzenStack>
@@ -44,6 +44,8 @@
 
 
 @code {
+
+	string usernameValue = "";
 
 	private void onSeeMoreClick()
 	{

@@ -15,7 +15,7 @@
             <RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
                 <RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px; text-align:left">
                     <ChildContent>
-                        <RadzenTextBox Name="email" @bind-Value=@model.email />
+                        <RadzenTextBox Name="email" @bind-Value="emailValue" @bind-Value=@model.email />
                         <RadzenRequiredValidator Component="email" Text="emai field is empty" Popup=true Style="margin-top: 50px" />
                         <RadzenEmailValidator Component="email" Text="email is not valid" Popup=true Style="margin-top: 50px" />
                     </ChildContent>
@@ -23,7 +23,7 @@
 
                 <RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px; text-align: left">
                     <ChildContent>
-                        <RadzenTextBox Name="password" @bind-Value=@password_value @bind-Value=@model.password />
+                        <RadzenTextBox Name="password" @bind-Value="password_value" @bind-Value=@model.password />
                         <!-- Auskommentiert Aufgrund eines Bugs: bei visibility=false wird das feld als leer vom validator angesehen -->
                         <!--
                         <RadzenTextBox Name="password" @bind-Value="@passwordValue" @bind-Value=@model.password Visible="@(!password_visibility)" />
@@ -41,34 +41,14 @@
                     -->
                 </RadzenFormField>
                 <RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
-                    <RadzenButton ButtonType="ButtonType.Submit" style="width: 150px">Login</RadzenButton>
+                    <RadzenButton ButtonType="ButtonType.Submit" Click="LoginUser" style="width: 150px">Login</RadzenButton>
                 </RadzenStack>
             </RadzenTemplateForm>
         </div>
     </RadzenStack>
-        <RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px">
-            <ChildContent>
-                <RadzenTextBox @bind-Value="emailValue"/>
-            </ChildContent>
-        </RadzenFormField>
-        <RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px">
-            <ChildContent>
-                <RadzenTextBox @bind-Value="@passwordValue" Visible="@(!password)" />
-                <RadzenPassword @bind-Value="@passwordValue" Visible="@password" />
-            </ChildContent>
-            <End>
-                <RadzenButton Icon="@(password ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
-            </End>
-        </RadzenFormField>
-    </RadzenStack>
-    <RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
-        <RadzenButton Click="LoginUser" style="width: 150px">Login</RadzenButton>
-    </RadzenStack>
     <br />
     <div style="text-align:center;">
         <p>Dont have an account? </p>
-        <RadzenLink Path="/register"> Register! </RadzenLink>
-        <p>Dont have an account? </p>        
         <RadzenLink Path="/register"> Register! </RadzenLink>
 
     </div>
@@ -117,7 +97,7 @@
 
     async Task LoginUser()
     {
-        bool loginSuccessful = await userservice.LoginUser(emailValue, passwordValue);
+        bool loginSuccessful = await userservice.LoginUser(emailValue, password_value);
         if (loginSuccessful)
         {
             Console.WriteLine("Angemeldet");

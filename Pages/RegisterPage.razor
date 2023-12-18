@@ -1,12 +1,10 @@
 ﻿@layout LoginLayout
 @page "/register"
 @inject NavigationManager NavManager
-@page "/register"
 @using InVision.Data;
 @using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 @using System.Security.Cryptography;
 @inject Data.UserService userservice
-
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
     <div style="text-align:center;">
@@ -16,14 +14,14 @@
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
         <div style="text-align: center">
             <RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
-                <RadzenFormField Text="Username" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
+                <RadzenFormField Text="Username" @bind-Value="usernameValue" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
                     <ChildContent>
                         <RadzenTextBox />
                     </ChildContent>
                 </RadzenFormField>
                 <RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
                     <ChildContent>
-                        <RadzenTextBox Name="email" @bind-Value=@model.email />
+                        <RadzenTextBox Name="email" @bind-Value="emailValue" @bind-Value=@model.email />
                         <RadzenRequiredValidator Component="email" Text="emai field is empty" Popup=true Style="margin-top: 50px" />
                         <RadzenEmailValidator Component="email" Text="email is not valid" Popup=true Style="margin-top: 50px" />
                     </ChildContent>
@@ -31,9 +29,9 @@
                 <RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
                     <ChildContent>
                         <RadzenTextBox Name="password" @bind-Value=@password_value @bind-Value=@model.password />
-                        <!--
-                        <RadzenPassword @bind-Value="@password_value" Visible="@password_visibility" />
-                        -->
+                        
+                        <!--<RadzenPassword @bind-Value="@password_value" Visible="@password_visibility" />-->
+                        
                         <RadzenRequiredValidator Component="password" Text="password field is empty" Popup=true Style="margin-top: 50px" />
                         <RadzenRegexValidator Component="password" Text="password is not valid" Pattern="@password_regex" Popup=true Style="margin-top: 50px" />
                     </ChildContent>
@@ -45,35 +43,12 @@
 
                 </RadzenFormField>
                 <RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
-                    <RadzenButton ButtonType="ButtonType.Submit" style="width: 150px">Register</RadzenButton>
+                    <RadzenButton ButtonType="ButtonType.Submit" Click="CreateUser" style="width: 150px">Register</RadzenButton>
                 </RadzenStack>
             </RadzenTemplateForm>
         </div>
     </RadzenStack>
 
-        <RadzenFormField Text="Username"  Variant="Variant.Flat" style="width: 300px">
-            <ChildContent>
-                <RadzenTextBox @bind-Value="usernameValue" />
-            </ChildContent>
-        </RadzenFormField>
-        <RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px">
-            <ChildContent>
-                <RadzenTextBox @bind-Value="emailValue" />
-            </ChildContent>
-        </RadzenFormField>
-        <RadzenFormField Text="Password"Variant="Variant.Flat" style="width: 300px">
-            <ChildContent>
-                <RadzenTextBox @bind-Value="@passwordValue" Visible="@(!password)" />
-                <RadzenPassword @bind-Value="@passwordValue" Visible="@password" />
-            </ChildContent>
-            <End>
-                <RadzenButton Icon="@(password ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
-            </End>
-        </RadzenFormField>
-    </RadzenStack>
-    <RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
-        <RadzenButton style="width: 150px" Click="CreateUser" >Register</RadzenButton>
-    </RadzenStack>
     <br />
     <div style="text-align:center;">
         <p>Already have an account? </p>
@@ -130,7 +105,7 @@
 
         // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
         string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            password: passwordValue!,
+            password: password_value!,
             salt: salt,
             prf: KeyDerivationPrf.HMACSHA256,
             iterationCount: 100000,

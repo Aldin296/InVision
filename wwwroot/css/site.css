@@ -73,3 +73,11 @@ a, .btn-link {
     background-color: #f0f0f0; /* Ändere dies auf die gewünschte gräuliche Farbe */
     transition: box-shadow 0.3s ease; /* Add a smooth transition for the hover effect */
 }
+
+.delete-todoitem-icon:hover {
+    color: red;
+}
+
+.add-todoitem-icon:hover {
+    color: rgb(67, 64, 210)
+}

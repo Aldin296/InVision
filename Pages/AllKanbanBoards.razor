@@ -53,6 +53,7 @@ else
 
     private void OpenKanbanBoard(KBoard selectedBoard)
     {
-        NavManager.NavigateTo("/kanbanBoard/" + selectedBoard.Name);
+        service.selectedBoard = selectedBoard;
+        NavManager.NavigateTo("/kanbanBoard/" + selectedBoard.Id);
     }
 }

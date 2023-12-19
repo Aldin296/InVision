@@ -21,9 +21,9 @@
 			</RadzenText>
 		</RadzenCard>
 
-		<Dropzone Items="MyFirstList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall("ToDo", tdi))" Class="h-100">
+		<Dropzone Items="MyFirstList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(todo, tdi))" Class="h-100">
 			<ChildContent>
-				<div class="card" style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px; max-width:370px">
+				<div class="card" style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px; max-width: 100%">
 					<div class="card-body">
 						<RadzenText contenteditable="true">
 							<strong>@context.Title </strong>
@@ -33,7 +33,7 @@
 								<p contenteditable="true">@context.Description</p>
 							</RadzenColumn>
 							<RadzenColumn Size="2">
-								<RadzenIcon @onclick="()=>OnDeleteitem(context)" Icon="delete" Style="cursor: pointer;" class="delete-todoitem-icon"></RadzenIcon>
+								<RadzenIcon @onclick="()=>OnDeleteitem(inProgress,context)" Icon="delete" Style="cursor: pointer;" class="delete-todoitem-icon"></RadzenIcon>
 							</RadzenColumn>
 						</RadzenRow>
 					</div>
@@ -58,9 +58,9 @@
 			</RadzenText>
 		</RadzenCard>
 
-		<Dropzone Items="MySecondList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall("InProgress", tdi))" Class="h-100" Id="Progress">
+		<Dropzone Items="MySecondList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(inProgress, tdi))" Class="h-100" Id="Progress">
 			<ChildContent>
-				<div class="card" style="border-left: 6px solid orange; border-color: orange; border-radius: 0px; max-width:370px">
+				<div class="card" style="border-left: 6px solid orange; border-color: orange; border-radius: 0px; max-width:100%">
 					<div class="card-body">
 						<RadzenText contenteditable="true">
 							<strong>@context.Title </strong>
@@ -70,7 +70,7 @@
 								<p contenteditable="true">@context.Description</p>
 							</RadzenColumn>
 							<RadzenColumn Size="2">
-								<RadzenIcon @onclick="()=>OnDeleteitem(context)" Icon="delete" Style="cursor: pointer;"></RadzenIcon>
+								<RadzenIcon @onclick="()=>OnDeleteitem(inProgress,context)" Icon="delete" Style="cursor: pointer;"></RadzenIcon>
 							</RadzenColumn>
 						</RadzenRow>
 					</div>
@@ -94,8 +94,8 @@
 				</RadzenRow>
 			</RadzenText>
 		</RadzenCard>
-		<Dropzone Items="MyThirdList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall("Done", tdi))" Class="h-100" Id="done">
-			<div class="card" style="border-left: 6px solid green; border-color: green; border-radius: 0px; max-width:370px">
+		<Dropzone Items="MyThirdList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(done, tdi))" Class="h-100" Id="done">
+			<div class="card" style="border-left: 6px solid green; border-color: green; border-radius: 0px; max-width:100%">
 				<div class="card-body">
 					<RadzenText contenteditable="true">
 						<strong>@context.Title </strong>
@@ -105,7 +105,7 @@
 							<p contenteditable="true">@context.Description</p>
 						</RadzenColumn>
 						<RadzenColumn Size="2">
-							<RadzenIcon @onclick="()=>OnDeleteitem(context)" Icon=" delete" Style="cursor: pointer;"></RadzenIcon>
+							<RadzenIcon @onclick="()=>OnDeleteitem(done, context)" Icon=" delete" Style="cursor: pointer;"></RadzenIcon>
 						</RadzenColumn>
 					</RadzenRow>
 				</div>
@@ -178,12 +178,23 @@
 	}
 
 
-	public async void OnDeleteitem(TodoItem item)
+	public async void OnDeleteitem(string dropzone, TodoItem item)
 	{
 		var confirmationResult = await this.DialogService.Confirm("Are you sure?", "Dialog Title", new ConfirmOptions { OkButtonText = "Yes", CancelButtonText = "No" });
 		if (confirmationResult == true)
 		{
-			board.Items.Remove(item);
+			if (dropzone == "ToDo")
+			{
+				MyFirstList.Remove(item);
+			}
+			if (dropzone == "InProgress")
+			{
+				MyFirstList.Remove(item);
+			}
+			if (dropzone == "Done")
+			{
+				MyFirstList.Remove(item);
+			}
 		}
 		StateHasChanged();
 	}

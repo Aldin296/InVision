@@ -14,9 +14,9 @@
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
         <div style="text-align: center">
             <RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
-                <RadzenFormField Text="Username" @bind-Value="usernameValue" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
+                <RadzenFormField Text="Username" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
                     <ChildContent>
-                        <RadzenTextBox />
+                        <RadzenTextBox @bind-Value="usernameValue"/>
                     </ChildContent>
                 </RadzenFormField>
                 <RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
@@ -87,7 +87,7 @@
     {
         email_valid = true;
         password_valid = true;
-        NavManager.NavigateTo("/index");
+        NavManager.NavigateTo("/");
         Console.WriteLine("valid submit");
     }
 

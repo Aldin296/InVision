@@ -1,20 +1,31 @@
 ﻿@page "/kanbanBoard/{boardName}"
 @using InVision.Data
 @using InVision.Pages
-@inject KBoardService service
+@inject KBoardService service;
+@inject DialogService DialogService
+
 
 <h1>@boardName</h1>
 <div class="row">
     <div class="col">
         <RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid #AA4A44;  border-bottom: 2px solid #AA4A44">
             <RadzenText TextStyle="TextStyle.H6">
-                <strong>To Do</strong>
+                <RadzenRow>
+                    <RadzenColumn Size="10">
+                        <strong>To Do</strong>
+                    </RadzenColumn>
+                    <RadzenColumn Size="2">
+                        <RadzenIcon Icon="add_circle_outline" Style="cursor: pointer;"></RadzenIcon>
+                    </RadzenColumn>
+                </RadzenRow>
+
             </RadzenText>
+
         </RadzenCard>
 
         <Dropzone Items="MyFirstList" TItem="TodoItem" OnItemDrop="@((i)=>lastdropped = i)" Class="h-100">
             <ChildContent>
-                <div class="card" style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px; max-width:370px">
+                <div class="card" style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px; max-width:395px">
                     <div class="card-body">
                         <RadzenText contenteditable="true">
                             <strong>@context.Title </strong>
@@ -31,13 +42,20 @@
     <div class="col">
         <RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid orange;  border-bottom: 2px solid orange">
             <RadzenText TextStyle="TextStyle.H6">
-                <strong>In Progress</strong>
+                <RadzenRow>
+                    <RadzenColumn Size="10">
+                        <strong>In progress</strong>
+                    </RadzenColumn>
+                    <RadzenColumn Size="2">
+                        <RadzenIcon @onclick="AddTaskToSecondList" Icon="add_circle_outline" Style="cursor: pointer;"></RadzenIcon>
+                    </RadzenColumn>
+                </RadzenRow>
             </RadzenText>
         </RadzenCard>
 
         <Dropzone Items="MySecondList" TItem="TodoItem" OnItemDrop="@((i)=>lastdropped = i)" Class="h-100">
             <ChildContent>
-                <div class="card" style="border-left: 6px solid orange; border-color: orange; border-radius: 0px; max-width:370px">
+                <div class="card" style="border-left: 6px solid orange; border-color: orange; border-radius: 0px; max-width:395px">
                     <div class="card-body">
                         <RadzenText contenteditable="true">
                             <strong>@context.Title </strong>
@@ -54,11 +72,18 @@
     <div class="col">
         <RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid green;  border-bottom: 2px solid green">
             <RadzenText TextStyle="TextStyle.H6">
-                <strong>Done</strong>
+                <RadzenRow>
+                    <RadzenColumn Size="10">
+                        <strong>Done</strong>
+                    </RadzenColumn>
+                    <RadzenColumn Size="2">
+                        <RadzenIcon @onclick="AddTaskToThirdList" Icon="add_circle_outline" Style="cursor: pointer;"></RadzenIcon>
+                    </RadzenColumn>
+                </RadzenRow>
             </RadzenText>
         </RadzenCard>
         <Dropzone Items="MyThirdList" TItem="TodoItem" OnItemDrop="@((i)=>lastdropped = i)" Class="h-100">
-            <div class="card" style="border-left: 6px solid green; border-color: green; border-radius: 0px; max-width:370px">
+            <div class="card" style="border-left: 6px solid green; border-color: green; border-radius: 0px; max-width:395px">
                 <div class="card-body">
                     <RadzenText contenteditable="true">
                         <strong>@context.Title </strong>
@@ -78,25 +103,48 @@
     private TodoItem lastdropped { get; set; }
 
     public List<TodoItem> MyFirstList = new List<TodoItem>();
-  
+
+    public List<TodoItem> MySecondList = new List<TodoItem>();
+
+    public List<TodoItem> MyThirdList = new List<TodoItem>();
 
     protected override async Task OnInitializedAsync()
     {
-       // MyFirstList = await Task.Run(() => service.BoardList());
+        KBoard board = service.selectedBoard;
+        IEnumerable<TodoItem> listOfItems = service.selectedBoard.Items;
+
+        foreach (var item in listOfItems)
+        {
+            if (item.state == 0)
+            {
+                MyFirstList.Add(item);
+            }
+            if (item.state == 1)
+            {
+                MySecondList.Add(item);
+            }
+            if (item.state == 2)
+            {
+                MyThirdList.Add(item);
+            }
+        }
+    }
+
+    <!--public async void AddTaskToFirstList()
+    {
+        TodoItem item = await DialogService.OpenAsync<AddToDoItemPage>("Add Task",
+        new Dictionary<string, object> { { "Title", null }, { "Description", null } });
+        item.state = 0;
+        MyFirstList.Add(item);
+    }-->
+
+    public void AddTaskToSecondList()
+    {
 
     }
 
-   
-
-    public List<TodoItem> MySecondList = new List<TodoItem>()
+    public void AddTaskToThirdList()
     {
-            new TodoItem(){Title = "Item 8", Description="abc"},
-            new TodoItem(){Title = "Item 9", Description="abc"},
-            new TodoItem(){Title = "Item 10", Description="abcde"},
-    };
 
-    public List<TodoItem> MyThirdList = new List<TodoItem>()
-    {
-        
-    };
+    }
 }

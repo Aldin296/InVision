@@ -1,8 +1,11 @@
-﻿<RadzenStack AlignItems="AlignItems.Center">
+﻿@inject Data.UserStateService userstate
+@inject NavigationManager NavManager
+
+<RadzenStack AlignItems="AlignItems.Center">
 
 	<RadzenStack AlignItems="AlignItems.Center" Class="rz-mx-auto rz-my-2">
 		<RadzenIcon Icon="account_circle" style="font-size: 5em;" />
-		<RadzenText style="color: black;">USERNAME</RadzenText>
+		<RadzenText style="color: black;">@userstate.CurrentUser.Name</RadzenText>
 	</RadzenStack>
 
 	<RadzenPanelMenu Style="width:250px" Multiple="false">
@@ -12,10 +15,13 @@
 		<RadzenPanelMenuItem Text="Notes" Path="/notes" Icon="assignment"></RadzenPanelMenuItem>
 	</RadzenPanelMenu>
 	<RadzenStack >
-        <RadzenButton>Log out</RadzenButton>
+        <RadzenButton Click="Click_Logout">Log out</RadzenButton>
 	</RadzenStack>
 </RadzenStack>
 @code {
 
-
+	public void Click_Logout()
+	{
+		NavManager.NavigateTo("/");
+	}
 }

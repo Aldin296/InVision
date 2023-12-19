@@ -58,5 +58,31 @@ namespace InVision.Data
 			
 			return false;
         }
+        public async Task<User> GetUserByEmail(string email)
+        {
+            string requestUrl = $"{baseurl}/api/User";
+            var data = await client.GetAsync(requestUrl);
+            if (data.IsSuccessStatusCode)
+            {
+                if (data.StatusCode != System.Net.HttpStatusCode.NoContent)
+                {
+                    string content = await data.Content.ReadAsStringAsync();
+                    List<User> users = JsonSerializer.Deserialize<List<User>>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    foreach (User u in users)
+                    {
+                        if (email == u.Email)
+                        {
+                            return u;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+         
     }
 }

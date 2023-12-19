@@ -15,11 +15,14 @@ namespace InVision.Data
 
 		public byte[] salt { get; set; }
 
+		public User() { }
         public User(string name, string password, string email)
         {
             Name = name;
             Password = password;
             Email = email;
         }
+
+
     }
 }

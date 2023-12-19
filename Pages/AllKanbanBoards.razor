@@ -1,4 +1,4 @@
-﻿5@page "/allKanbanBoards"
+﻿@page "/allKanbanBoards"
 @using InVision.Data
 @inject KBoardService service;
 @inject NavigationManager NavManager
@@ -53,6 +53,7 @@ else
 
     private void OpenKanbanBoard(KBoard selectedBoard)
     {
+        service.selectedBoard = selectedBoard;
         NavManager.NavigateTo("/kanbanBoard/" + selectedBoard.Name);
     }
 }

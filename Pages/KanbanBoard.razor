@@ -60,25 +60,21 @@
 
 		<Dropzone Items="MySecondList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall("InProgress", tdi))" Class="h-100" Id="Progress">
 			<ChildContent>
-				@foreach (var i in MySecondList)
-				{
-					<div class="card" style="border-left: 6px solid orange; border-color: orange; border-radius: 0px; max-width:370px">
-						<div class="card-body">
-							<RadzenText contenteditable="true">
-								<strong>@i.Title </strong>
-							</RadzenText>
-							<RadzenRow>
-								<RadzenColumn Size="10">
-									<p contenteditable="true">@i.Description</p>
-								</RadzenColumn>
-								<RadzenColumn Size="2">
-									<RadzenIcon @onclick="()=>OnDeleteitem(i)" Icon="delete" Style="cursor: pointer;"></RadzenIcon>
-								</RadzenColumn>
-							</RadzenRow>
-						</div>
+				<div class="card" style="border-left: 6px solid orange; border-color: orange; border-radius: 0px; max-width:370px">
+					<div class="card-body">
+						<RadzenText contenteditable="true">
+							<strong>@context.Title </strong>
+						</RadzenText>
+						<RadzenRow>
+							<RadzenColumn Size="10">
+								<p contenteditable="true">@context.Description</p>
+							</RadzenColumn>
+							<RadzenColumn Size="2">
+								<RadzenIcon @onclick="()=>OnDeleteitem(context)" Icon="delete" Style="cursor: pointer;"></RadzenIcon>
+							</RadzenColumn>
+						</RadzenRow>
 					</div>
-				}
-
+				</div>
 			</ChildContent>
 			<Footer>
 			</Footer>
@@ -136,7 +132,7 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		board = service.GetBoardById(int.Parse(boardId));
+		board = service.GetBoardById(int.Parse( boardId));
 		List<TodoItem> listOfItems = board.Items;
 
 		foreach (TodoItem item in listOfItems)
@@ -158,26 +154,27 @@
 
 	public async void OnAddItem(string dropzone)
 	{
-		TodoItem newitem = await DialogService.OpenAsync<AddToDoItemPage>("Add Appointment",
-			new Dictionary<string, object> { { "Title", null }, { "Description", null } });
+		TodoItem newitem = await DialogService.OpenAsync<AddToDoItemPage>("Add Appointment");
 		if (newitem != null)
 		{
-			if (dropzone == "ToDo")
+			if(dropzone == "ToDo")
 			{
 				newitem.state = 0;
 				MyFirstList.Add(newitem);
 			}
-			if (dropzone == "InProgress")
+			if(dropzone == "InProgress")
 			{
 				newitem.state = 1;
 				MySecondList.Add(newitem);
 			}
-			if (dropzone == "Done")
+			if(dropzone == "Done")
 			{
 				newitem.state = 2;
-				MySecondList.Add(newitem);
+				MyThirdList.Add(newitem);
 			}
 		}
+
+		StateHasChanged();
 	}
 
 
@@ -188,20 +185,21 @@
 		{
 			board.Items.Remove(item);
 		}
+		StateHasChanged();
 	}
 
 	public void Itemdropcall(string dropzoneId, TodoItem item)
 	{
 		Console.WriteLine(dropzoneId);
-		if (dropzoneId == "ToDo")
+		if(dropzoneId == "ToDo")
 		{
 			item.state = 0;
 		}
-		if (dropzoneId == "InProgress")
+		if(dropzoneId == "InProgress")
 		{
 			item.state = 1;
 		}
-		if (dropzoneId == "Done")
+		if(dropzoneId == "Done")
 		{
 			item.state = 2;
 		}

@@ -2,14 +2,14 @@
 @using InVision.Data
 
 
-<RadzenTemplateForm TItem="TodoItem" Data="@model" Submit=@OnSubmit>
+<RadzenTemplateForm TItem="KBoard" Data="@model" Submit=@OnSubmit>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
             <RadzenLabel Text="Title" />
         </div>
         <div class="col">
-            <RadzenTextBox @bind-Value="@model.Title" Name="Title" />
-            <RadzenRequiredValidator Text="Title is required" Component="Title" />
+            <RadzenTextBox @bind-Value="@model.Name" Name="Name" />
+            <RadzenRequiredValidator Text="Name is required" Component="Name" />
         </div>
     </div>
     <div class="row" style="margin-bottom: 16px">
@@ -30,20 +30,21 @@
 </RadzenTemplateForm>
 @code {
     [Parameter]
-    public string Title { get; set; }
+    public string Name { get; set; }
 
     [Parameter]
     public string Description { get; set; }
 
-    TodoItem model = new TodoItem();
+    KBoard model = new KBoard();
 
     protected override void OnParametersSet()
     {
-        model.Title = Title;
+        model.Name = Name;
         model.Description = Description;
+        model.CreatedBy = "Username";
     }
 
-    void OnSubmit(TodoItem model)
+    void OnSubmit(KBoard model)
     {
         DialogService.Close(model);
     }

@@ -132,7 +132,7 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		board = service.GetBoardById(int.Parse( boardId));
+		board = service.GetBoardById(boardId);
 		List<TodoItem> listOfItems = board.Items;
 
 		foreach (TodoItem item in listOfItems)

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\InVision_API.props" />
+</Project>

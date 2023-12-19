@@ -1,0 +1,121 @@
+﻿@layout LoginLayout
+@page "/register"
+@inject NavigationManager NavManager
+@using InVision.Data;
+@using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+@using System.Security.Cryptography;
+@inject Data.UserService userservice
+
+<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
+    <div style="text-align:center;">
+        <h2>Login Form</h2>
+    </div>
+
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
+        <div style="text-align: center">
+            <RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
+                <RadzenFormField Text="Username" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
+                    <ChildContent>
+                        <RadzenTextBox @bind-Value="usernameValue"/>
+                    </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
+                    <ChildContent>
+                        <RadzenTextBox Name="email" @bind-Value="emailValue" @bind-Value=@model.email />
+                        <RadzenRequiredValidator Component="email" Text="emai field is empty" Popup=true Style="margin-top: 50px" />
+                        <RadzenEmailValidator Component="email" Text="email is not valid" Popup=true Style="margin-top: 50px" />
+                    </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
+                    <ChildContent>
+                        <RadzenTextBox Name="password" @bind-Value=@password_value @bind-Value=@model.password />
+                        
+                        <!--<RadzenPassword @bind-Value="@password_value" Visible="@password_visibility" />-->
+                        
+                        <RadzenRequiredValidator Component="password" Text="password field is empty" Popup=true Style="margin-top: 50px" />
+                        <RadzenRegexValidator Component="password" Text="password is not valid" Pattern="@password_regex" Popup=true Style="margin-top: 50px" />
+                    </ChildContent>
+                    <!--
+                    <End>
+                        <RadzenButton Icon="@(password_visibility ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
+                    </End>
+                    -->
+
+                </RadzenFormField>
+                <RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
+                    <RadzenButton ButtonType="ButtonType.Submit" Click="CreateUser" style="width: 150px">Register</RadzenButton>
+                </RadzenStack>
+            </RadzenTemplateForm>
+        </div>
+    </RadzenStack>
+
+    <br />
+    <div style="text-align:center;">
+        <p>Already have an account? </p>
+        <RadzenLink Path=""> Login! </RadzenLink>
+    </div>
+</RadzenCard>
+
+@code {
+    class Model
+    {
+        public string email { get; set; }
+        public string password { get; set; }
+    }
+    Model model = new Model();
+
+    string email_regex = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
+    string password_regex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+
+    bool email_valid = false;
+    bool password_valid = false;
+
+    string password_value = "";
+    bool password_visibility = true;
+    string usernameValue = "";
+    string emailValue = "";
+    string value = "";
+    string passwordValue = "";
+    bool password = true;
+
+    void TogglePassword()
+    {
+        password_visibility = !password_visibility;
+    }
+
+    void OnSubmit(Model model)
+    {
+        email_valid = true;
+        password_valid = true;
+        NavManager.NavigateTo("/");
+        Console.WriteLine("valid submit");
+    }
+
+    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+    {
+        email_valid = false;
+        password_valid = false;
+        Console.WriteLine("invalid submit");
+    }
+    async Task CreateUser()
+    {
+        //Salt wird generiert um bei dem selben Passwort von verschiedenen Benutzern einen anderen Hashwert zu generieren
+        byte[] salt = RandomNumberGenerator.GetBytes(128 / 8); // divide by 8 to convert bits to bytes
+        Console.WriteLine($"Salt: {Convert.ToBase64String(salt)}");
+
+        // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
+        string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: password_value!,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA256,
+            iterationCount: 100000,
+            numBytesRequested: 256 / 8));
+
+        Console.WriteLine($"Hashed: {hashed}");
+
+        //Console.WriteLine(usernameValue + emailValue + passwordValue);
+        User user = new User(usernameValue, hashed, emailValue);
+        user.salt = salt;
+        await userservice.CreateUser(user);
+    }
+}

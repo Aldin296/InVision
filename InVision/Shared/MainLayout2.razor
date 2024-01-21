@@ -1,0 +1,34 @@
+﻿@inherits LayoutComponentBase
+@inject Data.UserStateService userstate
+@inject NavigationManager NavManager
+
+
+<RadzenDialog></RadzenDialog>
+<RadzenNotification></RadzenNotification>
+<RadzenContextMenu></RadzenContextMenu>
+<RadzenTooltip></RadzenTooltip>
+
+<PageTitle>InVision</PageTitle>
+<RadzenLayout>
+
+    <RadzenSidebar Responsive="false" Style="@($"width: {(sidebarExpanded ? "250px" : "60px")}")">
+        <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" Style="color:black" />
+
+        <RadzenPanelMenu DisplayStyle="@(sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
+            <RadzenPanelMenuItem Text="Dashboard" Path="/index" Icon="dashboard"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="Calendar" Path="/calendar" Icon="event"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="Kanban" Path="/allKanbanBoards" Icon="dns"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="Notes" Path="/notes" Icon="assignment"></RadzenPanelMenuItem>
+
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+    <RadzenBody Style="background-color: white">
+        <div class="rz-p-4">
+            @Body
+        </div>
+    </RadzenBody>
+</RadzenLayout>
+
+@code {
+    bool sidebarExpanded = true;
+}

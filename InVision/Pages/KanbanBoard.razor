@@ -33,7 +33,7 @@
 								<p contenteditable="true">@context.Description</p>
 							</RadzenColumn>
 							<RadzenColumn Size="2">
-								<RadzenIcon @onclick="()=>OnDeleteitem(inProgress,context)" Icon="delete" Style="cursor: pointer;" class="delete-todoitem-icon"></RadzenIcon>
+								<RadzenIcon @onclick="()=>OnDeleteitem(todo,context)" Icon="delete" Style="cursor: pointer;" class="delete-todoitem-icon"></RadzenIcon>
 							</RadzenColumn>
 						</RadzenRow>
 					</div>
@@ -102,7 +102,7 @@
 					</RadzenText>
 					<RadzenRow>
 						<RadzenColumn Size="10">
-							<p contenteditable="true">@context.Description</p>
+							<p @onchange="()=>OnEditItem(context)" contenteditable="true">@context.Description</p>
 						</RadzenColumn>
 						<RadzenColumn Size="2">
 							<RadzenIcon @onclick="()=>OnDeleteitem(done, context)" Icon=" delete" Style="cursor: pointer;"></RadzenIcon>
@@ -133,7 +133,8 @@
 	protected override async Task OnInitializedAsync()
 	{
 		board = service.GetBoardById(boardId);
-		List<TodoItem> listOfItems = board.Items;
+
+		List<TodoItem> ?listOfItems = board.Items;
 
 		foreach (TodoItem item in listOfItems)
 		{
@@ -197,6 +198,11 @@
 			}
 		}
 		StateHasChanged();
+	}
+
+	public async void OnEditItem(TodoItem item)
+	{
+		
 	}
 
 	public void Itemdropcall(string dropzoneId, TodoItem item)

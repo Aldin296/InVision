@@ -1,4 +1,5 @@
 ﻿@inject DialogService DialogService
+@inject UserStateService userstate
 @using InVision.Data
 
 
@@ -41,7 +42,7 @@
     {
         model.Name = Name;
         model.Description = Description;
-        model.CreatedBy = "Username";
+        model.CreatedBy = userstate.CurrentUser.Name;
     }
 
     void OnSubmit(KBoard model)

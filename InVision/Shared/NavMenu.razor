@@ -1,13 +1,14 @@
 ﻿@inject Data.UserStateService userstate
 @inject NavigationManager NavManager
 
-<RadzenStack AlignItems="AlignItems.Center" Style="height: 100vh; border-right: 1px solid #eeeeee;">
+<RadzenStack AlignItems="AlignItems.Center">
+
 	<RadzenStack AlignItems="AlignItems.Center" Class="rz-mx-auto rz-my-2">
 		<RadzenIcon Icon="account_circle" style="font-size: 5em;" />
 		<RadzenText style="color: black;">@userstate.CurrentUser.Name</RadzenText>
 	</RadzenStack>
 
-	<RadzenPanelMenu Style="width:250px;" Multiple="false">
+	<RadzenPanelMenu Style="width:250px" Multiple="false">
 		<RadzenPanelMenuItem Text="Dashboard" Path="/index" Icon="dashboard"></RadzenPanelMenuItem>
 		<RadzenPanelMenuItem Text="Calendar" Path="/calendar" Icon="event"></RadzenPanelMenuItem>
 		<RadzenPanelMenuItem Text="Kanban" Path="/allKanbanBoards" Icon="dns"></RadzenPanelMenuItem>

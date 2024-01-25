@@ -16,7 +16,9 @@
             <RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
                 <RadzenFormField Text="Username" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
                     <ChildContent>
-                        <RadzenTextBox @bind-Value="usernameValue"/>
+                        <RadzenTextBox Name="username" @bind-Value="usernameValue"/>
+                        <RadzenRequiredValidator Component="username" Text="username field is empty" Popup=true Style="margin-top: 50px" />
+
                     </ChildContent>
                 </RadzenFormField>
                 <RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">

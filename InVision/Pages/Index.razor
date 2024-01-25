@@ -4,6 +4,7 @@
 @inject NavigationManager NavManager
 @inject DialogService DialogService
 @inject UserStateService userstate
+@inject MatIconService iconservice
 
 <RadzenColumn>
 
@@ -46,6 +47,11 @@
 @code {
 
 	string usernameValue = "";
+
+	protected override async Task OnInitializedAsync()
+	{
+		await iconservice.GetMaterialDesignIconNames();
+	}
 
 	private void onSeeMoreClick()
 	{

@@ -1,0 +1,63 @@
+﻿@page "/settings"
+
+<RadzenPanel>
+	<HeaderTemplate>
+		<RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
+			<RadzenIcon Icon="settings" class="rz-mr-1" /><b>User Settings</b>
+		</RadzenText>
+	</HeaderTemplate>
+	<ChildContent>
+		<br />
+		<RadzenRow Style="height: 100%; background-color: yellowgreen; margin: 10,10,10,10" Gap="2rem">
+			<RadzenColumn Size="3" Style="background-color:cadetblue">
+				<h3 style="text-align:center">Avatar</h3>
+			</RadzenColumn>
+		</RadzenRow>
+		<hr />
+
+		<RadzenRow Gap="2rem">
+			<RadzenColumn Style="background-color: orangered; display: flex; justify-content: center; align-items: center;" Size="3">
+				<RadzenImage Path="https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png" Style="width: 8rem;" AlternateText="url image" />
+			</RadzenColumn>
+			<RadzenColumn Style="background-color:aquamarine">
+				<RadzenRow Style="background-color:coral; height:50%">
+					<RadzenColumn Style="display: flex; justify-content: flex-start; align-items: center">
+						<RadzenButton Style="height:50px">Change Picture</RadzenButton>
+					</RadzenColumn>
+				</RadzenRow>
+				<RadzenRow Style="background-color:chocolate; height:50%">
+					<RadzenColumn Style="display: flex; justify-content: flex-start; align-items: center">
+						<RadzenButton Style="height:50px">Clear Picture</RadzenButton>
+					</RadzenColumn>
+				</RadzenRow>
+			</RadzenColumn>
+		</RadzenRow>
+
+		<br />
+
+		<RadzenRow Style="height: 100%; background-color: yellowgreen; margin: 10,10,10,10">
+			<RadzenColumn Size="3" Style="background-color:darkcyan; ">
+				<h3 style="text-align:center">User Details</h3>
+			</RadzenColumn>
+
+		</RadzenRow>
+		<hr />
+
+		<RadzenRow>
+			<RadzenColumn Size="2" Style="background-color:darkkhaki;display: flex; justify-content: center; align-items: center;">
+				<RadzenText TextStyle="TextStyle.H5">Vorname</RadzenText>
+			</RadzenColumn>
+			<RadzenColumn Size="10">
+				<RadzenTextBox></RadzenTextBox>
+			</RadzenColumn>
+		</RadzenRow>
+
+
+	</ChildContent>
+</RadzenPanel>
+
+
+
+@code {
+
+}

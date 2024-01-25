@@ -81,3 +81,8 @@ a, .btn-link {
 .add-todoitem-icon:hover {
     color: rgb(67, 64, 210)
 }
+
+.rz-sidebar-toggle:hover {
+    background-color: #e8e8fa !important;
+    color: #4340d2 !important;
+}

@@ -17,6 +17,7 @@ builder.Services.AddScoped<KBoardService>();
 builder.Services.AddBlazorDragDrop();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddScoped<UserStateService>();
+builder.Services.AddScoped<MatIconService>();
 
 
 

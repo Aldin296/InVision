@@ -1,6 +1,8 @@
+using Blazored.LocalStorage;
 using InVision.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.DependencyInjection;
 using Plk.Blazor.DragDrop;
 using Radzen;
 
@@ -18,24 +20,26 @@ builder.Services.AddBlazorDragDrop();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddScoped<UserStateService>();
 builder.Services.AddScoped<MatIconService>();
+builder.Services.AddBlazoredLocalStorage();
 
-
+// Add session-related services
+// builder.Services.AddSession();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddHttpContextAccessor(); // Needed to access the HttpContext in services
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
 
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
 app.UseRouting();
+
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

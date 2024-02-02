@@ -2,7 +2,7 @@
 {
     public class UserStateService
     {
-        public User CurrentUser { get; set; }
+        static public User CurrentUser { get; set; }
 
     }
 }

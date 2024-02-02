@@ -1,23 +1,31 @@
-﻿namespace InVision.Data
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using MongoDB.Driver;
+using System.Text.Json;
+
+namespace InVision.Data
+
 {
     public class KBoardService
     {
-        public KBoard selectedBoard { get;set; }
+		private readonly string baseurl = "https://localhost:7133";
+		HttpClient client = new HttpClient();
+		public KBoard selectedBoard { get;set; }
 
-        List<KBoard> boards = new List<KBoard>()
-        {
-            new KBoard(){Name="Projekt1", Description="hier wird beschrieben das in diesem Board verwaltet wird", CreatedBy="User1", Items = { new TodoItem { Title="title", Description="ich tue dies und das", state=0}, new TodoItem {Title="ich mache etwas", Description="ich mache tatsachlich etwas lol", state=1 }, new TodoItem {Title="haha lol invision", Description="diplomarbeit für die schule ich ahbe fun", state=2} } },
-            new KBoard(){Name="Weise Haus", Description="Ex Präsidenten Buisness", CreatedBy="Obama"},
-            new KBoard(){Name="Weise Haus 2022", Description="Gelbe Präsidenten Buisness", CreatedBy="Trump"},
-            new KBoard(){Name="InVision", Description="Diplomarbeit - WebbPlaner für Menschen ohne Plan", CreatedBy="Jan"},
-            new KBoard(){Name="Test", Description="bla bla loren impus lolol", CreatedBy="Gott"},
-            new KBoard(){Name="spas und gas", Description="LOL", CreatedBy="Rizzler"}
-        };
+        List<KBoard> boards = new List<KBoard>(){};
+        
 
-        public async Task<List<KBoard>> BoardList()
+        /*public async Task<List<KBoard>> BoardList()
         {
             return await Task.FromResult(boards);
-        }
+        }*/
+        /*public async Task<KBoard?> GetKBoardAsync(string userId, string kboardId)
+        {
+            var user = await CurrentUser.Find(x => x.Id == userId).FirstOrDefaultAsync();
+
+
+            return user?.KBoards?.Find(kboard => kboard.Id == kboardId);
+        }*/
 
         public KBoard GetKBoardByName(string name)
         {
@@ -28,5 +36,31 @@
         {
             return boards.Where(board => board.Id == id).FirstOrDefault();
         }
+
+
+		public async Task<List<KBoard>> GetAllKBoardsAsync(string userid)
+		{
+			string requestUrl = $"{baseurl}/api/User";
+			var data = await client.GetAsync($"{requestUrl}/{userid}");
+			User user = null;
+			if (data.StatusCode != System.Net.HttpStatusCode.NoContent)
+			{
+				string content = await data.Content.ReadAsStringAsync();
+				user = JsonSerializer.Deserialize<User>(content, new JsonSerializerOptions
+				{
+					PropertyNameCaseInsensitive = true
+				});
+			}
+
+            return user?.KBoards ?? new List<KBoard>() ;
+		}
+
+
+        public async Task CreateKBoard(string userid, KBoard kboard)
+        {
+            string requestUrl = $"{baseurl}/api/KBoard/{userid}";
+            await client.PostAsJsonAsync(requestUrl, kboard);
+        }
+
     }
 }

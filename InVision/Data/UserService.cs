@@ -17,24 +17,27 @@ namespace InVision.Data
 			await client.PostAsJsonAsync(requestUrl, newUser);
 		}
 
-		public async Task<bool> LoginUser(string email, string password)
+
+
+        public async Task<bool> LoginUser(string email,string password)
 		{
-			string requestUrl = $"{baseurl}/api/User";
-			var data = await client.GetAsync(requestUrl);
-			if (data.IsSuccessStatusCode)
-			{
-				if (data.StatusCode != System.Net.HttpStatusCode.NoContent)
-				{
-					string content = await data.Content.ReadAsStringAsync();
-					List<User> users = JsonSerializer.Deserialize<List<User>>(content, new JsonSerializerOptions
-					{
-						PropertyNameCaseInsensitive = true
-					});
-					foreach (User u in users)
-					{
-						if (email == u.Email)
-						{
-							byte[] salt = u.salt;
+
+            string requestUrl = $"{baseurl}/api/User";
+            var data = await client.GetAsync(requestUrl);
+            if (data.IsSuccessStatusCode)
+            {
+                if (data.StatusCode != System.Net.HttpStatusCode.NoContent)
+                {
+                    string content = await data.Content.ReadAsStringAsync();
+                    List<User> users = JsonSerializer.Deserialize<List<User>>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                    foreach(User u in users)
+                    {
+                        if(email == u.Email)
+                        {
+                            byte[] salt = u.salt;
 
 							// derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
 							string controllhashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -55,20 +58,37 @@ namespace InVision.Data
 				}
 			}
 			return false;
-		}
-		public async Task<User> GetUserByEmail(string email)
-		{
+        }
+
+        public async Task<User> GetUserById(string id)
+        {
 			string requestUrl = $"{baseurl}/api/User";
-			var data = await client.GetAsync(requestUrl);
-			if (data.IsSuccessStatusCode)
-			{
-				if (data.StatusCode != System.Net.HttpStatusCode.NoContent)
-				{
-					string content = await data.Content.ReadAsStringAsync();
-					List<User> users = JsonSerializer.Deserialize<List<User>>(content, new JsonSerializerOptions
-					{
-						PropertyNameCaseInsensitive = true
-					});
+            var data = await client.GetAsync($"{requestUrl}/{id}");
+            User user = null;
+            if (data.StatusCode != System.Net.HttpStatusCode.NoContent)
+            {
+                string content = await data.Content.ReadAsStringAsync();
+                 user = JsonSerializer.Deserialize<User>(content, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+
+				return user;
+        }
+        public async Task<User> GetUserByEmail(string email)
+        {
+            string requestUrl = $"{baseurl}/api/User";
+            var data = await client.GetAsync(requestUrl);
+            if (data.IsSuccessStatusCode)
+            {
+                if (data.StatusCode != System.Net.HttpStatusCode.NoContent)
+                {
+                    string content = await data.Content.ReadAsStringAsync();
+                    List<User> users = JsonSerializer.Deserialize<List<User>>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
 
 					foreach (User u in users)
 					{

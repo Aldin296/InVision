@@ -18,6 +18,7 @@ namespace InVision.Data
                 Console.WriteLine(response.Content);
                 response.EnsureSuccessStatusCode();
 				string jsonString = await response.Content.ReadAsStringAsync();
+				jsonString = jsonString.Remove(0,4);
 				root = JsonSerializer.Deserialize<MatRoot>(jsonString);
 				matroot = root;
 

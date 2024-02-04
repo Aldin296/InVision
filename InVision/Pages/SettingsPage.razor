@@ -109,7 +109,16 @@
     {
         userid = await localstore.GetItemAsync<string>("UserId");
         user = await userservice.GetUserById(userid);
-        selectedImagePath = $"data:{Convert.ToBase64String(user.ProfilePicture)}";
+         if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
+    {
+        // Convert byte array to base64 string
+        selectedImagePath = $"data:image/png;base64,{Convert.ToBase64String(user.ProfilePicture)}";
+    }
+    else
+    {
+        // Set a default image path if no profile picture is available
+        selectedImagePath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
+    }
     }
 
 

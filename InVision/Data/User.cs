@@ -12,8 +12,10 @@ namespace InVision.Data
 		public string Name { get; set; }
 		public string Password { get; set; }
 		public string Email { get; set; }
-		public List<Note>? Notes { get; set; } = null;
-		public List<KBoard>? KBoards { get; set; } = null;
+		public List<Note>? Notes { get; set; } 
+		public List<KBoard>? KBoards { get; set; } 
+		public byte[]? ProfilePicture { get; set; }
+
 
 		public byte[] salt { get; set; }
 

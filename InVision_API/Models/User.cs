@@ -12,7 +12,9 @@ namespace InVision_API.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public List<Note> Notes { get; set; } 
-        public List<KBoard> KBoards { get; set; } 
+        public List<KBoard> KBoards { get; set; }
+		public byte[]? ProfilePicture { get; set; }
+
 
 		public byte[] salt { get; set; } //Für die berechnung des hash passwortes, bzw. den Login
 

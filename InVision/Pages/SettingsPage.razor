@@ -1,7 +1,9 @@
-﻿@page "/settings"
+﻿
+@page "/settings"
 @using InVision.Data
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 @inject Data.UserService userservice
+
 
 
 <RadzenPanel>
@@ -23,7 +25,7 @@
                 <label for="fileInput" style="cursor: pointer;">
                     <RadzenImage Path="@selectedImagePath" Style="width: 8rem;" />
                 </label>
-                <input type="file" id="fileInput" style="display: none;" accept="image/*" @onchange="HandleFileChange" />
+                <InputFile type="file" id="fileInput" style="display: none;" accept="image/*" OnChange="@HandleFileChange" multiple />
             </RadzenColumn>
         </RadzenRow>
 
@@ -86,7 +88,7 @@
 
         <hr />
         <div style="display:flex; justify-content: flex-end">
-            <RadzenButton>Save</RadzenButton>
+            <RadzenButton Click="SaveProfile">Save</RadzenButton>
         </div>
 
     </ChildContent>
@@ -95,17 +97,54 @@
 
 
 @code {
-    User user;
-    private string selectedImagePath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
+
+    User? user;
+    public string? userid;
+    public string selectedImagePath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
+    public byte[]? imageBytes;
+
+
 
     protected override async Task OnInitializedAsync()
     {
-        string userid = await localstore.GetItemAsync<string>("UserId");
+        userid = await localstore.GetItemAsync<string>("UserId");
         user = await userservice.GetUserById(userid);
+        selectedImagePath = $"data:{Convert.ToBase64String(user.ProfilePicture)}";
     }
 
-    private async Task HandleFileChange(ChangeEventArgs e)
+
+    //Handling the image input and converting it to byte code for saving it in the database
+    private async Task HandleFileChange(InputFileChangeEventArgs e)
     {
-       
+        var imageFile = e.File; // Get the selected image file
+
+        if (imageFile != null)
+        {
+            try
+            {
+                // Read the selected image file as a byte array
+                using (var stream = imageFile.OpenReadStream())
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(memoryStream);
+                        imageBytes = memoryStream.ToArray();
+                    }
+                }
+
+                selectedImagePath = $"data:{imageFile.ContentType};base64,{Convert.ToBase64String(imageBytes)}";
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions here, such as logging the error or displaying a message to the user
+                Console.WriteLine($"Error converting image to byte array: {ex.Message}");
+            }
+        }
+    }
+
+    private async Task SaveProfile(MouseEventArgs e)
+    {
+        user.ProfilePicture = imageBytes;
+        await userservice.UpdateUser(userid, user);
     }
 }

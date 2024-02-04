@@ -134,7 +134,7 @@
 	{
 		board = service.GetBoardById(boardId);
 
-		List<TodoItem> ?listOfItems = board.Items;
+		List<TodoItem>? listOfItems = board.Items;
 
 		foreach (TodoItem item in listOfItems)
 		{
@@ -151,6 +151,7 @@
 				MyThirdList.Add(item);
 			}
 		}
+		
 	}
 
 	public async void OnAddItem(string dropzone)

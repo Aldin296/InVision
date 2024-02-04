@@ -17,6 +17,12 @@ namespace InVision.Data
 			await client.PostAsJsonAsync(requestUrl, newUser);
 		}
 
+        public async Task UpdateUser(string id, User newUser)
+        {
+            string requestUrl = $"{baseurl}/api/User/{id}";
+            await client.PutAsJsonAsync(requestUrl, newUser);
+
+        }
 
 
         public async Task<bool> LoginUser(string email,string password)

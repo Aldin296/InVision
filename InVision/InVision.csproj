@@ -23,15 +23,7 @@
     <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.20.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-<<<<<<< HEAD
-<<<<<<< HEAD
     <PackageReference Include="Radzen.Blazor" Version="4.24.3" />
-=======
-    <PackageReference Include="Radzen.Blazor" Version="4.24.4" />
->>>>>>> 6948e39fa939ab08f39b15fdafc4f4429ccb0e60
-=======
-    <PackageReference Include="Radzen.Blazor" Version="4.24.4" />
->>>>>>> 6948e39fa939ab08f39b15fdafc4f4429ccb0e60
   </ItemGroup>
 
   <ItemGroup>

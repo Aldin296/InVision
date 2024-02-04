@@ -45,7 +45,7 @@
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">Name</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%" Placeholder=@user?.Name></RadzenTextBox>
+                <RadzenTextBox Style="width:50%" Placeholder=@user?.Name @bind-Value="username"></RadzenTextBox>
             </RadzenColumn>
         </RadzenRow>
 
@@ -54,7 +54,7 @@
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">E-Mail</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%" Placeholder=@user?.Email></RadzenTextBox>
+                <RadzenTextBox Style="width:50%" Placeholder=@user?.Email @bind-Value="useremail"></RadzenTextBox>
             </RadzenColumn>
         </RadzenRow>
 
@@ -64,7 +64,7 @@
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">Old Password</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%"></RadzenTextBox>
+                <RadzenTextBox Style="width:50%" @bind-Value="oldPassword" ></RadzenTextBox>
             </RadzenColumn>
         </RadzenRow>
 
@@ -73,7 +73,7 @@
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">New Password</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%"></RadzenTextBox>
+                <RadzenTextBox Style="width:50%" @bind-Value="newPassword"></RadzenTextBox>
             </RadzenColumn>
         </RadzenRow>
 
@@ -102,23 +102,26 @@
     public string? userid;
     public string selectedImagePath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
     public byte[]? imageBytes;
-
+    public string? username;
+    public string? useremail;
+    public string? newPassword;
+    public string? oldPassword;
 
 
     protected override async Task OnInitializedAsync()
     {
         userid = await localstore.GetItemAsync<string>("UserId");
         user = await userservice.GetUserById(userid);
-         if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
-    {
-        // Convert byte array to base64 string
-        selectedImagePath = $"data:image/png;base64,{Convert.ToBase64String(user.ProfilePicture)}";
-    }
-    else
-    {
-        // Set a default image path if no profile picture is available
-        selectedImagePath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
-    }
+        if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
+        {
+            // Convert byte array to base64 string
+            selectedImagePath = $"data:image/png;base64,{Convert.ToBase64String(user.ProfilePicture)}";
+        }
+        else
+        {
+            // Set a default image path if no profile picture is available
+            selectedImagePath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
+        }
     }
 
 
@@ -153,7 +156,29 @@
 
     private async Task SaveProfile(MouseEventArgs e)
     {
-        user.ProfilePicture = imageBytes;
+        bool passwordStatus = await userservice.PasswordControl(userid, oldPassword);
+
+        if(useremail!=null)
+        {
+            user.Email = useremail;
+        }
+        if (username != null)
+        {
+            user.Name = username;
+        }
+        if(imageBytes!= null)
+        {
+            user.ProfilePicture = imageBytes;
+        }
+
+        if (passwordStatus == true)
+        {
+            //Da das neue Passwort ebenfalls verschlüsselt werden muss, musste ich hier eine eigene hashPassword methode aufrufen
+            //Und dessen werte dann dem user geben damit diese geupdated werden
+            HashPassword hashpass = userservice.hashPassword(newPassword);
+            user.Password = hashpass.Hashed;
+            user.salt = hashpass.Salt;
+        }
         await userservice.UpdateUser(userid, user);
     }
 }

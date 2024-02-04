@@ -1,6 +1,7 @@
 ﻿using InVision.Pages;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+
 namespace InVision.Data
 {
 	public class User
@@ -11,7 +12,10 @@ namespace InVision.Data
 		public string Name { get; set; }
 		public string Password { get; set; }
 		public string Email { get; set; }
-		public List<Note>? Notes { get; set; } = null;
+		public List<Note>? Notes { get; set; } 
+		public List<KBoard>? KBoards { get; set; } 
+		public byte[]? ProfilePicture { get; set; }
+
 
 		public byte[] salt { get; set; }
 
@@ -23,6 +27,9 @@ namespace InVision.Data
             Email = email;
         }
 
-
-    }
+		public static implicit operator User(HttpResponseMessage v)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

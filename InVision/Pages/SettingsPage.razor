@@ -1,4 +1,10 @@
-﻿@page "/settings"
+﻿
+@page "/settings"
+@using InVision.Data
+@inject Blazored.LocalStorage.ILocalStorageService localstore
+@inject Data.UserService userservice
+
+
 
 <RadzenPanel>
     <HeaderTemplate>
@@ -19,7 +25,7 @@
                 <label for="fileInput" style="cursor: pointer;">
                     <RadzenImage Path="@selectedImagePath" Style="width: 8rem;" />
                 </label>
-                <input type="file" id="fileInput" style="display: none;" accept="image/*" @onchange="HandleFileChange" />
+                <InputFile type="file" id="fileInput" style="display: none;" accept="image/*" OnChange="@HandleFileChange" multiple />
             </RadzenColumn>
         </RadzenRow>
 
@@ -39,7 +45,7 @@
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">Name</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%"></RadzenTextBox>
+                <RadzenTextBox Style="width:50%" Placeholder=@user?.Name></RadzenTextBox>
             </RadzenColumn>
         </RadzenRow>
 
@@ -48,7 +54,7 @@
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">E-Mail</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%"></RadzenTextBox>
+                <RadzenTextBox Style="width:50%" Placeholder=@user?.Email></RadzenTextBox>
             </RadzenColumn>
         </RadzenRow>
 
@@ -73,7 +79,7 @@
 
         <RadzenRow>
             <RadzenColumn Size="2" Style="margin-bottom: 10px; height:60px">
-                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Do you want to recieve emails?</RadzenText>
+                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Do you want to receive emails?</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="1" Style="display: flex; align-items: center; height:60px">
                 <RadzenSwitch Style="width:20px; height:25px"></RadzenSwitch>
@@ -82,7 +88,7 @@
 
         <hr />
         <div style="display:flex; justify-content: flex-end">
-            <RadzenButton>Save</RadzenButton>
+            <RadzenButton Click="SaveProfile">Save</RadzenButton>
         </div>
 
     </ChildContent>
@@ -92,15 +98,62 @@
 
 @code {
 
-    private string selectedImagePath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
+    User? user;
+    public string? userid;
+    public string selectedImagePath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
+    public byte[]? imageBytes;
+
+
 
     protected override async Task OnInitializedAsync()
     {
-
+        userid = await localstore.GetItemAsync<string>("UserId");
+        user = await userservice.GetUserById(userid);
+         if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
+    {
+        // Convert byte array to base64 string
+        selectedImagePath = $"data:image/png;base64,{Convert.ToBase64String(user.ProfilePicture)}";
+    }
+    else
+    {
+        // Set a default image path if no profile picture is available
+        selectedImagePath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
+    }
     }
 
-    private async Task HandleFileChange(ChangeEventArgs e)
+
+    //Handling the image input and converting it to byte code for saving it in the database
+    private async Task HandleFileChange(InputFileChangeEventArgs e)
     {
-       
+        var imageFile = e.File; // Get the selected image file
+
+        if (imageFile != null)
+        {
+            try
+            {
+                // Read the selected image file as a byte array
+                using (var stream = imageFile.OpenReadStream())
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(memoryStream);
+                        imageBytes = memoryStream.ToArray();
+                    }
+                }
+
+                selectedImagePath = $"data:{imageFile.ContentType};base64,{Convert.ToBase64String(imageBytes)}";
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions here, such as logging the error or displaying a message to the user
+                Console.WriteLine($"Error converting image to byte array: {ex.Message}");
+            }
+        }
+    }
+
+    private async Task SaveProfile(MouseEventArgs e)
+    {
+        user.ProfilePicture = imageBytes;
+        await userservice.UpdateUser(userid, user);
     }
 }

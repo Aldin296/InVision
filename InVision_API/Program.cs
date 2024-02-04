@@ -21,6 +21,7 @@ namespace InVision_API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<NoteService>();
+            builder.Services.AddScoped<KBoardService>();
 
             var app = builder.Build();
 

@@ -1,6 +1,9 @@
 ﻿@inject DialogService DialogService
-@inject UserStateService userstate
 @using InVision.Data
+@inject Blazored.LocalStorage.ILocalStorageService localstore
+@inject KBoardService service;
+@inject UserService userservice;
+
 
 
 <RadzenTemplateForm TItem="KBoard" Data="@model" Submit=@OnSubmit>
@@ -42,11 +45,15 @@
     {
         model.Name = Name;
         model.Description = Description;
-        model.CreatedBy = userstate.CurrentUser.Name;
+
     }
 
-    void OnSubmit(KBoard model)
+    protected async void OnSubmit(KBoard model)
     {
+        string userid = await localstore.GetItemAsync<string>("UserId");
+        var user = await userservice.GetUserById(userid);
+        model.CreatedBy = user.Name;
+        await service.CreateKBoard(userid, model);
         DialogService.Close(model);
     }
 }

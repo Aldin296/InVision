@@ -3,7 +3,6 @@
 @using InVision.Pages
 @inject NavigationManager NavManager
 @inject DialogService DialogService
-@inject UserStateService userstate
 @inject MatIconService iconservice
 @inject UserService userservice
 @inject Blazored.LocalStorage.ILocalStorageService localstore
@@ -52,34 +51,30 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		//string userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+		string userId = await localstore.GetItemAsync<string>("UserId");
+
+		if (!string.IsNullOrEmpty(userId))
+		{
+			user = await userservice.GetUserById(userId);
+			StateHasChanged(); // Notify Blazor to re-render the component
+		}
+		else
+		{
+			// Handle the case when the UserId is not in the session
+		}
 	}
 
 	private void onSeeMoreClick()
 	{
-		//string userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
-		string userId = await localstore.GetItemAsync <string>("UserId");
-
-        if (!string.IsNullOrEmpty(userId))
-        {
-            user = await userservice.GetUserById(userId);
-            StateHasChanged(); // Notify Blazor to re-render the component
-        }
-        else
-        {
-            // Handle the case when the UserId is not in the session
-        }
-    }
-
-    private void onSeeMoreClick()
-    {
-        if (user != null)
-        {
-            Console.WriteLine(user.Name + user.Email);
-            NavManager.NavigateTo("/calendar");
-        }
-        else
-        {
-            // Handle the case when the user is not loaded
-        }
-    }
+		if (user != null)
+		{
+			Console.WriteLine(user.Name + user.Email);
+			NavManager.NavigateTo("/calendar");
+		}
+		else
+		{
+			// Handle the case when the user is not loaded
+		}
+	}
 }

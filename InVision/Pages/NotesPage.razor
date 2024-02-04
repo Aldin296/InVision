@@ -32,14 +32,14 @@ else
                     <RadzenCard Style="width: 250px" @onclick="()=>OpenNote(note)" class="kanban-card">
                         <RadzenRow>
                             <RadzenColumn Size="12" class="rz-text-align-start">
-                                <RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@note.Title</RadzenText>
+                                <RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@note?.Title</RadzenText>
                             </RadzenColumn>
                         </RadzenRow>
                         <hr style="border: none; background-color: var(--rz-text-disabled-color); height: 1px; margin: 1rem 0;" />
                         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
                             <RadzenStack Gap="0">
-                                <RadzenText TextStyle="TextStyle.Body1">@note.Content</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@note.IsDone</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body1">@note?.Content</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@note?.IsDone</RadzenText>
                             </RadzenStack>
                         </RadzenStack>
                     </RadzenCard>

@@ -1,4 +1,8 @@
 ﻿@page "/settings"
+@using InVision.Data
+@inject Blazored.LocalStorage.ILocalStorageService localstore
+@inject Data.UserService userservice
+
 
 <RadzenPanel>
     <HeaderTemplate>
@@ -39,7 +43,7 @@
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">Name</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%"></RadzenTextBox>
+                <RadzenTextBox Style="width:50%" Placeholder=@user?.Name></RadzenTextBox>
             </RadzenColumn>
         </RadzenRow>
 
@@ -48,7 +52,7 @@
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">E-Mail</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%"></RadzenTextBox>
+                <RadzenTextBox Style="width:50%" Placeholder=@user?.Email></RadzenTextBox>
             </RadzenColumn>
         </RadzenRow>
 
@@ -73,7 +77,7 @@
 
         <RadzenRow>
             <RadzenColumn Size="2" Style="margin-bottom: 10px; height:60px">
-                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Do you want to recieve emails?</RadzenText>
+                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Do you want to receive emails?</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="1" Style="display: flex; align-items: center; height:60px">
                 <RadzenSwitch Style="width:20px; height:25px"></RadzenSwitch>
@@ -91,12 +95,13 @@
 
 
 @code {
-
+    User user;
     private string selectedImagePath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
 
     protected override async Task OnInitializedAsync()
     {
-
+        string userid = await localstore.GetItemAsync<string>("UserId");
+        user = await userservice.GetUserById(userid);
     }
 
     private async Task HandleFileChange(ChangeEventArgs e)

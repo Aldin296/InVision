@@ -3,12 +3,13 @@
 @inject KBoardService service
 @inject NavigationManager NavManager
 @inject DialogService DialogService
+@inject ContextMenuService ContextMenuService
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
 
 @if (boards == null)
 {
-    <p>Loading...</p>
+	<p>Loading...</p>
 }
 else
 {
@@ -20,27 +21,26 @@ else
 			<RadzenIcon Icon="add_circle_outline" @onclick="()=>OnAddItem()" Style="cursor: pointer; padding-right: 20px; font-size: 2em" class="add-todoitem-icon"></RadzenIcon>
 		</HeaderTemplate>
 		<ChildContent>
-			<br />
 			<RadzenDataList WrapItems="true" AllowPaging="true" Data="@boards" TItem="KBoard">
 				<Template Context="kboard">
-					<RadzenCard Style="width: 250px" @onclick="()=>OpenKanbanBoard(kboard)" class="kanban-card">
+					<RadzenCard Style="width: 250px" ContextMenu=@(args => ShowContextMenuWithItems(args,kboard)) @onclick="()=>OpenKanbanBoard(kboard)" class="kanban-card">
 						<RadzenRow>
 							<RadzenColumn Size="12" class="rz-text-align-start">
 								<RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@kboard.Name</RadzenText>
-							</RadzenColumn>
-						</RadzenRow>
-						<hr style="border: none; background-color: var(--rz-text-disabled-color); height: 1px; margin: 1rem 0;" />
-						<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
-							<RadzenStack Gap="0">
-								<RadzenText TextStyle="TextStyle.Body1">@kboard.Description</RadzenText>
-								<RadzenText TextStyle="TextStyle.Body2">@kboard.CreatedBy</RadzenText>
+								</RadzenColumn>
+							</RadzenRow>
+							<hr style="border: none; background-color: var(--rz-text-disabled-color); height: 1px; margin: 1rem 0;" />
+							<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+								<RadzenStack Gap="0">
+									<RadzenText TextStyle="TextStyle.Body1">@kboard.Description</RadzenText>
+									<RadzenText TextStyle="TextStyle.Body2">@kboard.CreatedBy</RadzenText>
+								</RadzenStack>
 							</RadzenStack>
-						</RadzenStack>
-					</RadzenCard>
-				</Template>
-			</RadzenDataList>
-		</ChildContent>
-	</RadzenPanel>
+						</RadzenCard>
+					</Template>
+				</RadzenDataList>
+			</ChildContent>
+		</RadzenPanel>
 }
 
 
@@ -79,5 +79,37 @@ else
 			Console.WriteLine("Kboard erstellen abgebrochen");
 		}
 
+	}
+
+	private void OnDeleteBoard(KBoard board)
+	{
+		// Remove the board from the list
+		boards.Remove(board);
+
+		// Trigger a UI update
+		StateHasChanged();
+
+		// Optional: Provide feedback to the user
+		Console.WriteLine($"Board '{board.Name}' deleted successfully.");
+	}
+
+	// Existing code...
+
+	void ShowContextMenuWithItems(MouseEventArgs args, KBoard board)
+	{
+		ContextMenuService.Open(args,
+			new List<ContextMenuItem> {
+				new ContextMenuItem(){ Text = "Delete", Value = 1, Icon = "delete" },
+				},
+			(MenuItemEventArgs eventArgs) => OnMenuItemClick(eventArgs, board));
+	}
+
+	void OnMenuItemClick(MenuItemEventArgs args, KBoard board)
+	{
+		if (args.Value.Equals(1))
+		{
+			OnDeleteBoard(board);
+			ContextMenuService.Close();
+		}
 	}
 }

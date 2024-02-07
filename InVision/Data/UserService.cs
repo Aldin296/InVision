@@ -38,6 +38,30 @@ namespace InVision.Data
             
         }
 
+        public async Task<bool> PasswordControl(string ?userid, string ?password)
+        {
+            string requestUrl = $"{baseurl}/api/User/{userid}";
+            User u = await client.GetAsync(requestUrl);
+            byte[] salt = u.salt;
+
+            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
+            string controllhashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                            password: password!,
+                            salt: salt,
+                            prf: KeyDerivationPrf.HMACSHA256,
+                            iterationCount: 100000,
+                            numBytesRequested: 256 / 8));
+            if (controllhashed == u.Password)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
         public async Task CreateUser(string userName, string userPassword, string userEmail)
         {
             string requestUrl = $"{baseurl}/api/User";
@@ -102,29 +126,7 @@ namespace InVision.Data
             return false;
         }
 
-        public async Task<bool> PasswordControl(string userid, string password)
-        {
-            string requestUrl = $"{baseurl}/api/User/{userid}";
-            User u = await client.GetAsync(requestUrl);
-            byte[] salt = u.salt;
-
-            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
-            string controllhashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                            password: password!,
-                            salt: salt,
-                            prf: KeyDerivationPrf.HMACSHA256,
-                            iterationCount: 100000,
-                            numBytesRequested: 256 / 8));
-            if (controllhashed == u.Password)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
+        
 
         public async Task<User> GetUserById(string id)
         {

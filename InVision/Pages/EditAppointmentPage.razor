@@ -29,6 +29,14 @@
             <RadzenRequiredValidator Component="End" Text="End is required" />
         </div>
     </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Color" />
+        </div>
+        <div class="col">
+            <RadzenColorPicker @bind-Value=@model.Color ShowHSV=@showHSV ShowRGBA=@showRGBA ShowColors=@showColors ShowButton=@showButton Change=@OnChange />
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
@@ -41,6 +49,16 @@
     public Appointment Appointment { get; set; }
 
     Appointment model = new Appointment();
+
+    bool showHSV = true;
+    bool showRGBA = true;
+    bool showColors = true;
+    bool showButton = false;
+
+    void OnChange(string value)
+    {
+        Console.WriteLine("Color changed");
+    }
 
     protected override void OnParametersSet()
     {

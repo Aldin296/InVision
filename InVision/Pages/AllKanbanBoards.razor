@@ -47,10 +47,16 @@ else
 
 @code {
 	List<KBoard> ?boards;
+	string userId;
+
+	protected override async Task OnInitializedAsync()
+	{
+	}
+
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		string userId = await localstore.GetItemAsync<string>("UserId");
+		userId = await localstore.GetItemAsync<string>("UserId");
 		boards = await Task.Run(() => boardService.GetAllKBoardsAsync(userId));
 	}
 

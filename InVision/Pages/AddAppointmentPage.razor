@@ -29,7 +29,17 @@
             <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true" />
             <RadzenRequiredValidator Component="End" Text="End is required" />
         </div>
+    </div>    
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Color" />
+        </div>
+        <div class="col">
+            <RadzenColorPicker Name="Color" @bind-Value=@model.Color ShowHSV=@showHSV ShowRGBA=@showRGBA ShowColors=@showColors ShowButton=@showButton Change=@OnChange />
+        </div>
     </div>
+
+
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
@@ -44,12 +54,28 @@
     [Parameter]
     public DateTime End { get; set; }
 
+    [Parameter]
+    public string Color { get; set; }
+
     Appointment model = new Appointment();
+
+    bool showHSV = true;
+    bool showRGBA = true;
+    bool showColors = true;
+    bool showButton = false;
+
+
+    void OnChange(string value)
+    {
+        Console.WriteLine("Color changed");
+    }
+
 
     protected override void OnParametersSet()
     {
         model.Start = Start;
         model.End = End;
+        model.Color = Color;
     }
 
     void OnSubmit(Appointment model)

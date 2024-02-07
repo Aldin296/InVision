@@ -39,7 +39,7 @@
     </RadzenCard>
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0">
         <RadzenButton Click="@onSeeMoreClick" Variant="Variant.Text" Text="See more" />
-        <RadzenButton Variant="Variant.Text" Text="Edit Profile" />
+        <RadzenButton Click="@editProfileClick" Variant="Variant.Text" Text="Edit Profile" />
     </RadzenStack>
 </RadzenCard>
 
@@ -89,6 +89,18 @@
         {
             Console.WriteLine(user.Name + user.Email);
             NavManager.NavigateTo("/calendar");
+        }
+        else
+        {
+            // Handle the case when the user is not loaded
+        }
+    }
+
+    private void editProfileClick()
+    {
+        if (user != null)
+        {
+            NavManager.NavigateTo("/settings");
         }
         else
         {

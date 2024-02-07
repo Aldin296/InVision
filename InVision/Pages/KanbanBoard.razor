@@ -130,9 +130,10 @@
 	public string done = "Done";
 
 
-	protected override async Task OnInitializedAsync()
+	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		board = service.GetBoardById(boardId);
+		
 
 		List<TodoItem>? listOfItems = board.Items;
 

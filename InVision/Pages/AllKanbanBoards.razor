@@ -1,4 +1,4 @@
-﻿@page "/allKanbanBoards"
+@page "/allKanbanBoards"
 @using InVision.Data
 @inject KBoardService boardService
 @inject NavigationManager NavManager
@@ -46,9 +46,9 @@ else
 
 
 @code {
-	List<KBoard> boards;
+	List<KBoard> ?boards;
 
-	protected override async Task OnInitializedAsync()
+	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		string userId = await localstore.GetItemAsync<string>("UserId");
 		boards = await Task.Run(() => boardService.GetAllKBoardsAsync(userId));

@@ -127,7 +127,7 @@
 	public string done = "Done";
 
 
-	protected override async Task OnInitializedAsync()
+	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		string userId = await localstore.GetItemAsync<string>("UserId");
 		boards = await Task.Run(() => service.GetAllKBoardsAsync(userId));

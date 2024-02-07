@@ -11,70 +11,88 @@
 
 </RadzenColumn>
 <RadzenCard Class="rz-my-12 rz-mx-auto" Style="max-width: 420px">
-	<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
-		<RadzenImage Path="Images/user.png" Style="width: 100px; height: 100px; border-radius: 50%;" />
-		<RadzenStack Gap="0">
-			<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">User</RadzenText>
-			<RadzenText TextStyle="TextStyle.Body1"><b>@user?.Name</b></RadzenText>
-			<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">E-Mail</RadzenText>
-			<RadzenText TextStyle="TextStyle.Body1"><b>@user?.Email</b></RadzenText>
-		</RadzenStack>
-	</RadzenStack>
-	<RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
-		<RadzenText TextStyle="TextStyle.H6" class="rz-color-on-primary-light"><strong>Information</strong></RadzenText>
-		<RadzenRow RowGap="0">
-			<RadzenColumn SizeSM="4">
-				<RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Meetings Today</RadzenText>
-				<RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>2</b></RadzenText>
-				<RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Meetings This Week</RadzenText>
-				<RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>13</b></RadzenText>
-			</RadzenColumn>
-			<RadzenColumn SizeSM="8">
-				<RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Tasks Today</RadzenText>
-				<RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>11</b></RadzenText>
-				<RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Tasks This Week</RadzenText>
-				<RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>42</b></RadzenText>
-			</RadzenColumn>
-		</RadzenRow>
-	</RadzenCard>
-	<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0">
-		<RadzenButton Click="@onSeeMoreClick" Variant="Variant.Text" Text="See more" />
-		<RadzenButton Variant="Variant.Text" Text="Edit Profile" />
-	</RadzenStack>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+        <RadzenImage Path="@imagepath" Style="width: 100px; height: 100px; border-radius: 50%;" />
+        <RadzenStack Gap="0">
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">User</RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1"><b>@user?.Name</b></RadzenText>
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">E-Mail</RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1"><b>@user?.Email</b></RadzenText>
+        </RadzenStack>
+    </RadzenStack>
+    <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+        <RadzenText TextStyle="TextStyle.H6" class="rz-color-on-primary-light"><strong>Information</strong></RadzenText>
+        <RadzenRow RowGap="0">
+            <RadzenColumn SizeSM="4">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Meetings Today</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>2</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Meetings This Week</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>13</b></RadzenText>
+            </RadzenColumn>
+            <RadzenColumn SizeSM="8">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Tasks Today</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>11</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Tasks This Week</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>42</b></RadzenText>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenCard>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0">
+        <RadzenButton Click="@onSeeMoreClick" Variant="Variant.Text" Text="See more" />
+        <RadzenButton Variant="Variant.Text" Text="Edit Profile" />
+    </RadzenStack>
 </RadzenCard>
 
 
 @code {
-	private RadzenCard card;
 
-	private User user;
+    private RadzenCard card;
 
-	protected override async Task OnInitializedAsync()
-	{
-		//string userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
-		string userId = await localstore.GetItemAsync<string>("UserId");
+    private User user;
 
-		if (!string.IsNullOrEmpty(userId))
-		{
-			user = await userservice.GetUserById(userId);
-			StateHasChanged(); // Notify Blazor to re-render the component
-		}
-		else
-		{
-			// Handle the case when the UserId is not in the session
-		}
-	}
+    public string imagepath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
 
-	private void onSeeMoreClick()
-	{
-		if (user != null)
-		{
-			Console.WriteLine(user.Name + user.Email);
-			NavManager.NavigateTo("/calendar");
-		}
-		else
-		{
-			// Handle the case when the user is not loaded
-		}
-	}
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //string userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
+        string userId = await localstore.GetItemAsync<string>("UserId");
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            user = await userservice.GetUserById(userId);
+            StateHasChanged(); // Notify Blazor to re-render the component
+
+            if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
+            {
+                // Convert byte array to base64 string
+                imagepath = $"data:image/png;base64,{Convert.ToBase64String(user.ProfilePicture)}";
+            }
+            else
+            {
+                // Set a default image path if no profile picture is available
+                imagepath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
+            }
+
+        }
+        else
+        {
+            // Handle the case when the UserId is not in the session
+        }
+
+    }
+
+    private void onSeeMoreClick()
+    {
+        if (user != null)
+        {
+            Console.WriteLine(user.Name + user.Email);
+            NavManager.NavigateTo("/calendar");
+        }
+        else
+        {
+            // Handle the case when the user is not loaded
+        }
+    }
 }

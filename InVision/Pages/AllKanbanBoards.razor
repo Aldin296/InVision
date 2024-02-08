@@ -24,20 +24,24 @@ else
 		<ChildContent>
 			<RadzenDataList WrapItems="true" AllowPaging="true" Data="@boards" TItem="KBoard">
 				<Template Context="kboard">
-					<RadzenCard Style="width: 250px" MouseEnter="@(args => ShowTooltip(args, new TooltipOptions(){ Delay = 500}))" ContextMenu=@(args => ShowContextMenuWithItems(args,kboard)) @onclick="()=>OpenKanbanBoard(kboard)" class="kanban-card">
-						<RadzenRow>
-							<RadzenColumn Size="12" class="rz-text-align-start">
-								<RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@kboard.Name</RadzenText>
-								</RadzenColumn>
-							</RadzenRow>
-							<hr style="border: none; background-color: var(--rz-text-disabled-color); height: 1px; margin: 1rem 0;" />
-							<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
-								<RadzenStack Gap="0">
-									<RadzenText TextStyle="TextStyle.Body1">@kboard.Description</RadzenText>
-									<RadzenText TextStyle="TextStyle.Body2">@kboard.CreatedBy</RadzenText>
+					<div class="tooltip">
+						
+						<RadzenCard Style="width: 250px" ContextMenu=@(args => ShowContextMenuWithItems(args,kboard)) @onclick="()=>OpenKanbanBoard(kboard)" class="kanban-card">
+							<RadzenRow>
+								<RadzenColumn Size="12" class="rz-text-align-start">
+									<RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@kboard.Name</RadzenText>
+									</RadzenColumn>
+								</RadzenRow>
+								<hr style="border: none; background-color: var(--rz-text-disabled-color); height: 1px; margin: 1rem 0;" />
+								<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+									<RadzenStack Gap="0">
+										<RadzenText TextStyle="TextStyle.Body1">@kboard.Description</RadzenText>
+										<RadzenText TextStyle="TextStyle.Body2">@kboard.CreatedBy</RadzenText>
+									</RadzenStack>
 								</RadzenStack>
-							</RadzenStack>
-						</RadzenCard>
+							</RadzenCard>
+					</div>
+
 					</Template>
 				</RadzenDataList>
 			</ChildContent>
@@ -98,8 +102,6 @@ else
 		Console.WriteLine($"Board '{board.Name}' deleted successfully.");
 	}
 
-	// Existing code...
-
 	void ShowContextMenuWithItems(MouseEventArgs args, KBoard board)
 	{
 		ContextMenuService.Open(args,
@@ -117,6 +119,6 @@ else
 			ContextMenuService.Close();
 		}
 	}
-	void ShowTooltip(ElementReference elementReference, TooltipOptions options = null) => tooltipService.Open(elementReference, "To delete the Board press right click!", options);
+	//void ShowTooltip(ElementReference elementReference, TooltipOptions options = null) => tooltipService.Open(elementReference, "To delete the Board press right click!", options);
 
 }

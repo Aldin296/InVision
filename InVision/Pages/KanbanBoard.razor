@@ -1,7 +1,7 @@
 ﻿@page "/kanbanBoard/{boardId}"
 @using InVision.Data
 @using InVision.Pages
-@inject KBoardService service
+@inject KBoardService boardService
 @inject DialogService DialogService
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
@@ -22,7 +22,7 @@
 			</RadzenText>
 		</RadzenCard>
 		<Dropzone Items="MyFirstList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(todo, tdi))" Class="h-100">
-			<ChildContent>
+			<ChildContent >
 				<div class="card" style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px; max-width: 100%">
 					<div class="card-body">
 						<div style="width: 325px">
@@ -129,12 +129,9 @@
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (firstRender)
-		{
-			await InvokeAsync(StateHasChanged);
-		}
+		
 		string userId = await localstore.GetItemAsync<string>("UserId");
-		boards = await Task.Run(() => service.GetAllKBoardsAsync(userId));
+		boards = await Task.Run(() => boardService.GetAllKBoardsAsync(userId));
 
 		board = boards.Where(board => board.Id == boardId).FirstOrDefault();
 		//board = service.GetBoardById(boardId);
@@ -156,7 +153,10 @@
 				MyThirdList.Add(item);
 			}
 		}
-
+		if (firstRender)
+		{
+			await InvokeAsync(StateHasChanged);
+		}
 	}
 
 	public async void OnAddItem(string dropzone)

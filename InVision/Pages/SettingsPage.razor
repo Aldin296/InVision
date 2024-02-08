@@ -2,6 +2,8 @@
 @using InVision.Data
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 @inject Data.UserService userservice
+@inject NotificationService notificationService
+
 
 <RadzenPanel>
     <HeaderTemplate>
@@ -61,7 +63,18 @@
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">Old Password</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%" @bind-Value="oldPassword" ></RadzenTextBox>
+                <!--
+				<RadzenPassword Style="width:50%" @bind-Value=@oldPassword Placeholder="Enter old password..." AutoComplete="false" aria-label="enter password" />
+                -->
+                <RadzenFormField  Variant="Variant.Outlined" Style="width: 50%">
+                    <ChildContent>
+                        <RadzenTextBox @bind-Value="@oldPassword" Visible="@(!passwordVisibleOld)" Placeholder="Enter old Password"/>
+                        <RadzenPassword @bind-Value="@oldPassword" Visible="@passwordVisibleOld" />
+                    </ChildContent>
+                    <End>
+                        <RadzenButton Icon="@(passwordVisibleOld ? "visibility" : "visibility_off")" Click="TogglePasswordOld" Variant="Variant.Text" Size="ButtonSize.Small" />
+                    </End>
+                </RadzenFormField>
             </RadzenColumn>
         </RadzenRow>
 
@@ -70,7 +83,15 @@
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">New Password</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%" @bind-Value="newPassword"></RadzenTextBox>
+                <RadzenFormField Variant="Variant.Outlined" Style="width: 50%">
+                    <ChildContent>
+                        <RadzenTextBox @bind-Value="@newPassword" Visible="@(!passwordVisibleNew)" Placeholder="Enter new Password" />
+                        <RadzenPassword @bind-Value="@newPassword" Visible="@passwordVisibleNew" />
+                    </ChildContent>
+                    <End>
+                        <RadzenButton Icon="@(passwordVisibleNew ? "visibility" : "visibility_off")" Click="TogglePasswordNew" Variant="Variant.Text" Size="ButtonSize.Small" />
+                    </End>
+                </RadzenFormField>
             </RadzenColumn>
         </RadzenRow>
 
@@ -78,8 +99,9 @@
             <RadzenColumn Size="2" Style="margin-bottom: 10px; height:60px">
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Do you want to receive emails?</RadzenText>
             </RadzenColumn>
-            <RadzenColumn Size="1" Style="display: flex; align-items: center; height:60px">
-                <RadzenSwitch Style="width:20px; height:25px"></RadzenSwitch>
+            <RadzenColumn Size="10" Style="display: flex; align-items: center; height:60px">
+                <RadzenToggleButton @bind-Value=@recieveEmails Change=@OnChange Text="@(recieveEmails ? "Turn off Notifications" : "Turn on Notifications" )" ButtonStyle="ButtonStyle.Primary"
+                                    ToggleButtonStyle="ButtonStyle.Light" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Turn off Notifications" }})" />
             </RadzenColumn>
         </RadzenRow>
 
@@ -104,6 +126,10 @@
     public string? newPassword;
     public string? oldPassword;
 
+    bool passwordVisibleNew = true;
+    bool passwordVisibleOld = true;
+
+    bool recieveEmails = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -186,5 +212,20 @@
             user.salt = hashpass.Salt;
         }
         await userservice.UpdateUser(userid, user);
+    }
+
+    void TogglePasswordNew()
+    {
+        passwordVisibleNew = !passwordVisibleNew;
+    }
+
+    void TogglePasswordOld()
+    {
+        passwordVisibleOld= !passwordVisibleOld;
+    }
+
+    private void OnChange(bool newValue)
+    {
+        notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Recieve Emais? ", Detail = $"{newValue}" });
     }
 }

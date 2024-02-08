@@ -10,13 +10,12 @@
     <div style="text-align:center;">
         <h2>Login Form</h2>
     </div>
-
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
         <div style="text-align: center">
             <RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
                 <RadzenFormField Text="Username" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
                     <ChildContent>
-                        <RadzenTextBox Name="username" @bind-Value="usernameValue"/>
+                        <RadzenTextBox Name="username" @bind-Value="usernameValue" />
                         <RadzenRequiredValidator Component="username" Text="username field is empty" Popup=true Style="margin-top: 50px" />
 
                     </ChildContent>
@@ -31,19 +30,26 @@
                 <RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
                     <ChildContent>
                         <RadzenTextBox Name="password" @bind-Value=@password_value @bind-Value=@model.password />
-                        
-                        <!--<RadzenPassword @bind-Value="@password_value" Visible="@password_visibility" />-->
-                        
                         <RadzenRequiredValidator Component="password" Text="password field is empty" Popup=true Style="margin-top: 50px" />
                         <RadzenRegexValidator Component="password" Text="password is not valid" Pattern="@password_regex" Popup=true Style="margin-top: 50px" />
                     </ChildContent>
-                    <!--
-                    <End>
-                        <RadzenButton Icon="@(password_visibility ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
-                    </End>
-                    -->
-
                 </RadzenFormField>
+
+                <div style="text-align:center">
+                    <p>
+                        Be at least 8 characters long
+                        <br />
+                        Contain at least one uppercase letter (A-Z)
+                        <br />
+                        Contain at least one lowercase letter (a-z)
+                        <br />
+                        Contain at least one digit (0-9)
+                        <br />
+                        Contain at least one special character (#?!$%^&*-)
+                        <br />
+                    </p>
+                </div>
+                <br />
                 <RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
                     <RadzenButton ButtonType="ButtonType.Submit" Click="Register" style="width: 150px">Register</RadzenButton>
                 </RadzenStack>
@@ -51,7 +57,6 @@
         </div>
     </RadzenStack>
 
-    <br />
     <div style="text-align:center;">
         <p>Already have an account? </p>
         <RadzenLink Path=""> Login! </RadzenLink>

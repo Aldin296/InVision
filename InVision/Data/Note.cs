@@ -10,6 +10,5 @@ namespace InVision.Data
 		public string? Id { get; set; }
 		public string Title { get; set; }
 		public string? Content { get; set; }
-		public bool IsDone { get; set; }
 	}
 }

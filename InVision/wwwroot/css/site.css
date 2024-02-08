@@ -2,6 +2,8 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --rz-tooltip-color: #fff;
+    --rz-tooltip-background-color: #4340d2;
 }
 
 h1:focus {
@@ -67,11 +69,10 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
-/* Add this to your existing styles or create a new stylesheet */
 .kanban-card:hover {
     cursor: pointer;
-    background-color: #f0f0f0; /* Ändere dies auf die gewünschte gräuliche Farbe */
-    transition: box-shadow 0.3s ease; /* Add a smooth transition for the hover effect */
+    background-color: #f0f0f0;
+    transition: box-shadow 0.3s ease;
 }
 
 .delete-todoitem-icon:hover {

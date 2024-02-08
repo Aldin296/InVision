@@ -6,115 +6,109 @@
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
 
-	<h1>@board.Name</h1>
-	<div class="row">
-		<div class="col">
-			<RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid #AA4A44;  border-bottom: 2px solid #AA4A44">
-				<RadzenText TextStyle="TextStyle.H6">
-					<RadzenRow>
-						<RadzenColumn Size="10">
-							<strong>To Do</strong>
-						</RadzenColumn>
-						<RadzenColumn Size="2">
-							<RadzenIcon @onclick="()=>OnAddItem(todo)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
-						</RadzenColumn>
-					</RadzenRow>
-				</RadzenText>
-			</RadzenCard>
-			<br>
-			<Dropzone Items="MyFirstList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(todo, tdi))" Class="h-100">
-				<ChildContent>
-					<div class="card" style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px; max-width: 100%">
-						<div class="card-body">
-							<RadzenText contenteditable="true">
-								<strong>@context.Title </strong>
-							</RadzenText>
-							<RadzenRow>
-								<RadzenColumn Size="10">
-									<RadzenTextArea contenteditable="true">@context.Description</RadzenTextArea>
-									<p contenteditable="true">@context.Description</p>
-								</RadzenColumn>
-								<RadzenColumn Size="2">
-									<RadzenIcon @onclick="()=>OnDeleteitem(todo,context)" Icon="delete" Style="cursor: pointer;" class="delete-todoitem-icon"></RadzenIcon>
-								</RadzenColumn>
-							</RadzenRow>
-						</div>
-					</div>
-				</ChildContent>
-				<Footer>
-				</Footer>
-			</Dropzone>
-		</div>
-
-		<div class="col">
-			<RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid orange;  border-bottom: 2px solid orange">
-				<RadzenText TextStyle="TextStyle.H6">
-					<RadzenRow>
-						<RadzenColumn Size="10">
-							<strong>In Progress</strong>
-						</RadzenColumn>
-						<RadzenColumn Size="2">
-							<RadzenIcon @onclick="()=>OnAddItem(inProgress)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
-						</RadzenColumn>
-					</RadzenRow>
-				</RadzenText>
-			</RadzenCard>
-
-			<Dropzone Items="MySecondList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(inProgress, tdi))" Class="h-100" Id="Progress">
-				<ChildContent>
-					<div class="card" style="border-left: 6px solid orange; border-color: orange; border-radius: 0px; max-width:100%">
-						<div class="card-body">
-							<RadzenText contenteditable="true">
-								<strong>@context.Title </strong>
-							</RadzenText>
-							<RadzenRow>
-								<RadzenColumn Size="10">
-									<p contenteditable="true">@context.Description</p>
-								</RadzenColumn>
-								<RadzenColumn Size="2">
-									<RadzenIcon @onclick="()=>OnDeleteitem(inProgress,context)" Icon="delete" Style="cursor: pointer;"></RadzenIcon>
-								</RadzenColumn>
-							</RadzenRow>
-						</div>
-					</div>
-				</ChildContent>
-				<Footer>
-				</Footer>
-			</Dropzone>
-		</div>
-
-		<div class="col">
-			<RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid green;  border-bottom: 2px solid green">
-				<RadzenText TextStyle="TextStyle.H6">
-					<RadzenRow>
-						<RadzenColumn Size="10">
-							<strong>Done</strong>
-						</RadzenColumn>
-						<RadzenColumn Size="2">
-							<RadzenIcon @onclick="()=>OnAddItem(done)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
-						</RadzenColumn>
-					</RadzenRow>
-				</RadzenText>
-			</RadzenCard>
-			<Dropzone Items="MyThirdList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(done, tdi))" Class="h-100" Id="done">
-				<div class="card" style="border-left: 6px solid green; border-color: green; border-radius: 0px; max-width:100%">
+<h1>@board.Name</h1>
+<div class="row">
+	<div class="col">
+		<RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid #AA4A44;  border-bottom: 2px solid #AA4A44">
+			<RadzenText TextStyle="TextStyle.H6">
+				<RadzenRow>
+					<RadzenColumn Size="10">
+						<strong>To Do</strong>
+					</RadzenColumn>
+					<RadzenColumn Size="2">
+						<RadzenIcon @onclick="()=>OnAddItem(todo)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
+					</RadzenColumn>
+				</RadzenRow>
+			</RadzenText>
+		</RadzenCard>
+		<Dropzone Items="MyFirstList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(todo, tdi))" Class="h-100">
+			<ChildContent>
+				<div class="card" style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px; max-width: 100%">
 					<div class="card-body">
-						<RadzenText contenteditable="true">
-							<strong>@context.Title </strong>
-						</RadzenText>
+						<div style="width: 325px">
+							<RadzenText contenteditable="true" style="white-space: pre-wrap;">
+								<strong>@context.Title </strong>
+							</RadzenText>
+						</div>
 						<RadzenRow>
-							<RadzenColumn Size="10">
-								<p @onchange="()=>OnEditItem(context)" contenteditable="true">@context.Description</p>
-							</RadzenColumn>
-							<RadzenColumn Size="2">
-								<RadzenIcon @onclick="()=>OnDeleteitem(done, context)" Icon=" delete" Style="cursor: pointer;"></RadzenIcon>
+							<RadzenColumn Size="12">
+								<RadzenTextArea Style="width: 100%" Value="@context.Description"></RadzenTextArea>
 							</RadzenColumn>
 						</RadzenRow>
 					</div>
 				</div>
-			</Dropzone>
-		</div>
+			</ChildContent>
+			<Footer>
+			</Footer>
+		</Dropzone>
 	</div>
+
+	<div class="col">
+		<RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid orange;  border-bottom: 2px solid orange">
+			<RadzenText TextStyle="TextStyle.H6">
+				<RadzenRow>
+					<RadzenColumn Size="10">
+						<strong>In Progress</strong>
+					</RadzenColumn>
+					<RadzenColumn Size="2">
+						<RadzenIcon @onclick="()=>OnAddItem(inProgress)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
+					</RadzenColumn>
+				</RadzenRow>
+			</RadzenText>
+		</RadzenCard>
+		<Dropzone Items="MySecondList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(inProgress, tdi))" Class="h-100" Id="Progress">
+			<ChildContent>
+				<div class="card" style="border-left: 6px solid orange; border-color: orange; border-radius: 0px; max-width:100%">
+					<div class="card-body">
+						<div style="width: 325px">
+							<RadzenText contenteditable="true" style="white-space: pre-wrap;">
+								<strong>@context.Title </strong>
+							</RadzenText>
+						</div>
+						<RadzenRow>
+							<RadzenColumn Size="12">
+								<RadzenTextArea Style="width: 100%" Value="@context.Description"></RadzenTextArea>
+							</RadzenColumn>
+						</RadzenRow>
+					</div>
+				</div>
+			</ChildContent>
+			<Footer>
+			</Footer>
+		</Dropzone>
+	</div>
+
+	<div class="col">
+		<RadzenCard style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border-left: 6px solid green;  border-bottom: 2px solid green">
+			<RadzenText TextStyle="TextStyle.H6">
+				<RadzenRow>
+					<RadzenColumn Size="10">
+						<strong>Done</strong>
+					</RadzenColumn>
+					<RadzenColumn Size="2">
+						<RadzenIcon @onclick="()=>OnAddItem(done)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
+					</RadzenColumn>
+				</RadzenRow>
+			</RadzenText>
+		</RadzenCard>
+		<Dropzone Items="MyThirdList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(done, tdi))" Class="h-100" Id="done">
+			<div class="card" style="border-left: 6px solid green; border-color: green; border-radius: 0px; max-width:100%">
+				<div class="card-body">
+					<div style="width: 325px">
+						<RadzenText contenteditable="true" style="white-space: pre-wrap;">
+							<strong>@context.Title </strong>
+						</RadzenText>
+					</div>
+					<RadzenRow>
+						<RadzenColumn Size="12">
+							<RadzenTextArea Style="width: 100%" Value="@context.Description"></RadzenTextArea>
+						</RadzenColumn>
+					</RadzenRow>
+				</div>
+			</div>
+		</Dropzone>
+	</div>
+</div>
 
 
 @code {
@@ -167,7 +161,7 @@
 
 	public async void OnAddItem(string dropzone)
 	{
-		TodoItem newitem = await DialogService.OpenAsync<AddToDoItemPage>("Add Appointment");
+		TodoItem newitem = await DialogService.OpenAsync<AddToDoItemPage>("Add Task");
 		if (newitem != null)
 		{
 			if (dropzone == "ToDo")
@@ -233,7 +227,4 @@
 			item.State = 2;
 		}
 	}
-
-
-
 }

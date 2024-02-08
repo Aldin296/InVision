@@ -1,9 +1,10 @@
-﻿@page "/allKanbanBoards"
+@page "/allKanbanBoards"
 @using InVision.Data
 @inject KBoardService service
 @inject NavigationManager NavManager
 @inject DialogService DialogService
 @inject ContextMenuService ContextMenuService
+@inject TooltipService tooltipService
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
 
@@ -23,7 +24,7 @@ else
 		<ChildContent>
 			<RadzenDataList WrapItems="true" AllowPaging="true" Data="@boards" TItem="KBoard">
 				<Template Context="kboard">
-					<RadzenCard Style="width: 250px" ContextMenu=@(args => ShowContextMenuWithItems(args,kboard)) @onclick="()=>OpenKanbanBoard(kboard)" class="kanban-card">
+					<RadzenCard Style="width: 250px" MouseEnter="@(args => ShowTooltip(args, new TooltipOptions(){ Delay = 500}))" ContextMenu=@(args => ShowContextMenuWithItems(args,kboard)) @onclick="()=>OpenKanbanBoard(kboard)" class="kanban-card">
 						<RadzenRow>
 							<RadzenColumn Size="12" class="rz-text-align-start">
 								<RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@kboard.Name</RadzenText>
@@ -116,4 +117,6 @@ else
 			ContextMenuService.Close();
 		}
 	}
+	void ShowTooltip(ElementReference elementReference, TooltipOptions options = null) => tooltipService.Open(elementReference, "To delete the Board press right click!", options);
+
 }

@@ -6,8 +6,7 @@
 
 
 <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
-				 TextProperty="Text" SelectedIndex="2"
-				 SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender>
+				 TextProperty="Text" SelectedIndex="2" SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender EventSty>
 	<RadzenDayView />
 	<RadzenWeekView />
 	<RadzenMonthView />
@@ -38,10 +37,12 @@
 		}
 
 		// Highlight working hours (9-18)
+		/*
 		if ((args.View.Text == "Week" || args.View.Text == "Day") && args.Start.Hour > 8 && args.Start.Hour < 19)
 		{
 			args.Attributes["style"] = "background: rgba(232, 232, 250);";
 		}
+		*/
 	}
 
 	async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
@@ -49,7 +50,11 @@
 		if (args.View.Text != "Year")
 		{
 			Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
-				new Dictionary<string, object> { { "Start", args.Start }, { "End", args.End } });
+				new Dictionary<string, object> 
+				{
+					{ "Start", args.Start },
+					{ "End", args.End } 
+				});
 
 			if (data != null)
 			{
@@ -84,9 +89,6 @@
 
 	void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Appointment> args)
 	{
-
-
 		args.Attributes["style"] = "background: rgba(67, 64, 210)";
-
 	}
 }

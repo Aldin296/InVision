@@ -62,7 +62,7 @@
         if (!string.IsNullOrEmpty(userId))
         {
             user = await userservice.GetUserById(userId);
-            StateHasChanged(); // Notify Blazor to re-render the component
+           
 
             if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
             {
@@ -75,6 +75,10 @@
                 imagepath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
             }
 
+            if (firstRender)
+            {
+                StateHasChanged();
+            }
         }
         else
         {

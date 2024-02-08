@@ -135,6 +135,10 @@
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
+		if (firstRender)
+		{
+			await InvokeAsync(StateHasChanged);
+		}
 		string userId = await localstore.GetItemAsync<string>("UserId");
 		boards = await Task.Run(() => service.GetAllKBoardsAsync(userId));
 
@@ -145,15 +149,15 @@
 
 		foreach (TodoItem item in listOfItems)
 		{
-			if (item.state == 0)
+			if (item.State == 0)
 			{
 				MyFirstList.Add(item);
 			}
-			if (item.state == 1)
+			if (item.State == 1)
 			{
 				MySecondList.Add(item);
 			}
-			if (item.state == 2)
+			if (item.State == 2)
 			{
 				MyThirdList.Add(item);
 			}
@@ -168,17 +172,17 @@
 		{
 			if (dropzone == "ToDo")
 			{
-				newitem.state = 0;
+				newitem.State = 0;
 				MyFirstList.Add(newitem);
 			}
 			if (dropzone == "InProgress")
 			{
-				newitem.state = 1;
+				newitem.State = 1;
 				MySecondList.Add(newitem);
 			}
 			if (dropzone == "Done")
 			{
-				newitem.state = 2;
+				newitem.State = 2;
 				MyThirdList.Add(newitem);
 			}
 		}
@@ -218,15 +222,15 @@
 		Console.WriteLine(dropzoneId);
 		if (dropzoneId == "ToDo")
 		{
-			item.state = 0;
+			item.State = 0;
 		}
 		if (dropzoneId == "InProgress")
 		{
-			item.state = 1;
+			item.State = 1;
 		}
 		if (dropzoneId == "Done")
 		{
-			item.state = 2;
+			item.State = 2;
 		}
 	}
 

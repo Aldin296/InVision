@@ -4,6 +4,6 @@
     {
             public string Title { get; set; }
             public string? Description { get; set; }
-            public int state { get; set; }
+            public int State { get; set; }
     }
 }

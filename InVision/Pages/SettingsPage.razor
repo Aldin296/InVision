@@ -112,7 +112,8 @@
     {
         userid = await localstore.GetItemAsync<string>("UserId");
         user = await userservice.GetUserById(userid);
-        StateHasChanged();
+        
+        
         if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
         {
             // Convert byte array to base64 string
@@ -122,6 +123,10 @@
         {
             // Set a default image path if no profile picture is available
             selectedImagePath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
+        }
+        if (firstRender)
+        {
+            StateHasChanged();
         }
     }
 
@@ -161,7 +166,6 @@
         if(oldPassword!=null)
         {
             passwordStatus = await userservice.PasswordControl(userid, oldPassword);
-
         }
     
         if(useremail!=null)

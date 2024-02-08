@@ -54,8 +54,12 @@ else
     List<Note> filterNotes;
     string searchValue;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (firstRender)
+        {
+            await InvokeAsync(StateHasChanged);
+        }
         //notes = await Task.Run(() => service.BoardList());
         filterNotes = new List<Note>(notes);
     }

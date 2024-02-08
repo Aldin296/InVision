@@ -38,10 +38,10 @@ namespace InVision.Data
             
         }
 
-        public async Task<bool> PasswordControl(string ?userid, string ?password)
+        public async Task<bool> PasswordControl(string? userid, string? password)
         {
             string requestUrl = $"{baseurl}/api/User/{userid}";
-            User u = await client.GetAsync(requestUrl);
+            User u = await client.GetFromJsonAsync<User>(requestUrl);
             byte[] salt = u.salt;
 
             // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)

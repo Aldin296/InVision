@@ -25,9 +25,6 @@ namespace InVision.Data
             Email = email;
         }
 
-		public static implicit operator User(HttpResponseMessage v)
-		{
-			throw new NotImplementedException();
-		}
+		
 	}
 }

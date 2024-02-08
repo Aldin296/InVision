@@ -4,19 +4,29 @@
 @inject NavigationManager NavManager
 @inject DialogService DialogService
 
+
 <RadzenPanel>
     <HeaderTemplate>
         <RadzenText TextStyle="TextStyle.H4" Text="@note.Title" Class="rz-display-flex rz-align-items-center rz-m-0" contenteditable="true" />
-        <RadzenIcon Icon="more_horiz" Style="cursor: pointer; padding-right: 20px; font-size: 2em" class="add-todoitem-icon"></RadzenIcon>
+        <RadzenIcon @onclick="()=>OpenSideDialog()" Icon="more_horiz" Style="cursor: pointer; padding-right: 20px; font-size: 2em" class="add-todoitem-icon"></RadzenIcon>
     </HeaderTemplate>
     <ChildContent>
         <hr />
-        <RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" /> <!-- Adjust 50px according to your header height -->
+        <RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" UploadUrl="upload/image" />
     </ChildContent>
 </RadzenPanel>
 
 @code {
     public Note note = new Note();
+
+    DialogPosition position;
+    bool closeDialogOnOverlayClick;
+    bool showMask;
+
+    async Task OpenSideDialog()
+    {
+        await DialogService.OpenSideAsync<IconSelectDialog>("",options: new SideDialogOptions { CloseDialogOnOverlayClick = closeDialogOnOverlayClick, Position = position, ShowMask = showMask });
+    }
 
     protected override async Task OnInitializedAsync()
     {

@@ -146,7 +146,6 @@
                         imageBytes = memoryStream.ToArray();
                     }
                 }
-
                 selectedImagePath = $"data:{imageFile.ContentType};base64,{Convert.ToBase64String(imageBytes)}";
             }
             catch (Exception ex)

@@ -129,10 +129,7 @@
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (firstRender)
-		{
-			await InvokeAsync(StateHasChanged);
-		}
+		
 		string userId = await localstore.GetItemAsync<string>("UserId");
 		boards = await Task.Run(() => service.GetAllKBoardsAsync(userId));
 
@@ -155,6 +152,10 @@
 			{
 				MyThirdList.Add(item);
 			}
+		}
+		if (firstRender)
+		{
+			await InvokeAsync(StateHasChanged);
 		}
 
 	}

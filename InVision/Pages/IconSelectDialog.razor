@@ -1,10 +1,11 @@
 ﻿@using InVision.Data
 @inject InVision.Data.MatIconService iconService
+@inject TooltipService tooltipService
 
 
 
 <RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
-    <RadzenIcon Icon="account_box" class="rz-mr-1" /><b>Kanban Boards</b>
+    <RadzenIcon Icon="sentiment_satisfied" class="rz-mr-1" /><b>Select Icon</b>
 </RadzenText>
 <br />
 <RadzenFormField Text="" Variant="Variant.Text" Style="padding-left: 7px">
@@ -15,14 +16,11 @@
 <br />
 <RadzenDataList WrapItems="true" AllowPaging="false" Data="@filteredIcons" TItem="string">
     <Template Context="icon">
-        <RadzenButton Style="background-color: transparent; color:black" Icon="@icon"></RadzenButton>
+        <RadzenButton Click="OnIconClick" MouseEnter="@(args => ShowTooltip(args,icon ,new TooltipOptions(){ Delay = 100, Duration = 1000 }))" Style="background-color: transparent; color:black;" Icon="@icon"></RadzenButton>
         <br />
     </Template>
 </RadzenDataList>
-
-
-
-
+<br />
 <RadzenButton Size="ButtonSize.ExtraSmall" Text="Close Side Dialog" Click="@(_ => Service.CloseSide())" />
 
 @code {
@@ -33,7 +31,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        icons = await Task.Run(() => iconService.GetMaterialDesignIconNames());
+        icons = iconService.GetAllIconName();
         filteredIcons = icons;
     }
 
@@ -51,9 +49,17 @@
         }
         else
         {
-            //filteredIcons = boards.Where(b => b.Name.Contains(searchValue, StringComparison.OrdinalIgnoreCase)).ToList();
+            filteredIcons = icons.Where(b => b.Contains(searchValue, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         StateHasChanged();
     }
+
+    void OnIconClick()
+    {
+        
+    }
+
+    void ShowTooltip(ElementReference elementReference, string iconname, TooltipOptions options = null) => tooltipService.Open(elementReference, iconname, options);
+
 }

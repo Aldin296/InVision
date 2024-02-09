@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using MongoDB.Driver;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Xml.Linq;
 
@@ -54,7 +55,11 @@ namespace InVision.Data
 
             return user?.KBoards ?? new List<KBoard>() ;
 		}
-
+        public async Task DeleteKBoard(string userId, string KBoardId)
+        {
+            string requestUrl = $"{baseurl}/api/KBoard/{userId}/{KBoardId}";
+            await client.DeleteAsync(requestUrl);
+        }
 
         public async Task CreateKBoard(string userid, KBoard kboard)
         {

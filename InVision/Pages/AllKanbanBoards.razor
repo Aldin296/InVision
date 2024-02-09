@@ -3,6 +3,7 @@
 @inject KBoardService service
 @inject NavigationManager NavManager
 @inject DialogService DialogService
+@inject KBoardService kboardService
 @inject ContextMenuService ContextMenuService
 @inject TooltipService tooltipService
 @inject Blazored.LocalStorage.ILocalStorageService localstore
@@ -56,10 +57,11 @@ else
     List<KBoard>? boards;
     List<KBoard> filteredBoards;
     string searchValue;
+    string userId;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        string userId = await localstore.GetItemAsync<string>("UserId");
+        userId = await localstore.GetItemAsync<string>("UserId");
         boards = await Task.Run(() => service.GetAllKBoardsAsync(userId));
         filteredBoards = boards;
 
@@ -97,10 +99,11 @@ else
 
     }
 
-    private void OnDeleteBoard(KBoard board)
+    private async void OnDeleteBoard(KBoard board)
     {
-        boards.Remove(board);
-        filteredBoards.Remove(board);
+        await kboardService.DeleteKBoard(userId, board.Id);
+        boards.RemoveAll(x=>x.Id == board.Id);
+        filteredBoards.RemoveAll(x => x.Id == board.Id);
         UpdateFilteredBoards();
 
         StateHasChanged();
@@ -112,8 +115,7 @@ else
 
         ContextMenuService.Open(args,
             new List<ContextMenuItem> {
-                new ContextMenuItem(){ Text = "Delete", Value = 1, Icon = "delete" },
-                            },
+                new ContextMenuItem(){ Text = "Delete", Value = 1, Icon = "delete" },},
             (MenuItemEventArgs eventArgs) => OnMenuItemClick(eventArgs, board));
         UpdateFilteredBoards();
 

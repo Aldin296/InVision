@@ -88,3 +88,7 @@ a, .btn-link {
     color: #4340d2 !important;
 }
 
+.rz-year-view .rz-slot .rz-slot-title.rz-has-appointments {
+    color: white !important;
+    background-color: rgba(67, 64, 210) !important;
+}

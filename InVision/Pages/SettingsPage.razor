@@ -204,7 +204,7 @@
             user.ProfilePicture = imageBytes;
         }
 
-        if (passwordStatus == true)
+        if (passwordStatus == true && newPassword != null)
         {
             //Da das neue Passwort ebenfalls verschlüsselt werden muss, musste ich hier eine eigene hashPassword methode aufrufen
             //Und dessen werte dann dem user geben damit diese geupdated werden

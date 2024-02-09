@@ -26,7 +26,7 @@ namespace InVision_API.Controllers
 			return Ok(kboards);
 		}
 
-		[HttpGet("{userId:length(24)}/{kboardId:length(24)}")]
+		[HttpGet("{userId:length(24)}/{kboardId}")]
 		public async Task<ActionResult<KBoard>> GetKboard(string userId, string kboardId)
 		{
 			var kboard = await _kboardService.GetKBoardAsync(userId, kboardId);
@@ -67,7 +67,7 @@ namespace InVision_API.Controllers
 			}
 		}
 
-		[HttpDelete("{userId:length(24)}/{kboardId:length(24)}")]
+		[HttpDelete("{userId:length(24)}/{kboardId}")]
 		public async Task<IActionResult> DeleteKBoard(string userId, string kboardId)
 		{
 			try

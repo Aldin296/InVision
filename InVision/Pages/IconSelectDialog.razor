@@ -16,12 +16,11 @@
 <br />
 <RadzenDataList WrapItems="true" AllowPaging="false" Data="@filteredIcons" TItem="string">
     <Template Context="icon">
-        <RadzenButton Click="OnIconClick" MouseEnter="@(args => ShowTooltip(args,icon ,new TooltipOptions(){ Delay = 100, Duration = 1000 }))" Style="background-color: transparent; color:black;" Icon="@icon"></RadzenButton>
+        <RadzenButton Click="@(() => OnIconClick(icon))" MouseEnter="@(args => ShowTooltip(args,icon ,new TooltipOptions(){ Delay = 100, Duration = 2000 }))" Style="background-color: transparent; color:black;" Icon="@icon"></RadzenButton>
         <br />
     </Template>
 </RadzenDataList>
 <br />
-<RadzenButton Size="ButtonSize.ExtraSmall" Text="Close Side Dialog" Click="@(_ => Service.CloseSide())" />
 
 @code {
     [Inject] DialogService Service { get; set; }
@@ -55,9 +54,9 @@
         StateHasChanged();
     }
 
-    void OnIconClick()
+    void OnIconClick(string iconname)
     {
-        
+        iconService.SetSelectedIcon(iconname);
     }
 
     void ShowTooltip(ElementReference elementReference, string iconname, TooltipOptions options = null) => tooltipService.Open(elementReference, iconname, options);

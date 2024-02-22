@@ -3,11 +3,12 @@
 @inject KBoardService service
 @inject NavigationManager NavManager
 @inject DialogService DialogService
-
+@inject MatIconService IconService
 
 <RadzenPanel>
     <HeaderTemplate>
-        <RadzenText TextStyle="TextStyle.H4" Text="@note.Title" Class="rz-display-flex rz-align-items-center rz-m-0" contenteditable="true" />
+        <RadzenText TextStyle="TextStyle.H4" Text="@note.Title" Style="max-width: 90%" contenteditable="true" />
+        <RadzenIcon Icon="@IconService.selectedIcon" Style="padding-right: 20px; font-size:2em"></RadzenIcon>
         <RadzenIcon @onclick="()=>OpenSideDialog()" Icon="more_horiz" Style="cursor: pointer; padding-right: 20px; font-size: 2em" class="add-todoitem-icon"></RadzenIcon>
     </HeaderTemplate>
     <ChildContent>
@@ -17,7 +18,12 @@
 </RadzenPanel>
 
 @code {
+
+    [Parameter]
+    public string noteId { get; set; }
+
     public Note note = new Note();
+    public string? selectedIcon;
 
     DialogPosition position;
     bool closeDialogOnOverlayClick;
@@ -32,5 +38,7 @@
     {
         note.Title = "Toller Titel haha";
         note.Content = "<h1>Hello World!</h1>";
+
+        selectedIcon = IconService.GetSelectedIcon();
     }
 }

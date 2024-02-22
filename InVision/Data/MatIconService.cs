@@ -6,7 +6,17 @@ namespace InVision.Data
 {
     public class MatIconService
     {
-        public MatRoot? matroot = new();
+        public string? selectedIcon { get; set; }
+
+        public void SetSelectedIcon(string iconName)
+        {
+            selectedIcon = iconName;
+        }
+
+        public string GetSelectedIcon()
+        {
+            return selectedIcon; 
+        }
 
         /*
         public async Task<MatRoot> GetAllMaterialDesignIcons()

@@ -1,6 +1,7 @@
 ﻿@using InVision.Data
-@inject InVision.Data.MatIconService iconService
+@inject MatIconService iconService
 @inject TooltipService tooltipService
+@inject NoteService noteService
 
 
 
@@ -27,6 +28,7 @@
     string searchValue;
     List<string> filteredIcons;
     List<string> icons;
+    Note currentNote;
 
     protected override async Task OnInitializedAsync()
     {
@@ -57,6 +59,8 @@
     void OnIconClick(string iconname)
     {
         iconService.SetSelectedIcon(iconname);
+        currentNote = noteService.selectedNote;
+        currentNote.Icon = iconname;
     }
 
     void ShowTooltip(ElementReference elementReference, string iconname, TooltipOptions options = null) => tooltipService.Open(elementReference, iconname, options);

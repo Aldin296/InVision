@@ -5,7 +5,9 @@
 @inject NavigationManager NavManager
 @inject DialogService DialogService
 @inject ContextMenuService ContextMenuService
-@inject TooltipService tooltipService
+@inject TooltipService TooltipService
+@inject MatIconService IconService
+
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
 @if (filteredNotes == null)
@@ -33,11 +35,11 @@ else
                 <Template Context="note">
                     <RadzenCard Style="width: 250px" ContextMenu=@(args => ShowContextMenuWithItems(args,note)) @onclick="()=>OpenNote(note)" class="kanban-card">
                         <RadzenRow>
-                            <RadzenColumn Size="10" class="rz-text-align-start">
+                            <RadzenColumn Size="11" class="rz-text-align-start">
                                 <RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@note.Title</RadzenText>
                                 </RadzenColumn>
-                                <RadzenColumn Size="2">
-                                    <RadzenIcon Icon="@Iconservice.selectedIcon"></RadzenIcon>
+                                <RadzenColumn Size="1">
+                                    <RadzenIcon Icon="@note.Icon"></RadzenIcon>
                                 </RadzenColumn>
                             </RadzenRow>
                         </RadzenCard>
@@ -55,7 +57,7 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        notes = NoteService.GettAllNotes();
+        notes = NoteService.notes;
         filteredNotes = notes;
 
         if (firstRender)
@@ -64,10 +66,31 @@ else
         }
     }
 
+    private async void OnAddNote()
+    {
+        Note note = await DialogService.OpenAsync<AddNotePage>("Add Note");
+        if (note != null)
+        {
+            if (note.Title != null)
+            {
+                notes.Add(note);
+                StateHasChanged();
+            }
+            else
+            {
+                Console.WriteLine("Note erstellen abgebrochen");
+            }
+        }
+        else
+        {
+            Console.WriteLine("NOte erstellen abgebrochen");
+        }
+    }
+
     private void OpenNote(Note selectedNote)
     {
         NoteService.selectedNote = selectedNote;
-        NavManager.NavigateTo("/kanbanBoard/" + selectedNote.Id);
+        NavManager.NavigateTo("/note/" + selectedNote.Id);
     }
 
 
@@ -86,16 +109,27 @@ else
     {
         if (args.Value.Equals(1))
         {
-            OnDeleteBoard(board);
+            OnDeleteNote(note);
             ContextMenuService.Close();
         }
+    }
+
+    private async void OnDeleteNote(Note note)
+    {
+        //await kboardService.DeleteKBoard(userId, board.Id);
+        notes.Remove(note);
+        filteredNotes.Remove(note);
+        UpdateFilteredNotes();
+
+        StateHasChanged();
+
     }
 
     private void UpdateFilteredNotes()
     {
         if (string.IsNullOrEmpty(searchValue))
         {
-            filteredNotes= new List<Note>(notes);
+            filteredNotes = new List<Note>(notes);
         }
         else
         {
@@ -108,7 +142,7 @@ else
     private void SearchNotes(ChangeEventArgs args)
     {
         searchValue = args.Value.ToString();
-        UpdateFilteredBoards();
+        UpdateFilteredNotes();
     }
 
 

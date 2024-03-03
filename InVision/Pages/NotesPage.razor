@@ -1,14 +1,15 @@
-﻿@page "/notes"
+﻿@page "/note"
 @using InVision.Data
 @inject KBoardService service
 @inject NavigationManager NavManager
 @inject DialogService DialogService
 @inject MatIconService IconService
+@inject NoteService NoteService
 
 <RadzenPanel>
     <HeaderTemplate>
         <RadzenText TextStyle="TextStyle.H4" Text="@note.Title" Style="max-width: 90%" contenteditable="true" />
-        <RadzenIcon Icon="@IconService.selectedIcon" Style="padding-right: 20px; font-size:2em"></RadzenIcon>
+        <RadzenIcon Icon="@NoteService.selectedNote.Icon" Style="padding-right: 20px; font-size:2em"></RadzenIcon>
         <RadzenIcon @onclick="()=>OpenSideDialog()" Icon="more_horiz" Style="cursor: pointer; padding-right: 20px; font-size: 2em" class="add-todoitem-icon"></RadzenIcon>
     </HeaderTemplate>
     <ChildContent>
@@ -36,7 +37,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        note.Title = "Toller Titel haha";
+        note.Title = NoteService.selectedNote.Title;
         note.Content = "<h1>Hello World!</h1>";
 
         selectedIcon = IconService.GetSelectedIcon();

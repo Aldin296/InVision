@@ -1,6 +1,7 @@
 ﻿@page "/kanbanBoard/{boardId}"
-@using InVision.Data
+@using InVision.Data.Model
 @using InVision.Pages
+@using InVision.Data.Service
 @inject KBoardService boardService
 @inject DialogService DialogService
 @inject Blazored.LocalStorage.ILocalStorageService localstore

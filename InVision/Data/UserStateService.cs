@@ -1,4 +1,6 @@
-﻿namespace InVision.Data
+﻿using InVision.Data.Model;
+
+namespace InVision.Data
 {
     public class UserStateService
     {

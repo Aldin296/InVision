@@ -1,4 +1,4 @@
-﻿namespace InVision.Data
+﻿namespace InVision.Data.Model
 {
     public class HashPassword
     {

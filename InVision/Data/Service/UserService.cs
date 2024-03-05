@@ -1,20 +1,22 @@
-﻿
+﻿using InVision.Data.Model;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Text.Json;
 
-namespace InVision.Data
+namespace InVision.Data.Service
 
 {
     public class UserService
     {
-        private readonly string baseurl = "https://localhost:7133";
+
+        
+        private readonly string baseurl = "http://localhost:80";
         HttpClient client = new HttpClient();
 
         public HashPassword hashPassword(string password)
         {
-            
+
             //Salt wird generiert um bei dem selben Passwort von verschiedenen Benutzern einen anderen Hashwert zu generieren
             byte[] salt = RandomNumberGenerator.GetBytes(128 / 8); // divide by 8 to convert bits to bytes
             Console.WriteLine($"Salt: {Convert.ToBase64String(salt)}");
@@ -35,7 +37,7 @@ namespace InVision.Data
             hashedPassword.Hashed = hashed;
             hashedPassword.Salt = salt;
             return hashedPassword;
-            
+
         }
 
         public async Task<bool> PasswordControl(string? userid, string? password)
@@ -126,7 +128,7 @@ namespace InVision.Data
             return false;
         }
 
-        
+
 
         public async Task<User> GetUserById(string id)
         {

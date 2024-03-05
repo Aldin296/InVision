@@ -1,6 +1,8 @@
 ﻿@inject DialogService DialogService
-@using InVision.Data
-
+@using InVision.Data;
+@using InVision.Data.Model
+@inject InVision.Data.Service.CalendarService calendarService
+@inject ILocalStorageService localstore
 
 <RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
     <div class="row" style="margin-bottom: 16px">
@@ -48,6 +50,10 @@
     </div>
 </RadzenTemplateForm>
 @code {
+
+    [Parameter]
+    public string Text { get; set; }
+
     [Parameter]
     public DateTime Start { get; set; }
 
@@ -56,6 +62,8 @@
 
     [Parameter]
     public string Color { get; set; }
+
+    string userId = "";
 
     Appointment model = new Appointment();
 
@@ -73,13 +81,16 @@
 
     protected override void OnParametersSet()
     {
+        model.Text = Text;
         model.Start = Start;
         model.End = End;
         model.Color = Color;
     }
 
-    void OnSubmit(Appointment model)
+    async void OnSubmit(Appointment model)
     {
+        userId = await localstore.GetItemAsync<string>("UserId");
+        await calendarService.CreateAppointmentAsync(userId, model);
         DialogService.Close(model);
     }
 }

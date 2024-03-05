@@ -22,15 +22,14 @@ namespace InVision_API
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<NoteService>();
             builder.Services.AddScoped<KBoardService>();
+			builder.Services.AddScoped<CalendarService>();
 
-            var app = builder.Build();
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
 

@@ -1,5 +1,9 @@
 ﻿@inject DialogService DialogService
-@using InVision.Data
+@using InVision.Data.Service
+@using InVision.Data.Model
+@inject CalendarService calenderService
+@inject ILocalStorageService localstore
+
 
 <RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
     <div class="row" style="margin-bottom: 16px">
@@ -48,6 +52,7 @@
     [Parameter]
     public Appointment Appointment { get; set; }
 
+    string userId = "";
     Appointment model = new Appointment();
 
     bool showHSV = true;
@@ -65,8 +70,10 @@
         model = Appointment;
     }
 
-    void OnSubmit(Appointment model)
+    async void OnSubmit(Appointment model)
     {
+        userId = await localstore.GetItemAsync<string>("UserId");
+        //calenderService.UpdateAppointmentAsync(userId, appointmentId, model);
         DialogService.Close(model);
     }
 }

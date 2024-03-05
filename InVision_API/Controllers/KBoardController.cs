@@ -4,6 +4,8 @@ using InVision_API.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+
 
 namespace InVision_API.Controllers
 {
@@ -12,10 +14,13 @@ namespace InVision_API.Controllers
 	public class KBoardController : ControllerBase
 	{
 		private readonly KBoardService _kboardService;
+		private readonly ILogger<KBoardController> _logger;
 
-		public KBoardController(KBoardService kboardService)
+
+		public KBoardController(KBoardService kboardService, ILogger<KBoardController> logger)
 		{
 			_kboardService = kboardService;
+			_logger = logger;
 		}
 
 		[HttpGet("{userId:length(24)}")]
@@ -26,17 +31,27 @@ namespace InVision_API.Controllers
 			return Ok(kboards);
 		}
 
-		[HttpGet("{userId:length(24)}/{kboardId:length(24)}")]
+		[HttpGet]
 		public async Task<ActionResult<KBoard>> GetKboard(string userId, string kboardId)
 		{
-			var kboard = await _kboardService.GetKBoardAsync(userId, kboardId);
-
-			if (kboard == null)
+			try
 			{
-				return NotFound();
-			}
+				var kboard = await _kboardService.GetKBoardAsync(userId, kboardId);
 
-			return Ok(kboard);
+				if (kboard == null)
+				{
+					return NotFound();
+				}
+
+				return Ok(kboard);
+			}
+			catch (Exception ex)
+			{
+				// Log the exception
+				_logger.LogError(ex, "An error occurred while retrieving KBoard.");
+
+				return StatusCode(500, "An error occurred while processing your request.");
+			}
 		}
 
 		[HttpPost("{userId:length(24)}")]
@@ -67,7 +82,7 @@ namespace InVision_API.Controllers
 			}
 		}
 
-		[HttpDelete("{userId:length(24)}/{kboardId:length(24)}")]
+		[HttpDelete]
 		public async Task<IActionResult> DeleteKBoard(string userId, string kboardId)
 		{
 			try

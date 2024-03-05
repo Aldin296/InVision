@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using InVision.Data;
+using InVision.Data.Service;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ builder.Services.AddBlazorDragDrop();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddScoped<UserStateService>();
 builder.Services.AddScoped<MatIconService>();
+builder.Services.AddScoped<CalendarService>();
 builder.Services.AddBlazoredLocalStorage();
 
 // Add session-related services

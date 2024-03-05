@@ -1,10 +1,11 @@
 ﻿@page "/"
 @layout LoginLayout
 @inject NavigationManager NavManager
-@inject Data.UserService userservice
+@inject InVision.Data.Service.UserService userservice 
 @inject Data.UserStateService userstate
 @inject Blazored.LocalStorage.ILocalStorageService localstore
-@using InVision.Data
+@using InVision.Data.Model
+
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
 	<div style="text-align:center;">

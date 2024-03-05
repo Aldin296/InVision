@@ -1,101 +1,45 @@
-﻿@page "/notes"
-@using InVision.Data;
-@using InVision.Data.Service
-@using InVision.Data.Model
+﻿@page "/note"
+@using InVision.Data
 @inject KBoardService service
 @inject NavigationManager NavManager
 @inject DialogService DialogService
+@inject MatIconService IconService
+@inject NoteService NoteService
 
-@if (filterNotes == null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <RadzenPanel>
-        <HeaderTemplate>
-            <RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
-                <RadzenIcon Icon="dns" class="rz-mr-1" /><b>Kanban Boards</b>
-            </RadzenText>
-            <RadzenIcon Icon="add_circle_outline" @onclick="()=>OnAddNote()" Style="cursor: pointer; padding-right: 20px; font-size: 2em" class="add-todoitem-icon"></RadzenIcon>
-        </HeaderTemplate>
-
-        <ChildContent>
-            <br />
-            <RadzenFormField Text="" Variant="Variant.Text" Style="padding-left: 7px">
-                <RadzenTextBox @bind-Value="@searchValue" @oninput="SearchNotes" Style="width: 100%;" />
-            </RadzenFormField>
-            <RadzenIcon style="font-weight: 20; margin-top: 20px" Icon="search"></RadzenIcon>
-
-            <br />
-            <br />
-            <RadzenDataList WrapItems="true" AllowPaging="true" Data="@filterNotes" TItem="Note">
-                <Template Context="note">
-                    <RadzenCard Style="width: 250px" @onclick="()=>OpenNote(note)" class="kanban-card">
-                        <RadzenRow>
-                            <RadzenColumn Size="12" class="rz-text-align-start">
-                                <RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@note?.Title</RadzenText>
-                            </RadzenColumn>
-                        </RadzenRow>
-                        <hr style="border: none; background-color: var(--rz-text-disabled-color); height: 1px; margin: 1rem 0;" />
-                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
-                            <RadzenStack Gap="0">
-                                <RadzenText TextStyle="TextStyle.Body1">@note?.Content</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@note?.IsDone</RadzenText>
-                            </RadzenStack>
-                        </RadzenStack>
-                    </RadzenCard>
-                </Template>
-            </RadzenDataList>
-        </ChildContent>
-    </RadzenPanel>
-}
+<RadzenPanel>
+    <HeaderTemplate>
+        <RadzenText TextStyle="TextStyle.H4" Text="@note.Title" Style="max-width: 90%" contenteditable="true" />
+        <RadzenIcon Icon="@NoteService.selectedNote.Icon" Style="padding-right: 20px; font-size:2em"></RadzenIcon>
+        <RadzenIcon @onclick="()=>OpenSideDialog()" Icon="more_horiz" Style="cursor: pointer; padding-right: 20px; font-size: 2em" class="add-todoitem-icon"></RadzenIcon>
+    </HeaderTemplate>
+    <ChildContent>
+        <hr />
+        <RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" UploadUrl="upload/image" />
+    </ChildContent>
+</RadzenPanel>
 
 @code {
-    List<Note> notes;
-    List<Note> filterNotes;
-    string searchValue;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    [Parameter]
+    public string noteId { get; set; }
+
+    public Note note = new Note();
+    public string? selectedIcon;
+
+    DialogPosition position;
+    bool closeDialogOnOverlayClick;
+    bool showMask;
+
+    async Task OpenSideDialog()
     {
-        if (firstRender)
-        {
-            await InvokeAsync(StateHasChanged);
-        }
-        //notes = await Task.Run(() => service.BoardList());
-        filterNotes = new List<Note>(notes);
+        await DialogService.OpenSideAsync<IconSelectDialog>("",options: new SideDialogOptions { CloseDialogOnOverlayClick = closeDialogOnOverlayClick, Position = position, ShowMask = showMask });
     }
 
-    private void OpenNote(Note selectedNote)
+    protected override async Task OnInitializedAsync()
     {
-        //service.selectedNote = selectedNote;
-        NavManager.NavigateTo("/note/" + selectedNote.Id);
-    }
+        note.Title = NoteService.selectedNote.Title;
+        note.Content = "<h1>Hello World!</h1>";
 
-    private async void OnAddNote()
-    {
-        Note note = await DialogService.OpenAsync<AddKanbanBoardPage>("Add Kanban Board");
-        notes.Add(note);
-        UpdateFilteredBoards();
-    }
-
-    private void UpdateFilteredBoards()
-    {
-        if (string.IsNullOrEmpty(searchValue))
-        {
-            filterNotes = new List<Note>(notes);
-        }
-        else
-        {
-            filterNotes = notes.Where(b => b.Title.Contains(searchValue, StringComparison.OrdinalIgnoreCase)).ToList();
-        }
-
-        StateHasChanged();
-    }
-
-    private void SearchNotes(ChangeEventArgs args)
-    {
-        searchValue = args.Value.ToString();
-        UpdateFilteredBoards();
+        selectedIcon = IconService.GetSelectedIcon();
     }
 }

@@ -43,7 +43,7 @@
 
         <RadzenRow Style="margin-bottom: 10px;">
             <RadzenColumn Size="2" Style="display: flex; align-items: center;">
-                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">Name</RadzenText>
+                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Name</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
                 <RadzenTextBox Style="width:50%" Placeholder=@user?.Name @bind-Value="username"></RadzenTextBox>
@@ -52,7 +52,7 @@
 
         <RadzenRow Style="margin-bottom: 10px;">
             <RadzenColumn Size="2" Style="display: flex; align-items: center;">
-                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">E-Mail</RadzenText>
+                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">E-Mail</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
                 <RadzenTextBox Style="width:50%" Placeholder=@user?.Email @bind-Value="useremail"></RadzenTextBox>
@@ -62,15 +62,15 @@
 
         <RadzenRow Style="margin-bottom: 10px;">
             <RadzenColumn Size="2" Style="display: flex; align-items: center;">
-                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">Old Password</RadzenText>
+                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Old Password</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
                 <!--
-				<RadzenPassword Style="width:50%" @bind-Value=@oldPassword Placeholder="Enter old password..." AutoComplete="false" aria-label="enter password" />
+                <RadzenPassword Style="width:50%" @bind-Value=@oldPassword Placeholder="Enter old password..." AutoComplete="false" aria-label="enter password" />
                 -->
-                <RadzenFormField  Variant="Variant.Outlined" Style="width: 50%">
+                <RadzenFormField Variant="Variant.Outlined" Style="width: 50%">
                     <ChildContent>
-                        <RadzenTextBox @bind-Value="@oldPassword" Visible="@(!passwordVisibleOld)" Placeholder="Enter old Password"/>
+                        <RadzenTextBox @bind-Value="@oldPassword" Visible="@(!passwordVisibleOld)" Placeholder="Enter old Password" />
                         <RadzenPassword @bind-Value="@oldPassword" Visible="@passwordVisibleOld" />
                     </ChildContent>
                     <End>
@@ -82,7 +82,7 @@
 
         <RadzenRow Style="margin-bottom: 10px;">
             <RadzenColumn Size="2" Style="display: flex; align-items: center;">
-                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H5">New Password</RadzenText>
+                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">New Password</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10">
                 <RadzenFormField Variant="Variant.Outlined" Style="width: 50%">
@@ -137,8 +137,8 @@
     {
         userid = await localstore.GetItemAsync<string>("UserId");
         user = await userservice.GetUserById(userid);
-        
-        
+
+
         if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
         {
             // Convert byte array to base64 string
@@ -186,13 +186,13 @@
 
     private async Task SaveProfile(MouseEventArgs e)
     {
-        bool passwordStatus = false;
-        if(oldPassword!=null)
+        bool passwordStatus = true;
+        if (oldPassword != null)
         {
             passwordStatus = await userservice.PasswordControl(userid, oldPassword);
         }
-    
-        if(useremail!=null)
+
+        if (useremail != null)
         {
             user.Email = useremail;
         }
@@ -200,12 +200,12 @@
         {
             user.Name = username;
         }
-        if(imageBytes!= null)
+        if (imageBytes != null)
         {
             user.ProfilePicture = imageBytes;
         }
 
-        if (passwordStatus == true)
+        if (passwordStatus == true && newPassword != null)
         {
             //Da das neue Passwort ebenfalls verschlüsselt werden muss, musste ich hier eine eigene hashPassword methode aufrufen
             //Und dessen werte dann dem user geben damit diese geupdated werden
@@ -223,11 +223,26 @@
 
     void TogglePasswordOld()
     {
-        passwordVisibleOld= !passwordVisibleOld;
+        passwordVisibleOld = !passwordVisibleOld;
     }
 
     private void OnChange(bool newValue)
     {
-        notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Recieve Emais? ", Detail = $"{newValue}" });
+        if (newValue)
+        {
+            notificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "you are receiving emails"
+                });
+        }
+        else
+        {
+            notificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary ="you are NOT receiving emails"
+                });
+        }
     }
 }

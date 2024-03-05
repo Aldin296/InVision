@@ -15,7 +15,7 @@
 
 		<div style="text-align:center">
 			<RadzenTemplateForm TItem="User" Data=@user Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
-				<RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px; text-align:left">
+				<RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px;">
 					<ChildContent>
 						<RadzenTextBox Name="email" @bind-Value="emailValue" />
 						<!--
@@ -26,7 +26,7 @@
 					</ChildContent>
 				</RadzenFormField>
 
-				<RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px; text-align: left">
+				<RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px;">
 					<ChildContent>
 						<RadzenTextBox Name="password" @bind-Value="password_value" />
 						<!-- Auskommentiert Aufgrund eines Bugs: bei visibility=false wird das feld als leer vom validator angesehen -->

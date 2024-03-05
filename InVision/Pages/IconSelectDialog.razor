@@ -1,0 +1,68 @@
+﻿@using InVision.Data
+@inject MatIconService iconService
+@inject TooltipService tooltipService
+@inject NoteService noteService
+
+
+
+<RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
+    <RadzenIcon Icon="sentiment_satisfied" class="rz-mr-1" /><b>Select Icon</b>
+</RadzenText>
+<br />
+<RadzenFormField Text="" Variant="Variant.Text" Style="padding-left: 7px">
+        <RadzenTextBox @bind-Value="@searchValue" @oninput="SearchIcons" Style="width: 100%;" />
+</RadzenFormField>
+<RadzenIcon style="font-weight: 20; margin-top: 20px" Icon="search"></RadzenIcon>
+<br />
+<br />
+<RadzenDataList WrapItems="true" AllowPaging="false" Data="@filteredIcons" TItem="string">
+    <Template Context="icon">
+        <RadzenButton Click="@(() => OnIconClick(icon))" MouseEnter="@(args => ShowTooltip(args,icon ,new TooltipOptions(){ Delay = 100, Duration = 2000 }))" Style="background-color: transparent; color:black;" Icon="@icon"></RadzenButton>
+        <br />
+    </Template>
+</RadzenDataList>
+<br />
+
+@code {
+    [Inject] DialogService Service { get; set; }
+    string searchValue;
+    List<string> filteredIcons;
+    List<string> icons;
+    Note currentNote;
+
+    protected override async Task OnInitializedAsync()
+    {
+        icons = iconService.GetAllIconName();
+        filteredIcons = icons;
+    }
+
+    private void SearchIcons(ChangeEventArgs args)
+    {
+        searchValue = args.Value.ToString();
+        UpdateFilteredIcons();
+    }
+
+    private void UpdateFilteredIcons()
+    {
+        if (string.IsNullOrEmpty(searchValue))
+        {
+            filteredIcons = new List<string>(filteredIcons);
+        }
+        else
+        {
+            filteredIcons = icons.Where(b => b.Contains(searchValue, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        StateHasChanged();
+    }
+
+    void OnIconClick(string iconname)
+    {
+        iconService.SetSelectedIcon(iconname);
+        currentNote = noteService.selectedNote;
+        currentNote.Icon = iconname;
+    }
+
+    void ShowTooltip(ElementReference elementReference, string iconname, TooltipOptions options = null) => tooltipService.Open(elementReference, iconname, options);
+
+}

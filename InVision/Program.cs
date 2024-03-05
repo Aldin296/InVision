@@ -19,9 +19,9 @@ builder.Services.AddScoped<ContextMenuService>();
 builder.Services.AddScoped<KBoardService>();
 builder.Services.AddBlazorDragDrop();
 builder.Services.AddSingleton<UserService>();
-builder.Services.AddScoped<UserStateService>();
 builder.Services.AddScoped<MatIconService>();
 builder.Services.AddScoped<CalendarService>();
+builder.Services.AddScoped<NoteService>();
 builder.Services.AddBlazoredLocalStorage();
 
 // Add session-related services

@@ -11,7 +11,7 @@ namespace InVision.Data.Service
 {
     public class KBoardService
     {
-        private readonly string baseurl = "https://localhost:7133";
+        private readonly string baseurl = "http://localhost:80";
         HttpClient client = new HttpClient();
         public KBoard selectedBoard { get; set; }
         List<KBoard> boards = new List<KBoard>() { };

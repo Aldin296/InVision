@@ -1,4 +1,5 @@
-﻿namespace InVision.Data.Service
+﻿using InVision.Data.Model;
+namespace InVision.Data.Service
 {
     public class NoteService
     {

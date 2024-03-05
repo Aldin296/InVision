@@ -9,7 +9,7 @@ namespace InVision.Data
 {
     public class UserService
     {
-        private readonly string baseurl = "https://localhost:7133";
+        private readonly string baseurl = "http://localhost:80";
         HttpClient client = new HttpClient();
 
         public HashPassword hashPassword(string password)

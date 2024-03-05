@@ -8,13 +8,15 @@
 
 <RadzenPanel>
     <HeaderTemplate>
+        <RadzenIcon Icon="@NoteService.selectedNote.Icon" Style="padding-right: 0px; font-size:2em"></RadzenIcon>
         <RadzenText TextStyle="TextStyle.H4" Text="@note.Title" Style="max-width: 90%" contenteditable="true" />
-        <RadzenIcon Icon="@NoteService.selectedNote.Icon" Style="padding-right: 20px; font-size:2em"></RadzenIcon>
         <RadzenIcon @onclick="()=>OpenSideDialog()" Icon="more_horiz" Style="cursor: pointer; padding-right: 20px; font-size: 2em" class="add-todoitem-icon"></RadzenIcon>
     </HeaderTemplate>
     <ChildContent>
         <hr />
-        <RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" UploadUrl="upload/image" />
+        <RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" UploadUrl="upload/image">
+            
+        </RadzenHtmlEditor>
     </ChildContent>
 </RadzenPanel>
 

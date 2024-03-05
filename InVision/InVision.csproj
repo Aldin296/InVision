@@ -32,4 +32,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\upload\image\" />
+    <Folder Include="wwwroot\upload\" />
+  </ItemGroup>
+
 </Project>

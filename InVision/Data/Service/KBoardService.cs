@@ -63,5 +63,11 @@ namespace InVision.Data.Service
             await client.PostAsJsonAsync(requestUrl, kboard);
         }
 
+        public async Task DeleteKBoard(string userid, string kboardid)
+        {
+            string requestUrl = $"{baseurl}/api/KBoard/{userid}/{kboardid}";
+            await client.DeleteAsync(requestUrl);
+        }
+
     }
 }

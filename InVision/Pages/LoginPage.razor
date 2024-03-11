@@ -98,7 +98,7 @@
 	async Task LoginUser()
 	{
 		bool loginSuccessful = await userservice.LoginUser(emailValue, password_value);
-		if (loginSuccessful)
+		if (loginSuccessful==true)
 		{
 
 			Console.WriteLine("Angemeldet");

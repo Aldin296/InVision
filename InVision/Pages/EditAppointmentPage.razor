@@ -42,9 +42,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-3">
             <RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
+            <RadzenButton ButtonStyle="ButtonStyle.Danger" Click="@(() => OnDeleteButton(model))" Text="Delete" />
+
+        </div>       
+        <div class="col">
         </div>
     </div>
 </RadzenTemplateForm>
@@ -75,5 +80,10 @@
         userId = await localstore.GetItemAsync<string>("UserId");
         //calenderService.UpdateAppointmentAsync(userId, appointmentId, model);
         DialogService.Close(model);
+    }
+
+    void OnDeleteButton(Appointment appointment)
+    {
+        Console.WriteLine($"{appointment.Text} is deleted");
     }
 }

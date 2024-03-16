@@ -14,6 +14,7 @@ namespace InVision.Data
 		public string Email { get; set; }
 		public List<Note>? Notes { get; set; } 
 		public List<KBoard>? KBoards { get; set; } 
+		public List<Appointment>? Appointments { get; set; }
 		public byte[]? ProfilePicture { get; set; }
 		public byte[] salt { get; set; }
 

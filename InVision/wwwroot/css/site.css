@@ -92,3 +92,7 @@ a, .btn-link {
     color: white !important;
     background-color: rgba(67, 64, 210) !important;
 }
+
+.custom-row-spacing {
+    margin-bottom: 1rem; 
+}

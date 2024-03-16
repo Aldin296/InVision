@@ -1,7 +1,9 @@
 ﻿@page "/settings"
 @using InVision.Data
+@using InVision.Data.Model
+@using InVision.Data.Service
 @inject Blazored.LocalStorage.ILocalStorageService localstore
-@inject Data.UserService userservice
+@inject UserService userservice
 @inject NotificationService notificationService
 
 
@@ -172,7 +174,6 @@
                         imageBytes = memoryStream.ToArray();
                     }
                 }
-
                 selectedImagePath = $"data:{imageFile.ContentType};base64,{Convert.ToBase64String(imageBytes)}";
             }
             catch (Exception ex)

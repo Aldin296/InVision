@@ -20,7 +20,7 @@ namespace InVision_API.Services
 		}
 
 		public async Task<List<KBoard>> GetAllKBoardsAsync(string userId)
-		{
+		{ 
 			var user = await _userCollection.Find(x => x.Id == userId).FirstOrDefaultAsync();
 
 			return user?.KBoards ?? new List<KBoard>();
@@ -58,11 +58,16 @@ namespace InVision_API.Services
 
 		public async Task DeleteKBoardAsync(string userId, string KBoardId)
 		{
-			var filter = Builders<User>.Filter.Eq(x => x.Id, userId);
-			var update = Builders<User>.Update.PullFilter("KBoards", Builders<KBoard>.Filter.Eq("_id", KBoardId));
+			var filter = Builders<User>.Filter.And(
+				Builders<User>.Filter.Eq(x => x.Id, userId),
+				Builders<User>.Filter.ElemMatch(x => x.KBoards, kb => kb.Id == KBoardId)
+			);
+
+			var update = Builders<User>.Update.PullFilter(x => x.KBoards, kb => kb.Id == KBoardId);
 
 			await _userCollection.UpdateOneAsync(filter, update);
 		}
+
 	}
 }
 

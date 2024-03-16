@@ -1,12 +1,14 @@
 @page "/allKanbanBoards"
-@using InVision.Data
-@inject KBoardService service
+@using InVision.Data;
+@using InVision.Data.Service
+@using InVision.Data.Model
 @inject NavigationManager NavManager
 @inject DialogService DialogService
 @inject KBoardService kboardService
 @inject ContextMenuService ContextMenuService
 @inject TooltipService tooltipService
 @inject Blazored.LocalStorage.ILocalStorageService localstore
+
 
 
 @if (filteredBoards == null)
@@ -62,7 +64,7 @@ else
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         userId = await localstore.GetItemAsync<string>("UserId");
-        boards = await Task.Run(() => service.GetAllKBoardsAsync(userId));
+        boards = await Task.Run(() => kboardService.GetAllKBoardsAsync(userId));
         filteredBoards = boards;
 
         if (firstRender)
@@ -73,7 +75,7 @@ else
 
     private void OpenKanbanBoard(KBoard selectedBoard)
     {
-        service.selectedBoard = selectedBoard;
+        kboardService.selectedBoard = selectedBoard;
         NavManager.NavigateTo("/kanbanBoard/" + selectedBoard.Id);
     }
 

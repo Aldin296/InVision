@@ -5,17 +5,16 @@ using MongoDB.Driver;
 
 namespace InVision_API.Services
 {
-    public class ToDoItemService
+    /*public class ToDoItemService
     {
-       /* public KBoardService boardService;
+        public KBoardService boardService;
 
         
         
         private readonly IMongoCollection<User> _userCollection;
 
-        public ToDoItemService(IOptions<InVisionDatabaseSettings> InVisionDatabaseSettings)
+        ToDoItemService(IOptions<InVisionDatabaseSettings> InVisionDatabaseSettings)
         {
-            boardService.GetAllKBoardsAsync();
             var mongoClient = new MongoClient(InVisionDatabaseSettings.Value.ConnectionString);
             var mongoDatabase = mongoClient.GetDatabase(InVisionDatabaseSettings.Value.DatabaseName);
 
@@ -66,7 +65,7 @@ namespace InVision_API.Services
 
             await _userCollection.UpdateOneAsync(filter, update);
         }
-    }
-    */
+    }*/
+    
 }
-}
+

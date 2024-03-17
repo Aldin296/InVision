@@ -3,114 +3,108 @@
 @using InVision.Data.Model
 @using InVision.Pages
 @inject DialogService DialogService
+@inject ContextMenuService ContextMenuService
 @inject InVision.Data.Service.CalendarService calendarService
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
 
-<RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px; "  TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End" 
-				 TextProperty="Text" SelectedIndex="2" SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender EventSty>
-	<RadzenDayView />
-	<RadzenWeekView />
-	<RadzenMonthView />
-	<RadzenYearView />
+
+<RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
+                 TextProperty="Text" SelectedIndex="2" SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender>
+    <RadzenDayView />
+    <RadzenWeekView />
+    <RadzenMonthView />
+    <RadzenYearView />
 </RadzenScheduler>
 
 @code {
-	RadzenScheduler<Appointment> scheduler;
-	Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
-	string userId = "";
+    RadzenScheduler<Appointment> scheduler;
+    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+    string userId = "";
 
-	IList<Appointment> appointments = new List<Appointment>
-	{
-	};
+    List<Appointment> appointments = new List<Appointment>{};
 
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		userId = await localstore.GetItemAsync<string>("UserId");
-		appointments = await calendarService.GetAllAppointmentsAsync(userId);
-		if (firstRender)
-		{
-			await InvokeAsync(StateHasChanged);
-		}
-	}
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        userId = await localstore.GetItemAsync<string>("UserId");
+        appointments = await calendarService.GetAllAppointmentsAsync(userId);
+        if (firstRender)
+        {
+            await InvokeAsync(StateHasChanged);
+        }
+    }
 
 
-	async void OnSlotRender(SchedulerSlotRenderEventArgs args)
-	{
+    void OnSlotRender(SchedulerSlotRenderEventArgs args)
+    {
+        // Highlight today in month view
+        if (args.View.Text == "Month" && args.Start.Date == DateTime.Today)
+        {
+            args.Attributes["style"] = "background:rgba(232, 232, 250);";
+        }
+    }
 
-		// Highlight today in month view
-		if (args.View.Text == "Month" && args.Start.Date == DateTime.Today)
-		{
-			args.Attributes["style"] = "background:rgba(232, 232, 250);";
-		}
+    async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
+    {
+        if (args.View.Text != "Year")
+        {
+            Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
+                new Dictionary<string, object>
+                {
+                    { "Start", args.Start },
+                    { "End", args.End }
+                });
 
-		// Highlight working hours (9-18)
-		/*
-		if ((args.View.Text == "Week" || args.View.Text == "Day") && args.Start.Hour > 8 && args.Start.Hour < 19)
-			{
-			args.Attributes["style"] = "background: rgba(232, 232, 250);";
-		}
-		*/
-	}
+            if (data != null)
+            {
+                appointments.Add(data);
+                await scheduler.Reload();
+            }
+        }
+    }
 
-	async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
-	{
-		if (args.View.Text != "Year")
-		{
-			Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
-				new Dictionary<string, object> 
-				{
-					{ "Start", args.Start },
-					{ "End", args.End } 
-				});
+    async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
+    {
+        var copy = new Appointment
+            {
+                Id = args.Data.Id,
+                Start = args.Data.Start,
+                End = args.Data.End,
+                Text = args.Data.Text,
+                Color = args.Data.Color,
+            };
 
-			if (data != null)
-			{
-				appointments.Add(data);
-				// Either call the Reload method or reassign the Data property of the Scheduler
-				await scheduler.Reload();
-			}
-		}
-	}
+        var data = await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "Appointment", copy } });
 
-	async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
-	{
-		var copy = new Appointment
-			{
-				Start = args.Data.Start,
-				End = args.Data.End,
-				Text = args.Data.Text
-			};
+        if (data != null)
+        {
+            // Update the appointment
+            args.Data.Start = data.Start;
+            args.Data.End = data.End;
+            args.Data.Text = data.Text;
+            args.Data.Color = data.Color;
+            if(data.Delete == true)
+            {
+                appointments.Remove(data);
+                Console.WriteLine("Appointment gelöscht");
+                StateHasChanged(); 
+            }
+        }
 
-		var data = await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "Appointment", copy } });
+        await scheduler.Reload();
+    }
 
-		if (data != null)
-		{
-			// Update the appointment
-			args.Data.Start = data.Start;
-			args.Data.End = data.End;
-			args.Data.Text = data.Text;
-		}
+    void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Appointment> args)
+    {
+        if (args.Data.Color == null)
+        {
+            args.Attributes["style"] = "background: rgba(67, 64, 210)";
 
-		await scheduler.Reload();
-	}
+        }
+        else
+        {
+            args.Attributes["style"] = $"background: {args.Data.Color};";
 
-	void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Appointment> args)
-	{
-		foreach (Appointment x in appointments)
-		{
-			if (!args.Attributes.ContainsKey("style"))
-			{
-				args.Attributes["style"] = $"background-color: {x.Color};";
-			}
-			else
-			{
-				args.Attributes["style"] += $"background-color: {x.Color};";
-			}
-		}
-
-
-		//args.Attributes["style"] = "background: rgba(67, 64, 210)";
-	}
+        }
+    }
 }

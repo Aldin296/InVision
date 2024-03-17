@@ -7,119 +7,107 @@
 
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
-	<div style="text-align:center;">
-		<h2>Login Form</h2>
-	</div>
-	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
+    <div style="text-align:center;">
+        <h2>Login Form</h2>
+    </div>
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
 
-		<div style="text-align:center">
-			<RadzenTemplateForm TItem="User" Data=@user Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
-				<RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px;">
-					<ChildContent>
-						<RadzenTextBox Name="email" @bind-Value="emailValue" />
-						<!--
-						<RadzenRequiredValidator Component="email" Text="email field is empty" Popup=true Style="margin-top: 50px" />
-						<RadzenEmailValidator Component="email" Text="email is not valid" Popup=true Style="margin-top: 50px" />
-						-->						
+        <div style="text-align:center">
+            <RadzenTemplateForm TItem="User" Data=@user Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
+                <RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px;">
+                    <ChildContent>
+                        <RadzenTextBox Name="email" @bind-Value="emailValue" />
+                        <RadzenRequiredValidator Component="email" Text="email field is empty" Popup=true Style="margin-top: 50px" />
+                    </ChildContent>
+                </RadzenFormField>
 
-					</ChildContent>
-				</RadzenFormField>
-
-				<RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px;">
-					<ChildContent>
-						<RadzenTextBox Name="password" @bind-Value="password_value" />
-						<!-- Auskommentiert Aufgrund eines Bugs: bei visibility=false wird das feld als leer vom validator angesehen -->
-						<!--
-						<RadzenTextBox Name="password" @bind-Value="@passwordValue" @bind-Value=@user.password Visible="@(!password_visibility)" />
-						-->
-						<!--
-						<RadzenPassword @bind-Value="@passwordValue" @bind-bind-Value=@user.password Visible="@password_visibility" />
-						-->
-						<!--
-						<RadzenRequiredValidator Component="password" Text="password field is empty" Popup=true Style="margin-top: 50px" />
-												<RadzenRegexValidator Component="password" Text="password is not valid" Pattern="@password_regex" Popup=true Style="margin-top: 50px" />
-						-->
-
-					</ChildContent>
-					<!--
-					<End>
-						<RadzenButton Icon="@(password_visibility ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
-					</End>
-					-->
-				</RadzenFormField>
-				<RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
-					<RadzenButton ButtonType="ButtonType.Submit" Click="LoginUser" style="width: 150px">Login</RadzenButton>
-				</RadzenStack>
-			</RadzenTemplateForm>
-		</div>
-	</RadzenStack>
-	<br />
-	<div style="text-align:center;">
-		<p>Dont have an account? </p>
-		<RadzenLink Path="/register"> Register! </RadzenLink>
-	</div>
+                <RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px;">
+                    <ChildContent>
+                        <RadzenPassword Name="password" @bind-Value="password_value" />
+                        <RadzenRequiredValidator Component="password" Text="password field is empty" Popup=true Style="margin-top: 50px" />
+                    </ChildContent>
+                    <!--
+                    <End>
+                        <RadzenButton Icon="@(password_visibility ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
+                    </End>
+                    -->
+                </RadzenFormField>
+                <RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
+                    <RadzenButton ButtonType="ButtonType.Submit" Click="LoginUser" style="width: 150px">Login</RadzenButton>
+                </RadzenStack>
+            </RadzenTemplateForm>
+        </div>
+    </RadzenStack>
+    <br />
+    <div style="text-align:center;">
+        <p>Dont have an account? </p>
+        <RadzenLink Path="/register"> Register! </RadzenLink>
+    </div>
 </RadzenCard>
 
 @code {
-	User user = new User();
+    User user = new User();
 
-	string email_regex = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
-	string password_regex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+    string email_regex = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
+    string password_regex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
 
-	bool email_valid = false;
-	bool password_valid = false;
+    bool email_valid = false;
+    bool password_valid = false;
 
-	string password_value = "";
-	bool password_visibility = true;
-	string emailValue = "";
-	string value = "";
-	string passwordValue = "";
-	bool password = true;
+    string password_value = "";
+    bool password_visibility = true;
+    string emailValue = "";
+    string value = "";
+    string passwordValue = "";
+    bool password = true;
 
-	void TogglePassword()
-	{
-		password_visibility = !password_visibility;
-	}
+    void TogglePassword()
+    {
+        password_visibility = !password_visibility;
+    }
 
-	void OnSubmit(User user)
-	{
-		email_valid = true;
-		password_valid = true;
-		Console.WriteLine("valid submit");
-	}
+    void OnSubmit(User user)
+    {
+        email_valid = true;
+        password_valid = true;
+        Console.WriteLine("valid submit");
+    }
 
-	void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
-	{
-		email_valid = false;
-		password_valid = false;
-		Console.WriteLine("invalid submit");
-	}
+    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+    {
+        email_valid = false;
+        password_valid = false;
+        Console.WriteLine("invalid submit");
+    }
 
-	async Task LoginUser()
-	{
-		bool loginSuccessful = await userservice.LoginUser(emailValue, password_value);
-		if (loginSuccessful==true)
-		{
 
-			Console.WriteLine("Angemeldet");
-			user = await userservice.GetUserByEmail(emailValue);
-			//HttpContextAccessor.HttpContext.Session.SetString("UserId", user.Id.ToString());
-			//ISession session = HttpContextAccessor.HttpContext.Session;
-			//session.SetString("UserId", user.Id.ToString());
-			//HttpContext.Session.SetString(SessionKeyName, "The Doctor");
-			// Perform session-related operations on the server side
 
-			// Navigate to the index page
+    async Task LoginUser()
+    {
+        bool loginSuccessful = await userservice.LoginUser(emailValue, password_value);
+        if (loginSuccessful)
+        {
 
-			await localstore.SetItemAsync("UserId", user.Id);
 
-			NavManager.NavigateTo("/index");
-		}
-		else
-		{
-			Console.WriteLine("Anmelden fehlgeschlagen");
-			Console.WriteLine("invalid submit");
-		}
-	}
+            Console.WriteLine("Angemeldet");
+            user = await userservice.GetUserByEmail(emailValue);
+            //HttpContextAccessor.HttpContext.Session.SetString("UserId", user.Id.ToString());
+            //ISession session = HttpContextAccessor.HttpContext.Session;
+            //session.SetString("UserId", user.Id.ToString());
+            //HttpContext.Session.SetString(SessionKeyName, "The Doctor");
+            // Perform session-related operations on the server side
 
+            // Navigate to the index page
+
+            await localstore.SetItemAsync("UserId", user.Id);
+
+            NavManager.NavigateTo("/index");
+        }
+        else
+        {
+            Console.WriteLine("Anmelden fehlgeschlagen");
+            Console.WriteLine("invalid submit");
+        }
+    }
 }
+

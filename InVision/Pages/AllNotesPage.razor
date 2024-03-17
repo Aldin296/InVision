@@ -37,7 +37,7 @@ else
                 <Template Context="note">
                     <RadzenCard Style="width: 250px" ContextMenu=@(args => ShowContextMenuWithItems(args,note)) @onclick="()=>OpenNote(note)" class="kanban-card">
                         <RadzenRow>
-                            <RadzenColumn Size="11" class="rz-text-align-start">
+                            <RadzenColumn Size="10" class="rz-text-align-start">
                                 <RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@note.Title</RadzenText>
                                 </RadzenColumn>
                                 <RadzenColumn Size="1">

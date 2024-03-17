@@ -38,7 +38,7 @@
             <RadzenLabel Text="Color" />
         </div>
         <div class="col">
-            <RadzenColorPicker @bind-Value=@model.Color ShowHSV=@showHSV ShowRGBA=@showRGBA ShowColors=@showColors ShowButton=@showButton Change=@OnChange />
+            <RadzenColorPicker Name="ColorPicker" @bind-Value=@model.Color ShowHSV=@showHSV ShowRGBA=@showRGBA ShowColors=@showColors ShowButton=@showButton Change=@OnChange />
         </div>
     </div>
     <div class="row">
@@ -46,10 +46,7 @@
         </div>
         <div class="col-md-3">
             <RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
-            <RadzenButton ButtonStyle="ButtonStyle.Danger" Click="@(() => OnDeleteButton(model))" Text="Delete" />
-
-        </div>       
-        <div class="col">
+            <RadzenButton Click="OnDeleteAppointmentClick" Text="Delete" Style="background-color:red"></RadzenButton>
         </div>
     </div>
 </RadzenTemplateForm>
@@ -78,12 +75,13 @@
     async void OnSubmit(Appointment model)
     {
         userId = await localstore.GetItemAsync<string>("UserId");
-        //calendarService.UpdateAppointmentAsync(userId, appointmentId, model);
+        calenderService.UpdateAppointmentAsync(userId, model.Id, model);
         DialogService.Close(model);
     }
 
-    void OnDeleteButton(Appointment appointment)
+    void OnDeleteAppointmentClick()
     {
-        Console.WriteLine($"{appointment.Text} is deleted");
+        model.Delete = true;
+        OnSubmit(model);
     }
 }

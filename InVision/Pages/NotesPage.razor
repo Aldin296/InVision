@@ -21,7 +21,32 @@
     </HeaderTemplate>
     <ChildContent>
         <hr />
-        <RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" UploadUrl="upload/image">
+
+        <RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" Execute="@OnExecute">
+            <RadzenHtmlEditorUndo />
+            <RadzenHtmlEditorRedo />
+            <RadzenHtmlEditorSeparator />
+            <RadzenHtmlEditorBold />
+            <RadzenHtmlEditorItalic />
+            <RadzenHtmlEditorUnderline />
+            <RadzenHtmlEditorStrikeThrough />
+            <RadzenHtmlEditorAlignLeft/>
+            <RadzenHtmlEditorAlignCenter/>
+            <RadzenHtmlEditorAlignRight />
+            <RadzenHtmlEditorJustify />
+            <RadzenHtmlEditorUnorderedList />
+            <RadzenHtmlEditorOrderedList />
+            <RadzenHtmlEditorSeparator />
+            <RadzenHtmlEditorColor />
+            <RadzenHtmlEditorBackground />
+            <RadzenHtmlEditorRemoveFormat />
+            <RadzenHtmlEditorSubscript />
+            <RadzenHtmlEditorSuperscript />
+            <RadzenHtmlEditorSource/>
+            <RadzenHtmlEditorLink/>
+            <RadzenHtmlEditorFontSize/>
+            <RadzenHtmlEditorCustomTool CommandName="LinkDiffrentNote" Icon="control_point" />
+
 
         </RadzenHtmlEditor>
     </ChildContent>
@@ -36,13 +61,39 @@
     public Note note = new Note();
     public string? selectedIcon;
 
-    DialogPosition position;
-    bool closeDialogOnOverlayClick;
-    bool showMask;
+    async Task OnExecute(HtmlEditorExecuteEventArgs args)
+    {
+        if (args.CommandName == "LinkDiffrentNote")
+        {
+            await LinkDiffrentNote(args.Editor);
+        }
+    }
+
+    async Task LinkDiffrentNote(RadzenHtmlEditor editor)
+    {
+        await editor.SaveSelectionAsync();
+
+        var result = await DialogService.OpenAsync<ChooseNotePage>("Select a Note");
+
+        await editor.RestoreSelectionAsync();
+
+        if (result != null)
+        {
+            await editor.ExecuteCommandAsync(HtmlEditorCommands.InsertHtml, $@"<a href=""https://blazor.radzen.com/dashboard""><i class=""material-icons"" @onclick=""() => HandleIconClick(result)"">{result}</i> </a>");
+        }
+    }
+
+    void HandleIconClick(string iconName)
+    {
+        // Handle the click event here
+        // For example, you can display a message:
+        Console.WriteLine($"Icon clicked: {iconName}");
+        // Or perform any other desired action
+    }
 
     async Task OpenSideDialog()
     {
-        await DialogService.OpenSideAsync<IconSelectDialog>("", options: new SideDialogOptions { CloseDialogOnOverlayClick = closeDialogOnOverlayClick, Position = position, ShowMask = showMask });
+        await DialogService.OpenSideAsync<IconSelectDialog>("",options: new SideDialogOptions { CloseDialogOnOverlayClick = true, Position = DialogPosition.Right, ShowMask = true, });
     }
 
     protected override async Task OnInitializedAsync()
@@ -50,7 +101,8 @@
         userid = await localstore.GetItemAsync<string>("UserId");
 
         note.Title = NoteService.selectedNote.Title;
-        note.Content = NoteService.selectedNote.Content;
+        note.Content = @"<link rel=""stylesheet"" href=""https://fonts.googleapis.com/icon?family=Material+Icons"">";
+
 
         selectedIcon = IconService.GetSelectedIcon();
         note.Icon = selectedIcon;

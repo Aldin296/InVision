@@ -1,115 +1,161 @@
-﻿@layout LoginLayout
+@layout LoginLayout
 @page "/register"
 @inject NavigationManager NavManager
 @using InVision.Data;
 @using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 @using System.Security.Cryptography;
+@using System.Text.RegularExpressions
 @using InVision.Data.Service;
 @inject UserService userservice
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
-    <div style="text-align:center;">
-        <h2>Login Form</h2>
-    </div>
-    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
-        <div style="text-align: center">
-            <RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
-                <RadzenFormField Text="Username" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
-                    <ChildContent>
-                        <RadzenTextBox Name="username" @bind-Value="usernameValue" />
-                        <RadzenRequiredValidator Component="username" Text="username field is empty" Popup=true Style="margin-top: 50px" />
+	<div style="text-align:center;">
+		<h2>Register Form</h2>
+	</div>
+	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
+		<div style="text-align: center">
+			<RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
+				<RadzenFormField Text="Username" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
+					<ChildContent>
+						<RadzenTextBox Name="username" @bind-Value="usernameValue" @bind-Value=@model.username />
+						<RadzenRequiredValidator Component="username" Text="username field is empty" Popup=true Style="margin-top: 50px" />
 
-                    </ChildContent>
-                </RadzenFormField>
-                <RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
-                    <ChildContent>
-                        <RadzenTextBox Name="email" @bind-Value="emailValue" @bind-Value=@model.email />
-                        <RadzenRequiredValidator Component="email" Text="emai field is empty" Popup=true Style="margin-top: 50px" />
-                        <RadzenEmailValidator Component="email" Text="email is not valid" Popup=true Style="margin-top: 50px" />
-                    </ChildContent>
-                </RadzenFormField>
-                <RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
-                    <ChildContent>
-                        <RadzenTextBox Name="password" @bind-Value=@password_value @bind-Value=@model.password />
-                        <RadzenRequiredValidator Component="password" Text="password field is empty" Popup=true Style="margin-top: 50px" />
-                        <RadzenRegexValidator Component="password" Text="password is not valid" Pattern="@password_regex" Popup=true Style="margin-top: 50px" />
-                    </ChildContent>
-                </RadzenFormField>
+					</ChildContent>
+				</RadzenFormField>
+				<RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
+					<ChildContent>
+						<RadzenTextBox Name="email" @bind-Value="emailValue" @bind-Value=@model.email />
+						<RadzenRequiredValidator Component="email" Text="emai field is empty" Popup=true Style="margin-top: 50px" />
+						<RadzenEmailValidator Component="email" Text="email is not valid" Popup=true Style="margin-top: 50px" />
+					</ChildContent>
+				</RadzenFormField>
+				<RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
+					<ChildContent>
+						<RadzenTextBox Name="password" @bind-Value=@passwordValue @bind-Value=@model.password />
+						<RadzenCustomValidator Component="password" Text="@validation_text" Validator="@(() => PasswordValidation(passwordValue))" Popup="true" Style="margin-top:50px" />
+					</ChildContent>
+				</RadzenFormField>
 
-                <div style="text-align:center">
-                    <p>
-                        Be at least 8 characters long
-                        <br />
-                        Contain at least one uppercase letter (A-Z)
-                        <br />
-                        Contain at least one lowercase letter (a-z)
-                        <br />
-                        Contain at least one digit (0-9)
-                        <br />
-                        Contain at least one special character (#?!$%^&*-)
-                        <br />
-                    </p>
-                </div>
-                <br />
-                <RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
-                    <RadzenButton ButtonType="ButtonType.Submit" Click="Register" style="width: 150px">Register</RadzenButton>
-                </RadzenStack>
-            </RadzenTemplateForm>
-        </div>
-    </RadzenStack>
+				<div style="text-align:center">
+					<p>
+						Be at least 6 characters long
+						<br />
+						Contain at least one uppercase letter (A-Z)
+						<br />
+						Contain at least one lowercase letter (a-z)
+						<br />
+						Contain at least one digit (0-9)
+						<br />
+						Contain at least one special character !\#$%^&*._+*ยง/=?>)
+						<br />
+					</p>
+				</div>
+				<br />
+				<RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
+					<RadzenButton ButtonType="ButtonType.Submit" Click="Register" style="width: 150px">Register</RadzenButton>
+				</RadzenStack>
+			</RadzenTemplateForm>
+		</div>
+	</RadzenStack>
 
-    <div style="text-align:center;">
-        <p>Already have an account? </p>
-        <RadzenLink Path=""> Login! </RadzenLink>
-    </div>
+	<div style="text-align:center;">
+		<p>Already have an account? </p>
+		<RadzenLink Path=""> Login! </RadzenLink>
+	</div>
 </RadzenCard>
 
 @code {
-    class Model
-    {
-        public string email { get; set; }
-        public string password { get; set; }
-    }
-    Model model = new Model();
+	string validation_text;
 
-    string email_regex = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
-    string password_regex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+	class Model
+	{
+		public string username { get; set; }
+		public string email { get; set; }
+		public string password { get; set; }
+	}
+	Model model = new Model();
 
-    bool email_valid = false;
-    bool password_valid = false;
+	bool username_valid = false;
+	bool email_valid = false;
+	bool password_valid = false;
 
-    string password_value = "";
-    bool password_visibility = true;
-    string usernameValue = "";
-    string emailValue = "";
-    string value = "";
-    string passwordValue = "";
-    bool password = true;
+	string passwordValue = "";
+	bool passwordVisibility = true;
+	string usernameValue = "";
+	string emailValue = "";
 
-    void TogglePassword()
-    {
-        password_visibility = !password_visibility;
-    }
+	void TogglePassword()
+	{
+		passwordVisibility = !passwordVisibility;
+	}
 
-    void OnSubmit(Model model)
-    {
-        email_valid = true;
-        password_valid = true;
-        NavManager.NavigateTo("/");
-        Console.WriteLine("valid submit");
-    }
+	void OnSubmit(Model model)
+	{
+		username_valid = true;
+		email_valid = true;
+		password_valid = true;
+		NavManager.NavigateTo("/");
+		Console.WriteLine("valid submit");
+	}
 
-    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
-    {
-        email_valid = false;
-        password_valid = false;
-        Console.WriteLine("invalid submit");
-    }
-    async Task Register()
-    {
-        if(usernameValue != null && passwordValue != null && emailValue != null)
-        {
-                await userservice.CreateUser(usernameValue, password_value, emailValue);
-        }
-    }
+	void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+	{
+		username_valid = false;
+		email_valid = false;
+		password_valid = false;
+		Console.WriteLine("invalid submit");
+	}
+
+	async Task Register()
+	{
+		if (PasswordValidation(passwordValue) == true && email_valid == true && username_valid == true)
+		{
+			await userservice.CreateUser(usernameValue, passwordValue, emailValue);
+		}
+	}
+
+
+	bool PasswordValidation(string input)
+	{
+		Regex regex_lowerCase = new Regex(@"^(?=.*[a-z]).{1,}$");
+		Regex regex_uperCase = new Regex(@"^(?=.*[A-Z]).{1,}$");
+		Regex regex_charackter = new Regex(@"(?=.*[!\#$%^&*@._+*ยง/=?><|()]).{1,}$");
+		Regex regex_number = new Regex(@"(?=.*\d).{1,}$");
+
+		if (input is null)
+		{
+			validation_text = "Password field is empty!";
+			return false;
+		}
+		else if (!regex_lowerCase.IsMatch(input))
+		{
+			validation_text = "Please use at least one lower case letter!";
+			return false;
+		}
+		else if (!regex_uperCase.IsMatch(input))
+		{
+			validation_text = "Please use at least one upper case letter!";
+			return false;
+
+		}
+		else if (!regex_charackter.IsMatch(input))
+		{
+			validation_text = "Please use at least one non-alphanumeric character!";
+			return false;
+		}
+		else if (!regex_number.IsMatch(input))
+		{
+			validation_text = "Please use at least one number!";
+			return false;
+		}
+		else if (input.Length < 6)
+		{
+			validation_text = "Password needs to be at least 6 characters long!";
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 }

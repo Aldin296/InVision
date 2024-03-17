@@ -9,51 +9,241 @@
 @inject UserService userservice
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
-<RadzenColumn>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
+        <RadzenIcon Icon="dashboard" class="rz-mr-1" /><b>Dashboard</b>
+    </RadzenText>
+    <br />
+    <RadzenRow Class="custom-row-spacing">
+        <RadzenColumn Size="4">
+            <RadzenCard>
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+                    <RadzenImage Path="@imagepath" Style="width:6rem ;border-radius: 50%;" />
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">User</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@user?.Name</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">E-Mail</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@user?.Email</b></RadzenText>
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
 
-</RadzenColumn>
-<RadzenCard Class="rz-my-12 rz-mx-auto" Style="max-width: 420px">
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
-        <RadzenImage Path="@imagepath" Style="width:6rem ;border-radius: 50%;" />
-        <RadzenStack Gap="0">
-            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">User</RadzenText>
-            <RadzenText TextStyle="TextStyle.Body1"><b>@user?.Name</b></RadzenText>
-            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">E-Mail</RadzenText>
-            <RadzenText TextStyle="TextStyle.Body1"><b>@user?.Email</b></RadzenText>
-        </RadzenStack>
-    </RadzenStack>
-    <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
-        <RadzenText TextStyle="TextStyle.H6" class="rz-color-on-primary-light"><strong>Information</strong></RadzenText>
-        <RadzenRow RowGap="0">
-            <RadzenColumn SizeSM="4">
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Meetings Today</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>2</b></RadzenText>
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Meetings This Week</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>13</b></RadzenText>
-            </RadzenColumn>
-            <RadzenColumn SizeSM="8">
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Tasks Today</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>11</b></RadzenText>
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Tasks This Week</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>42</b></RadzenText>
-            </RadzenColumn>
-        </RadzenRow>
-    </RadzenCard>
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0">
-        <RadzenButton Click="@onSeeMoreClick" Variant="Variant.Text" Text="See more" />
-        <RadzenButton Click="@editProfileClick" Variant="Variant.Text" Text="Edit Profile" />
-    </RadzenStack>
+    <RadzenRow Class="custom-row-spacing">
+        <RadzenColumn Size="4">
+            <RadzenCard Style="height:70%">
+                <h6>Open Items</h6>
+                <h2 style="color:#3700b3">@sumOpenItemsAllBoards</h2>
+                <RadzenChart Style="height:80%">
+                    <RadzenColumnSeries Data="@openItems" CategoryProperty="KboardName" Title="Open Items" LineType="LineType.Dashed" ValueProperty="SumOpenItems">
+                        <RadzenSeriesDataLabels Visible="false" />
+                    </RadzenColumnSeries>
+                    <RadzenColumnOptions Radius="5" />
+                    <RadzenValueAxis>
+                        <RadzenGridLines Visible="false" />
+                        <RadzenCategoryAxis Visible="false" />
+                        <RadzenValueAxis Visible="false" />
+                        <RadzenLegend Visible="false" />
+                    </RadzenValueAxis>
+                </RadzenChart>
+            </RadzenCard>
+        </RadzenColumn>
+
+        <RadzenColumn Size="4">
+            <RadzenCard Style="height:70%">
+                <h6>Closed Items</h6>
+                <h2 style="color:red">@sumClosedItemsAllBoards</h2>
+
+                <RadzenChart Style="height:80%">
+                    <RadzenColumnSeries Fill="red" Data="@closedItems" CategoryProperty="KboardName" Title="Closed Items" LineType="LineType.Dashed" ValueProperty="SumClosedItmes">
+                        <RadzenSeriesDataLabels Visible="false" />
+                    </RadzenColumnSeries>
+                    <RadzenColumnOptions Radius="5" />
+                    <RadzenValueAxis Visible="false">
+                        <RadzenGridLines Visible="false" />
+                        <RadzenCategoryAxis Visible="false" />
+                        <RadzenValueAxis Visible="false" />
+                        <RadzenLegend Visible="false" />
+                    </RadzenValueAxis>
+                </RadzenChart>
+            </RadzenCard>
+        </RadzenColumn>
+
+        <RadzenColumn Size="4">
+            <RadzenCard Style="height:70%">
+                <h6>Progress</h6>
+
+                <RadzenArcGauge Style="width: 100%">
+                    <RadzenArcGaugeScale Min="0" Max="100" Radius="1" Margin="0">
+                        <RadzenArcGaugeScaleValue Fill="#3700b3" Value=@sumAllItemsAllBoardsPrecentage ShowValue="true">
+                            <Template Context="pointer">
+                                <h4>
+                                    @pointer.Value.ToString("0.00") <sup>%</sup>
+                                </h4>
+                            </Template>
+                        </RadzenArcGaugeScaleValue>
+                    </RadzenArcGaugeScale>
+                </RadzenArcGauge>
+
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow Class="custom-row-spacing">
+        <RadzenColumn>
+            <RadzenCard>
+                <h6>Appointments this Month</h6>
+                <RadzenTimeline Orientation="Orientation.Horizontal">
+                    <Items>
+                        @foreach (var appointment in appointmentsThisMonth)
+                        {
+                            <RadzenTimelineItem PointStyle="PointStyle.Primary">
+                                <LabelContent>
+                                    @if (appointment.Start.Date != appointment.End.Date)
+                                    {
+                                        @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
+                                        {
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
+                                        }
+                                        else
+                                        {
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@($"{appointment.Start.ToString("dd.MM.yy")} - {appointment.End.ToString("dd.MM.yy")}")</RadzenText>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
+                                        {
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
+                                        }
+                                        else
+                                        {
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@appointment.Start.ToString("dd.MM.yy")</RadzenText>
+                                        }
+                                    }
+                                </LabelContent>
+                                <ChildContent>
+                                    @appointment.Text
+                                </ChildContent>
+                            </RadzenTimelineItem>
+                        }
+                    </Items>
+                </RadzenTimeline>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
 </RadzenCard>
 
 
-@code {
 
-    private RadzenCard card;
+
+@code {
+    int sumOpenItemsAllBoards;
+    int sumClosedItemsAllBoards;
+    int sumAllItemsAllBoards;
+    float sumAllItemsAllBoardsPrecentage;
 
     private User user;
 
     public string imagepath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
 
+    List<Appointment> appointmentsThisMonth = new List<Appointment>
+    {
+        new Appointment { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
+        new Appointment { Start = DateTime.Today.AddDays(-11), End = DateTime.Today.AddDays(-10), Text = "Day off" },
+        new Appointment { Start = DateTime.Today.AddDays(-10), End = DateTime.Today.AddDays(-8), Text = "Work from home" },
+        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(12), Text = "Online meeting" },
+        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(13), Text = "Skype call" },
+        new Appointment { Start = DateTime.Today.AddHours(14), End = DateTime.Today.AddHours(14).AddMinutes(30), Text = "Dentist appointment" },
+        new Appointment { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
+    };
+
+    public class KboardItme
+    {
+        public string KboardName { get; set; }
+        public int SumOpenItems { get; set; }
+        public int SumClosedItmes { get; set; }
+    }
+
+    List<KboardItme> openItems = new List<KboardItme>
+    {
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 1",
+            SumOpenItems = 24,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 2",
+            SumOpenItems = 15,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 3",
+            SumOpenItems = 10,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 4",
+            SumOpenItems = 33,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 5",
+            SumOpenItems = 25,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 6",
+            SumOpenItems = 31,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 7",
+            SumOpenItems = 21,
+        },
+    };
+
+
+    List<KboardItme> closedItems = new List<KboardItme>
+    {
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 1",
+            SumClosedItmes = 34,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 2",
+            SumClosedItmes = 11,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 3",
+            SumClosedItmes = 38,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 4",
+            SumClosedItmes = 12,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 5",
+            SumClosedItmes = 38,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 6",
+            SumClosedItmes = 27,
+        },
+        new KboardItme
+        {
+            KboardName = "Kanbanboard 7",
+            SumClosedItmes = 11,
+        },
+    };
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -64,7 +254,21 @@
         if (!string.IsNullOrEmpty(userId))
         {
             user = await userservice.GetUserById(userId);
-           
+            foreach (var citem in closedItems)
+            {
+                sumClosedItemsAllBoards += citem.SumClosedItmes;
+                sumAllItemsAllBoards += citem.SumClosedItmes;
+            }
+            foreach (var oitem in openItems)
+            {
+                sumOpenItemsAllBoards += oitem.SumOpenItems;
+                sumAllItemsAllBoards += oitem.SumOpenItems;
+            }
+
+            sumAllItemsAllBoardsPrecentage = (100f / sumAllItemsAllBoards) * sumClosedItemsAllBoards;
+
+            //appointmentsThisMonth = await calendarservice.GetAllAppointmentsAsync(userId);
+
 
             if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
             {
@@ -102,7 +306,7 @@
         }
     }
 
-    private void editProfileClick()
+    private void EditProfileClick()
     {
         if (user != null)
         {

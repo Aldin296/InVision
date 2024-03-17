@@ -1,4 +1,4 @@
-﻿using InVision.Data.Model;
+using InVision.Data.Model;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
@@ -9,8 +9,6 @@ namespace InVision.Data.Service
 {
     public class UserService
     {
-
-        
         private readonly string baseurl = "http://localhost:80";
         HttpClient client = new HttpClient();
 

@@ -14,6 +14,12 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
       
+      - name: Debug - Print Docker Hub username
+        run: echo "DOCKERHUB_USERNAME:${{ secrets.DOCKERHUB_USERNAME }}"
+      
+      - name: Debug - Print Docker Hub token
+        run: echo "DOCKERHUB_TOKEN:${{ secrets.DOCKERHUB_TOKEN }}"
+      
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:

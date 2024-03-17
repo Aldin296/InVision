@@ -16,15 +16,13 @@ namespace InVision_API.Models
         public List<Appointment>? Appointments { get; set; }
 		public byte[]? ProfilePicture { get; set; }
 
+        public bool Notification { get; set; } = false;
 
 		public byte[] salt { get; set; } //Für die berechnung des hash passwortes, bzw. den Login
 
-        public User(List<Note>? notes, List<KBoard>? kBoards, List<Appointment>? appointments)
+        public User ()
         {
-            // Initialize lists as empty arrays in the constructor
-            Notes = new List<Note>();
-            KBoards = new List<KBoard>();
-            Appointments = new List<Appointment>();
+
         }
     }
 }

@@ -107,6 +107,9 @@
     }
     async Task Register()
     {
-        await userservice.CreateUser(usernameValue, password_value, emailValue);
+        if(usernameValue != null && passwordValue != null && emailValue != null)
+        {
+                await userservice.CreateUser(usernameValue, password_value, emailValue);
+        }
     }
 }

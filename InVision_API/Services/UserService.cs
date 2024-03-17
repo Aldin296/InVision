@@ -43,10 +43,27 @@ public class UserService
 
         await _userCollection.InsertOneAsync(newUser);
     }
+    // Update User
+    public async Task UpdateAsync(string id, User updatedUser)
+    {
+        var filter = Builders<User>.Filter.Eq(x => x.Id, id);
+        var updateBuilder = Builders<User>.Update;
 
-    //Update User
-    public async Task UpdateAsync(string id, User updatedUser) =>
-        await _userCollection.ReplaceOneAsync(x => x.Id == id, updatedUser);
+        var updateDefinition = updateBuilder.Combine(
+            // Dynamically add update operations for non-null properties
+            updatedUser.Name != null ? updateBuilder.Set(x => x.Name, updatedUser.Name) : null,
+            updatedUser.Password != null ? updateBuilder.Set(x => x.Password, updatedUser.Password) : null,
+            updatedUser.Email != null ? updateBuilder.Set(x => x.Email, updatedUser.Email) : null,
+            updatedUser.Notes != null ? updateBuilder.Set(x => x.Notes, updatedUser.Notes) : null,
+            updatedUser.KBoards != null ? updateBuilder.Set(x => x.KBoards, updatedUser.KBoards) : null,
+            updatedUser.Appointments != null ? updateBuilder.Set(x => x.Appointments, updatedUser.Appointments) : null,
+            updatedUser.ProfilePicture != null ? updateBuilder.Set(x => x.ProfilePicture, updatedUser.ProfilePicture) : null,
+            // Assuming you also want to update the Notification
+            updatedUser.Notification != null ? updateBuilder.Set(x => x.Notification, updatedUser.Notification) : null
+        ) ;
+
+        await _userCollection.UpdateOneAsync(filter, updateDefinition);
+    }
 
     //Delete User
     public async Task RemoveAsync(string id) =>

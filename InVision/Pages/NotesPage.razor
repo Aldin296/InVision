@@ -1,4 +1,4 @@
-﻿@page "/note"
+﻿@page "/note/{noteId}"
 @using InVision.Data
 @using InVision.Data.Service
 @using InVision.Data.Model
@@ -7,6 +7,11 @@
 @inject DialogService DialogService
 @inject MatIconService IconService
 @inject NoteService NoteService
+@inject ILocalStorageService localstore
+
+
+@implements IDisposable
+
 
 <RadzenPanel>
     <HeaderTemplate>
@@ -17,7 +22,7 @@
     <ChildContent>
         <hr />
         <RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" UploadUrl="upload/image">
-            
+
         </RadzenHtmlEditor>
     </ChildContent>
 </RadzenPanel>
@@ -26,6 +31,7 @@
 
     [Parameter]
     public string noteId { get; set; }
+    string userid;
 
     public Note note = new Note();
     public string? selectedIcon;
@@ -41,9 +47,31 @@
 
     protected override async Task OnInitializedAsync()
     {
+        userid = await localstore.GetItemAsync<string>("UserId");
+
         note.Title = NoteService.selectedNote.Title;
-        note.Content = "<h1>Hello World!</h1>";
+        note.Content = NoteService.selectedNote.Content;
 
         selectedIcon = IconService.GetSelectedIcon();
+        note.Icon = selectedIcon;
     }
+
+
+    /*[JSInvokable]
+    public async Task SaveNoteBeforeUnload()
+    {
+        await NoteService.UpdateNote(userid, NoteService.selectedNote.Id, note);
+    }*
+
+    /*[JSInvokable]
+    public async Task AttachBeforeUnloadListener()
+    {
+    //    await JSRuntime.InvokeVoidAsync("window.addEventListener", "beforeunload", DotNetObjectReference.Create(this), "SaveNoteBeforeUnload");
+    }
+    */
+
+    async void IDisposable.Dispose()
+    {
+        await NoteService.UpdateNote(userid, NoteService.selectedNote.Id, note);
+ }
 }

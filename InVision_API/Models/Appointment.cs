@@ -4,7 +4,7 @@ namespace InVision_API.Models
 {
 	public class Appointment
 	{
-		[JsonIgnore]
+
 		public string Id { get; set; }
 
 		public DateTime Start { get; set; }

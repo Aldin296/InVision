@@ -51,7 +51,7 @@ namespace InVision_API.Controllers
 				}
 			}
 
-		[HttpPut("{userId:length(24)}/{appointmentId:length(24)}")]
+		[HttpPut("{userId}/{appointmentId}")]
 		public async Task<IActionResult> UpdateAppointment(string userId, string appointmentId, Appointment updatedAppointment)
 		{
 			try

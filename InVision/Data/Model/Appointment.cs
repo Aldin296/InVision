@@ -1,10 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace InVision.Data
+namespace InVision.Data.Model
 {
     public class Appointment
     {
-		[JsonIgnore]
         public string Id { get; set; }
 
 		public DateTime Start { get; set; }

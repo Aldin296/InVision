@@ -4,7 +4,8 @@
 @using InVision.Pages
 @inject DialogService DialogService
 @inject ContextMenuService ContextMenuService
-
+@inject InVision.Data.Service.CalendarService calendarService
+@inject Blazored.LocalStorage.ILocalStorageService localstore
 
 
 
@@ -19,17 +20,20 @@
 @code {
     RadzenScheduler<Appointment> scheduler;
     Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+    string userId = "";
 
-    List<Appointment> appointments = new List<Appointment>
+    List<Appointment> appointments = new List<Appointment>{};
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        new Appointment { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
-        new Appointment { Start = DateTime.Today.AddDays(-11), End = DateTime.Today.AddDays(-10), Text = "Day off" },
-        new Appointment { Start = DateTime.Today.AddDays(-10), End = DateTime.Today.AddDays(-8), Text = "Work from home" },
-        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(12), Text = "Online meeting" },
-        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(13), Text = "Skype call" },
-        new Appointment { Start = DateTime.Today.AddHours(14), End = DateTime.Today.AddHours(14).AddMinutes(30), Text = "Dentist appointment" },
-        new Appointment { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
-    };
+        userId = await localstore.GetItemAsync<string>("UserId");
+        appointments = await calendarService.GetAllAppointmentsAsync(userId);
+        if (firstRender)
+        {
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
 
     void OnSlotRender(SchedulerSlotRenderEventArgs args)
     {
@@ -46,10 +50,10 @@
         {
             Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
                 new Dictionary<string, object>
-                            {
+                {
                     { "Start", args.Start },
                     { "End", args.End }
-                            });
+                });
 
             if (data != null)
             {
@@ -63,9 +67,11 @@
     {
         var copy = new Appointment
             {
+                Id = args.Data.Id,
                 Start = args.Data.Start,
                 End = args.Data.End,
-                Text = args.Data.Text
+                Text = args.Data.Text,
+                Color = args.Data.Color,
             };
 
         var data = await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "Appointment", copy } });

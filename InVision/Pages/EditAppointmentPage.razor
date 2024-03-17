@@ -75,7 +75,7 @@
     async void OnSubmit(Appointment model)
     {
         userId = await localstore.GetItemAsync<string>("UserId");
-        //calenderService.UpdateAppointmentAsync(userId, appointmentId, model);
+        calenderService.UpdateAppointmentAsync(userId, model.Id, model);
         DialogService.Close(model);
     }
 

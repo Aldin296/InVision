@@ -16,7 +16,7 @@
     </HeaderTemplate>
     <ChildContent>
         <hr />
-        <RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" UploadUrl="upload/image" >
+        <RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" Execute="@OnExecute">
             <RadzenHtmlEditorUndo />
             <RadzenHtmlEditorRedo />
             <RadzenHtmlEditorSeparator />
@@ -39,6 +39,8 @@
             <RadzenHtmlEditorSource/>
             <RadzenHtmlEditorLink/>
             <RadzenHtmlEditorFontSize/>
+            <RadzenHtmlEditorCustomTool CommandName="LinkDiffrentNote" Icon="control_point" />
+
         </RadzenHtmlEditor>
     </ChildContent>
 </RadzenPanel>
@@ -51,6 +53,35 @@
     public Note note = new Note();
     public string? selectedIcon;
 
+    async Task OnExecute(HtmlEditorExecuteEventArgs args)
+    {
+        if (args.CommandName == "LinkDiffrentNote")
+        {
+            await LinkDiffrentNote(args.Editor);
+        }
+    }
+
+    async Task LinkDiffrentNote(RadzenHtmlEditor editor)
+    {
+        await editor.SaveSelectionAsync();
+
+        var result = await DialogService.OpenAsync<ChooseNotePage>("Select a Note");
+
+        await editor.RestoreSelectionAsync();
+
+        if (result != null)
+        {
+            await editor.ExecuteCommandAsync(HtmlEditorCommands.InsertHtml, $@"<a href=""https://blazor.radzen.com/dashboard""><i class=""material-icons"" @onclick=""() => HandleIconClick(result)"">{result}</i> </a>");
+        }
+    }
+
+    void HandleIconClick(string iconName)
+    {
+        // Handle the click event here
+        // For example, you can display a message:
+        Console.WriteLine($"Icon clicked: {iconName}");
+        // Or perform any other desired action
+    }
 
     async Task OpenSideDialog()
     {
@@ -60,7 +91,7 @@
     protected override async Task OnInitializedAsync()
     {
         note.Title = NoteService.selectedNote.Title;
-        note.Content = "<h1>Hello World!</h1>";
+        note.Content = @"<link rel=""stylesheet"" href=""https://fonts.googleapis.com/icon?family=Material+Icons"">";
 
         selectedIcon = IconService.GetSelectedIcon();
     }

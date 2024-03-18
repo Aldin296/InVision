@@ -8,7 +8,7 @@
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
     <div style="text-align:center;">
-        <h2>Login Form</h2>
+        <h2>Sign In</h2>
     </div>
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
 
@@ -23,14 +23,9 @@
 
                 <RadzenFormField Text="Password" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px;">
                     <ChildContent>
-                        <RadzenPassword Name="password" @bind-Value="password_value" />
+                        <RadzenPassword Name="password" @bind-Value="passwordValue" />
                         <RadzenRequiredValidator Component="password" Text="password field is empty" Popup=true Style="margin-top: 50px" />
                     </ChildContent>
-                    <!--
-                    <End>
-                        <RadzenButton Icon="@(password_visibility ? "visibility" : "visibility_off")" Click="TogglePassword" Variant="Variant.Text" Size="ButtonSize.Small" />
-                    </End>
-                    -->
                 </RadzenFormField>
                 <RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
                     <RadzenButton ButtonType="ButtonType.Submit" Click="LoginUser" style="width: 150px">Login</RadzenButton>
@@ -48,35 +43,24 @@
 @code {
     User user = new User();
 
-    string email_regex = "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$";
-    string password_regex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+    bool emailValid = false;
+    bool passwordValid = false;
 
-    bool email_valid = false;
-    bool password_valid = false;
-
-    string password_value = "";
-    bool password_visibility = true;
-    string emailValue = "";
-    string value = "";
     string passwordValue = "";
-    bool password = true;
+    string emailValue = "";
 
-    void TogglePassword()
-    {
-        password_visibility = !password_visibility;
-    }
 
-    void OnSubmit(User user)
+    void OnSubmit()
     {
-        email_valid = true;
-        password_valid = true;
+        emailValid = true;
+        passwordValid = true;
         Console.WriteLine("valid submit");
     }
 
     void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
     {
-        email_valid = false;
-        password_valid = false;
+        emailValid = false;
+        passwordValid = false;
         Console.WriteLine("invalid submit");
     }
 
@@ -84,7 +68,7 @@
 
     async Task LoginUser()
     {
-        bool loginSuccessful = await userservice.LoginUser(emailValue, password_value);
+        bool loginSuccessful = await userservice.LoginUser(emailValue, passwordValue);
         if (loginSuccessful)
         {
 

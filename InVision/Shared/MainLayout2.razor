@@ -10,7 +10,6 @@
 
 <PageTitle>InVision</PageTitle>
 <RadzenLayout>
-
     <RadzenSidebar Responsive="false" Style="@($"width: {(sidebarExpanded ? "250px" : "60px")}")">
         <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" Style="color:black" />
         <RadzenPanelMenu DisplayStyle="@(sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">

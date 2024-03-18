@@ -10,7 +10,7 @@
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
 	<div style="text-align:center;">
-		<h2>Register Form</h2>
+		<h2>Sign Up</h2> 
 	</div>
 	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
 		<div style="text-align: center">
@@ -19,7 +19,6 @@
 					<ChildContent>
 						<RadzenTextBox Name="username" @bind-Value="usernameValue" @bind-Value=@model.username />
 						<RadzenRequiredValidator Component="username" Text="username field is empty" Popup=true Style="margin-top: 50px" />
-
 					</ChildContent>
 				</RadzenFormField>
 				<RadzenFormField Text="E-Mail" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
@@ -35,7 +34,6 @@
 						<RadzenCustomValidator Component="password" Text="@validation_text" Validator="@(() => PasswordValidation(passwordValue))" Popup="true" Style="margin-top:50px" />
 					</ChildContent>
 				</RadzenFormField>
-
 				<div style="text-align:center">
 					<p>
 						Be at least 6 characters long
@@ -47,7 +45,6 @@
 						Contain at least one digit (0-9)
 						<br />
 						Contain at least one special character !\#$%^&*._+*ยง/=?>)
-						<br />
 					</p>
 				</div>
 				<br />
@@ -57,7 +54,6 @@
 			</RadzenTemplateForm>
 		</div>
 	</RadzenStack>
-
 	<div style="text-align:center;">
 		<p>Already have an account? </p>
 		<RadzenLink Path=""> Login! </RadzenLink>
@@ -75,40 +71,35 @@
 	}
 	Model model = new Model();
 
-	bool username_valid = false;
-	bool email_valid = false;
-	bool password_valid = false;
+	bool usernameValid = false;
+	bool emailValid = false;
+	bool passwordValid = false;
 
 	string passwordValue = "";
-	bool passwordVisibility = true;
 	string usernameValue = "";
 	string emailValue = "";
 
-	void TogglePassword()
-	{
-		passwordVisibility = !passwordVisibility;
-	}
 
 	void OnSubmit(Model model)
 	{
-		username_valid = true;
-		email_valid = true;
-		password_valid = true;
+		usernameValid = true;
+		emailValid = true;
+		passwordValid = true;
 		NavManager.NavigateTo("/");
 		Console.WriteLine("valid submit");
 	}
 
 	void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
 	{
-		username_valid = false;
-		email_valid = false;
-		password_valid = false;
+		usernameValid = false;
+		emailValid = false;
+		passwordValid = false;
 		Console.WriteLine("invalid submit");
 	}
 
 	async Task Register()
 	{
-		if (PasswordValidation(passwordValue) == true && email_valid == true && username_valid == true)
+		if (emailValid == true && usernameValid == true)
 		{
 			await userservice.CreateUser(usernameValue, passwordValue, emailValue);
 		}
@@ -119,7 +110,7 @@
 	{
 		Regex regex_lowerCase = new Regex(@"^(?=.*[a-z]).{1,}$");
 		Regex regex_uperCase = new Regex(@"^(?=.*[A-Z]).{1,}$");
-		Regex regex_charackter = new Regex(@"(?=.*[!\#$%^&*@._+*ยง/=?><|()]).{1,}$");
+		Regex regex_charackter = new Regex(@"(?=.*[!\#$%^&*@._+*/=?><|()]).{1,}$");
 		Regex regex_number = new Regex(@"(?=.*\d).{1,}$");
 
 		if (input is null)

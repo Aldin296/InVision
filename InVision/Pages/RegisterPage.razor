@@ -99,7 +99,7 @@
 
 	async Task Register()
 	{
-		if (PasswordValidation(passwordValue) == true && emailValid == true && usernameValid == true)
+		if (emailValid == true && usernameValid == true)
 		{
 			await userservice.CreateUser(usernameValue, passwordValue, emailValue);
 		}

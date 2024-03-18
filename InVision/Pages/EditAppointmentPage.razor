@@ -75,12 +75,13 @@
     async void OnSubmit(Appointment model)
     {
         userId = await localstore.GetItemAsync<string>("UserId");
-        calenderService.UpdateAppointmentAsync(userId, model.Id, model);
+        await calendarService.UpdateAppointmentAsync(userId, model.Id, model);
         DialogService.Close(model);
     }
 
-    void OnDeleteAppointmentClick()
+    async void OnDeleteAppointmentClick()
     {
+        await calendarService.DeleteAppointmentAsync(userId, model.Id);
         model.Delete = true;
         OnSubmit(model);
     }

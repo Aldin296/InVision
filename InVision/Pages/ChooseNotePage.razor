@@ -8,7 +8,7 @@
 @inject ContextMenuService ContextMenuService
 @inject TooltipService TooltipService
 @inject MatIconService IconService
-
+@inject ILocalStorageService localstore
 
 <RadzenPanel>
     <RadzenFormField Text="" Variant="Variant.Text" Style="padding-left: 7px">
@@ -42,10 +42,12 @@
     List<Note> filteredNotes;
     string selectedNoteIcon;
     string searchValue;
+    string userid;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        notes = NoteService.notes;
+        userid = await localstore.GetItemAsync<string>("UserId");
+        notes = await NoteService.GetAllNotesAsync(userid);
         filteredNotes = notes;
 
         if (firstRender)

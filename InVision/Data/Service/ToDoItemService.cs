@@ -10,9 +10,9 @@ namespace InVision.Data.Service
         public TodoItem selectedAppointment { get; set; }
         List<TodoItem> todoitems = new List<TodoItem>() { };
 
-        public async Task CreateItem(string userid, TodoItem item)
+        public async Task CreateItem(string userid, string kboardid,TodoItem item)
         {
-            string requestUrl = $"{baseurl}/api/ToDoItem/{userid}";
+            string requestUrl = $"{baseurl}/api/ToDoItem/{userid}/{kboardid}";
             await client.PostAsJsonAsync(requestUrl, item);
         }
 
@@ -37,5 +37,12 @@ namespace InVision.Data.Service
                 string requestUrl = $"{baseurl}/api/ToDoItem/{userid}/{itemid}";
                 await client.DeleteAsync(requestUrl);
             }
-    }
+
+
+		    public async Task UpdateItem(string userid, string kboardid, string itemid,TodoItem item)
+		    {
+			    string requestUrl = $"{baseurl}/api/ToDoItem/{userid}/{kboardid}/{itemid}";
+			    await client.PutAsJsonAsync(requestUrl, item);
+		    }
+	}
 }

@@ -4,6 +4,7 @@
 @using InVision.Data.Service
 @inject KBoardService boardService
 @inject DialogService DialogService
+@inject ToDoItemService todoitemservice
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
 
@@ -126,18 +127,19 @@
 	public string todo = "ToDo";
 	public string inProgress = "InProgress";
 	public string done = "Done";
-
+	List<TodoItem>? listOfItems;
+	string userId;
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		
-		string userId = await localstore.GetItemAsync<string>("UserId");
+
+		userId = await localstore.GetItemAsync<string>("UserId");
 		boards = await Task.Run(() => boardService.GetAllKBoardsAsync(userId));
 
 		board = boards.Where(board => board.Id == boardId).FirstOrDefault();
 		//board = service.GetBoardById(boardId);
 
-		List<TodoItem>? listOfItems = board.Items;
+		listOfItems = board.Items;
 
 		foreach (TodoItem item in listOfItems)
 		{
@@ -163,22 +165,29 @@
 	public async void OnAddItem(string dropzone)
 	{
 		TodoItem newitem = await DialogService.OpenAsync<AddToDoItemPage>("Add Task");
+
 		if (newitem != null)
 		{
 			if (dropzone == "ToDo")
 			{
 				newitem.State = 0;
 				MyFirstList.Add(newitem);
+				await todoitemservice.CreateItem(userId, boardId, newitem);
+
 			}
 			if (dropzone == "InProgress")
 			{
 				newitem.State = 1;
 				MySecondList.Add(newitem);
+				await todoitemservice.CreateItem(userId, boardId, newitem);
+
 			}
 			if (dropzone == "Done")
 			{
 				newitem.State = 2;
 				MyThirdList.Add(newitem);
+				await todoitemservice.CreateItem(userId, boardId, newitem);
+
 			}
 		}
 
@@ -212,20 +221,25 @@
 
 	}
 
-	public void Itemdropcall(string dropzoneId, TodoItem item)
+	public async void Itemdropcall(string dropzoneId, TodoItem item)
 	{
+
+
 		Console.WriteLine(dropzoneId);
 		if (dropzoneId == "ToDo")
 		{
 			item.State = 0;
+			await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
 		}
 		if (dropzoneId == "InProgress")
 		{
 			item.State = 1;
+			await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
 		}
 		if (dropzoneId == "Done")
 		{
 			item.State = 2;
+			await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
 		}
 	}
 }

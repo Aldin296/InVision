@@ -21,6 +21,7 @@ builder.Services.AddBlazorDragDrop();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddScoped<MatIconService>();
 builder.Services.AddScoped<CalendarService>();
+builder.Services.AddScoped<ToDoItemService>();
 builder.Services.AddScoped<NoteService>();
 builder.Services.AddBlazoredLocalStorage();
 

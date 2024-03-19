@@ -56,10 +56,12 @@ else
 
     List<Note> filteredNotes;
     string searchValue;
+    string userid;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        notes = NoteService.notes;
+        userid = await localstore.GetItemAsync<string>("UserId");
+        notes = await NoteService.GetAllNotesAsync(userid);
         filteredNotes = notes;
 
         if (firstRender)
@@ -75,7 +77,8 @@ else
         {
             if (note.Title != null)
             {
-                notes.Add(note);
+                //notes.Add(note);
+                await NoteService.CreateNote(userid,note);
                 StateHasChanged();
             }
             else
@@ -118,8 +121,8 @@ else
 
     private async void OnDeleteNote(Note note)
     {
-        //await kboardService.DeleteKBoard(userId, board.Id);
-        notes.Remove(note);
+        //notes.Remove(note);
+        await NoteService.DeleteNote(userid,note.Id);
         filteredNotes.Remove(note);
         UpdateFilteredNotes();
 

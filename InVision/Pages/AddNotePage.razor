@@ -1,6 +1,7 @@
 ﻿@inject DialogService DialogService
 @inject NoteService NoteService
-@using InVision.Data
+@inject ILocalStorageService localstore
+@using InVision.Data.Service
 @using InVision.Data.Model
 @using InVision.Data.Service
 
@@ -29,16 +30,21 @@
 @code {
     [Parameter]
     public string Title { get; set; }
+    //string userid;
 
     Note model = new Note();
 
     protected override void OnParametersSet()
     {
         model.Title = Title;
+        model.Content = " ";
+        model.Icon = " ";
     }
 
-    void OnSubmit(Note model)
+    async void OnSubmit(Note model)
     {
+        //userid = await localstore.GetItemAsync<string>("UserId");
+        //await NoteService.CreateNote(userid,model);
         DialogService.Close(model);
         Console.WriteLine("Valid submit");
     }

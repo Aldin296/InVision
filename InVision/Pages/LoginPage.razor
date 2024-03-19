@@ -64,11 +64,14 @@
         Console.WriteLine("invalid submit");
     }
 
+
+
     async Task LoginUser()
     {
         bool loginSuccessful = await userservice.LoginUser(emailValue, passwordValue);
         if (loginSuccessful)
         {
+
 
             Console.WriteLine("Angemeldet");
             user = await userservice.GetUserByEmail(emailValue);

@@ -7,6 +7,7 @@
 @inject DialogService DialogService
 @inject MatIconService iconservice
 @inject UserService userservice
+@inject CalendarService calendarservice
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
 <RadzenCard>
@@ -148,16 +149,7 @@
 
     public string imagepath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
 
-    List<Appointment> appointmentsThisMonth = new List<Appointment>
-    {
-        new Appointment { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
-        new Appointment { Start = DateTime.Today.AddDays(-11), End = DateTime.Today.AddDays(-10), Text = "Day off" },
-        new Appointment { Start = DateTime.Today.AddDays(-10), End = DateTime.Today.AddDays(-8), Text = "Work from home" },
-        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(12), Text = "Online meeting" },
-        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(13), Text = "Skype call" },
-        new Appointment { Start = DateTime.Today.AddHours(14), End = DateTime.Today.AddHours(14).AddMinutes(30), Text = "Dentist appointment" },
-        new Appointment { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
-    };
+    List<Appointment> appointmentsThisMonth = new List<Appointment>{};
 
     public class KboardItme
     {
@@ -250,6 +242,7 @@
     {
         //string userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
         string userId = await localstore.GetItemAsync<string>("UserId");
+        appointmentsThisMonth = await calendarservice.GetAllAppointmentsAsync(userId);
 
         if (!string.IsNullOrEmpty(userId))
         {

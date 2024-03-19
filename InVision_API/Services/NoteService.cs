@@ -50,7 +50,7 @@ namespace InVision_API.Services
             var update = Builders<User>.Update
                 .Set("Notes.$.Title", updatedNote.Title)
                 .Set("Notes.$.Content", updatedNote.Content)
-                .Set("Notes.$.IsDone", updatedNote.IsDone);
+                .Set("Notes.$.Icon", updatedNote.Icon);
 
             await _userCollection.UpdateOneAsync(filter, update);
         }

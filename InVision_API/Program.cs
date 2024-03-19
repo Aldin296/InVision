@@ -23,7 +23,7 @@ namespace InVision_API
             builder.Services.AddScoped<NoteService>();
             builder.Services.AddScoped<KBoardService>();
 			builder.Services.AddScoped<CalendarService>();
-
+            builder.Services.AddScoped<ToDoItemService>();
 
 			var app = builder.Build();
 

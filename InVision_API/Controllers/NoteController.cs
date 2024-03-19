@@ -18,7 +18,7 @@ namespace InVision_API.Controllers
             _noteService = noteService;
         }
 
-        [HttpGet("{userId:length(24)}")]
+        [HttpGet("{userId}")]
         public async Task<ActionResult<List<Note>>> GetNotes(string userId)
         {
             var notes = await _noteService.GetNotesAsync(userId);
@@ -26,7 +26,7 @@ namespace InVision_API.Controllers
             return Ok(notes);
         }
 
-        [HttpGet("{userId:length(24)}/{noteId:length(24)}")]
+        [HttpGet("{userId}/{noteId}")]
         public async Task<ActionResult<Note>> GetNote(string userId, string noteId)
         {
             var note = await _noteService.GetNoteAsync(userId, noteId);
@@ -39,13 +39,13 @@ namespace InVision_API.Controllers
             return Ok(note);
         }
 
-        [HttpPost("{userId:length(24)}")]
+        [HttpPost("{userId}")]
         public async Task<IActionResult> PostNote(string userId, Note newNote)
         {
             try
             {
                 await _noteService.CreateNoteAsync(userId, newNote);
-                return CreatedAtAction(nameof(GetNote), new { userId, noteId = newNote.Id }, newNote);
+                return CreatedAtAction(nameof(PostNote), new { userId, noteId = newNote.Id }, newNote);
             }
             catch (Exception ex)
             {
@@ -53,7 +53,7 @@ namespace InVision_API.Controllers
             }
         }
 
-        [HttpPut("{userId:length(24)}/{noteId:length(24)}")]
+        [HttpPut("{userId}/{noteId}")]
         public async Task<IActionResult> UpdateNote(string userId, string noteId, Note updatedNote)
         {
             try
@@ -67,7 +67,7 @@ namespace InVision_API.Controllers
             }
         }
 
-        [HttpDelete("{userId:length(24)}/{noteId:length(24)}")]
+        [HttpDelete("{userId}/{noteId}")]
         public async Task<IActionResult> DeleteNote(string userId, string noteId)
         {
             try

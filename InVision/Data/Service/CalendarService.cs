@@ -39,5 +39,10 @@ namespace InVision.Data.Service
 			string requestUrl = $"{baseurl}/api/Calendar/{userid}/{appointmentId}";
 			await client.PutAsJsonAsync(requestUrl, updatedAppointment);
 		}
-    }
+		public async Task DeleteAppointmentAsync(string userid, string appointmentId)
+		{
+			string requestUrl = $"{baseurl}/api/Calendar/{userid}/{appointmentId}";
+			await client.DeleteAsync(requestUrl);
+		}
+	}
 }

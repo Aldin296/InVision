@@ -11,89 +11,94 @@
 
 
 <RadzenPanel>
-    <RadzenFormField Text="" Variant="Variant.Text" Style="padding-left: 7px">
-        <RadzenTextBox @bind-Value="@searchValue" @oninput="SearchNotes" Style="width: 100%;" />
-    </RadzenFormField>
-    <RadzenIcon style="font-weight: 20; margin-top: 20px" Icon="search"></RadzenIcon>
-    <RadzenDataList WrapItems="true" AllowPaging="false" Data="@notes" TItem="Note">
-        <Template Context="note">
-            @if (note.Icon != null)
-            {
-                <RadzenCard Style="width: 250px" @onclick="()=>OpenNote(note)" class="kanban-card">
-                    <RadzenRow>
-                        <RadzenColumn Size="11" class="rz-text-align-start">
-                            <RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@note.Title</RadzenText>
-                            </RadzenColumn>
-                            <RadzenColumn Size="1">
-                                <RadzenIcon Icon="@note.Icon"></RadzenIcon>
-                            </RadzenColumn>
-                        </RadzenRow>
-                    </RadzenCard>
-            }
-        </Template>
-    </RadzenDataList>
-    <RadzenButton Text="OK" Click=@OnOkClick />
-    <RadzenButton Text="Cancel" Click=@OnCancelClick ButtonStyle="ButtonStyle.Secondary" />
+	<RadzenFormField Text="" Variant="Variant.Text" Style="padding-left: 7px">
+		<RadzenTextBox @bind-Value="@searchValue" @oninput="SearchNotes" Style="width: 100%;" />
+	</RadzenFormField>
+	<RadzenIcon style="font-weight: 20; margin-top: 20px" Icon="search"></RadzenIcon>
+	<RadzenDataList WrapItems="true" AllowPaging="false" Data="@filteredNotes" TItem="Note">
+		<Template Context="note">
+			@if (note.Icon != null && note.Title != NoteService.selectedNote.Title)
+			{
+
+				<RadzenCard Style="width: 250px" @onclick="()=>OpenNote(note)" class="kanban-card">
+					<RadzenRow>
+						<RadzenColumn Size="10" class="rz-text-align-start">
+							<RadzenText BadgeStyle="BadgeStyle.Success" TextStyle="TextStyle.H5">@note.Title</RadzenText>
+							</RadzenColumn>
+							<RadzenColumn Size="2">
+								<RadzenIcon Icon="@note.Icon"></RadzenIcon>
+							</RadzenColumn>
+						</RadzenRow>
+					</RadzenCard>
+
+
+			}
+		</Template>
+	</RadzenDataList>
+	<RadzenButton Text="OK" Click=@OnOkClick />
+	<RadzenButton Text="Cancel" Click=@OnCancelClick Style="background-color:red" />
 </RadzenPanel>
 
 
 @code {
-    List<Note> notes;
-    List<Note> filteredNotes;
-    string selectedNoteIcon;
-    string searchValue;
+	List<Note> ?notes;
+	List<Note> allNotes;
+	List<Note> filteredNotes;
+	string selectedNoteIcon;
+	string searchValue;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        notes = NoteService.notes;
-        filteredNotes = notes;
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		notes = NoteService.notes;
 
-        if (firstRender)
-        {
-            await InvokeAsync(StateHasChanged);
-        }
-    }
+		filteredNotes = notes;
 
-    private void OpenNote(Note selectedNote)
-    {
-        selectedNoteIcon = selectedNote.Icon;
-    }
+		if (firstRender)
+		{
+			await InvokeAsync(StateHasChanged);
+		}
+	}
 
-    private void UpdateFilteredNotes()
-    {
-        if (string.IsNullOrEmpty(searchValue))
-        {
-            filteredNotes = new List<Note>(notes);
-        }
-        else
-        {
-            filteredNotes = notes.Where(b => b.Title.Contains(searchValue, StringComparison.OrdinalIgnoreCase)).ToList();
-        }
+	private void OpenNote(Note selectedNote)
+	{
+		selectedNoteIcon = selectedNote.Icon;
+	}
 
-        StateHasChanged();
-    }
+	private void UpdateFilteredNotes()
+	{
+		if (string.IsNullOrEmpty(searchValue))
+		{
+			filteredNotes = new List<Note>(notes);
+		}
+		else
+		{
+			filteredNotes = notes.Where(b => b.Title.Contains(searchValue, StringComparison.OrdinalIgnoreCase)).ToList();
+		}
 
-    private void SearchNotes(ChangeEventArgs args)
-    {
-        searchValue = args.Value.ToString();
-        UpdateFilteredNotes();
-    }
+		StateHasChanged();
+	}
 
-    void OnCancelClick()
-    {
-        DialogService.Close(null);
-    }
+	private void SearchNotes(ChangeEventArgs args)
+	{
+		searchValue = args.Value.ToString();
+		UpdateFilteredNotes();
+	}
 
-    void OnOkClick()
-    {
-        string result = null;
+	void OnCancelClick()
+	{
+		DialogService.Close(null);
+	}
 
-        if (selectedNoteIcon != null)
-        {
-            result = selectedNoteIcon;
-        }
+	void OnOkClick()
+	{
+		string result = null;
 
-        DialogService.Close(result);
-    }
+		if (selectedNoteIcon != null)
+		{
+			result = selectedNoteIcon;
+		}
+
+		DialogService.Close(result);
+	}
 
 }

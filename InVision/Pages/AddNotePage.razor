@@ -1,16 +1,20 @@
 ﻿@inject DialogService DialogService
+@inject NoteService NoteService
 @using InVision.Data
 @using InVision.Data.Model
+@using InVision.Data.Service
 
 
-<RadzenTemplateForm TItem="Note" Data="@model" Submit=@OnSubmit>
+
+<RadzenTemplateForm TItem="Note" Data="@model" Submit=@OnSubmit InvalidSubmit="@OnInvalidSubmit">
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
             <RadzenLabel Text="Title" />
         </div>
         <div class="col">
-            <RadzenTextBox @bind-Value="@model.Title" Name="Title" />
-            <RadzenRequiredValidator Text="Title is required" Component="Title" />
+            <RadzenTextBox @bind-Value="@model.Title" Name="Title"></RadzenTextBox>          
+            <RadzenRequiredValidator Text="Title is required" Component="Title"/>
+            <RadzenCustomValidator Component="Title" Text="@model.Title" Validator="@(() => TitleValidator(model.Title))"/>
         </div>
     </div>
 
@@ -26,7 +30,6 @@
     [Parameter]
     public string Title { get; set; }
 
-
     Note model = new Note();
 
     protected override void OnParametersSet()
@@ -37,5 +40,29 @@
     void OnSubmit(Note model)
     {
         DialogService.Close(model);
+        Console.WriteLine("Valid submit");
+    }
+
+    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+    {
+        Console.WriteLine("invalid submit");
+    }
+
+
+    bool TitleValidator(string input)
+    {
+        bool valid = false;
+        foreach(var note in NoteService.notes)
+        {
+            if(input != note.Title)
+            {
+                valid = true;
+            }
+            else
+            {
+                valid = false;
+            }
+        }
+        return valid;
     }
 }

@@ -34,14 +34,14 @@ namespace InVision.Data.Service
         }
             public async Task DeleteItem(string userid, string itemid)
             {
-                string requestUrl = $"{baseurl}/api/ToDoItem/{userid}/{itemid}";
+                string requestUrl = $"{baseurl}/api/ToDoItem";
                 await client.DeleteAsync(requestUrl);
             }
 
 
-		    public async Task UpdateItem(string userid, string kboardid, string itemid,TodoItem item)
+		    public async Task UpdateItem(string itemid,TodoItem item)
 		    {
-			    string requestUrl = $"{baseurl}/api/ToDoItem/{userid}/{kboardid}/{itemid}";
+			    string requestUrl = $"{baseurl}/api/ToDoItem/{itemid}";
 			    await client.PutAsJsonAsync(requestUrl, item);
 		    }
 	}

@@ -23,12 +23,12 @@ namespace InVision_API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{userId}/{kboardId}")]
-        public async Task<ActionResult<List<KBoard>>> GetKBoards(string userId,string kboardId)
+        [HttpGet("{userId}/{itemId}")]
+        public async Task<ActionResult<List<TodoItem>>> GetItems(string userId,string itemId)
         {
-            var kboards = await _todoService.GetAllToDoItemsAsync(userId,kboardId);
+            var items = await _todoService.GetAllToDoItemsAsync(userId,itemId);
 
-            return Ok(kboards);
+            return Ok(items);
         }
 
         [HttpPost("{userId}/{kboardId}")]
@@ -45,12 +45,12 @@ namespace InVision_API.Controllers
             }
         }
         
-       /* [HttpPut("{userId:length(24)}/{kboardId:length(24)}")]
-        public async Task<IActionResult> UpdateKBoard(string userId, string kboardId, KBoard updatedKBoard)
+        [HttpPut("{itemId}")]
+        public async Task<IActionResult> UpdateItem(string itemId, TodoItem newItem)
         {
             try
             {
-                await _kboardService.UpdateKboardAsync(userId, kboardId, updatedKBoard);
+                await _todoService.UpdateItemAsync(itemId, newItem);
                 return NoContent();
             }
             catch (Exception ex)
@@ -61,17 +61,17 @@ namespace InVision_API.Controllers
 
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteKBoard(string userId, string kboardId)
+        public async Task<IActionResult> DeleteItem(string userId, string kboardId,string itemId)
         {
             try
             {
-                await _todoService.DeleteKBoardAsync(userId, kboardId);
+                await _todoService.DeleteItemAsync(userId, kboardId, itemId);
                 return NoContent();
             }
             catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
-        }*/
+        }
     }
 }

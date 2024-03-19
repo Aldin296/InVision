@@ -8,15 +8,13 @@
 @inject MatIconService IconService
 @inject NoteService NoteService
 @inject ILocalStorageService localstore
-
-
 @implements IDisposable
 
 
 <RadzenPanel>
     <HeaderTemplate>
         <RadzenIcon Icon="@NoteService.selectedNote.Icon" Style="padding-right: 0px; font-size:2em"></RadzenIcon>
-        <RadzenText TextStyle="TextStyle.H4" Text="@note.Title" Style="max-width: 90%" contenteditable="true" />
+        <RadzenText TextStyle="TextStyle.H4" @bind-Value=@note.Title Text="@note.Title" Style="max-width: 90%" contenteditable="true" onchange="@UpdateTitle" />
         <RadzenIcon @onclick="()=>OpenSideDialog()" Icon="more_horiz" Style="cursor: pointer; padding-right: 20px; font-size: 2em" class="add-todoitem-icon"></RadzenIcon>
     </HeaderTemplate>
     <ChildContent>
@@ -58,6 +56,7 @@
     public string noteId { get; set; }
     string userid;
 
+
     public Note note = new Note();
     public string? selectedIcon;
 
@@ -67,6 +66,11 @@
         {
             await LinkDiffrentNote(args.Editor);
         }
+    }
+
+    async Task UpdateTitle(/*HtmlEditorExecuteEventArgs args*/)
+    {
+        
     }
 
     async Task LinkDiffrentNote(RadzenHtmlEditor editor)
@@ -109,21 +113,11 @@
     }
 
 
-    /*[JSInvokable]
-    public async Task SaveNoteBeforeUnload()
-    {
-        await NoteService.UpdateNote(userid, NoteService.selectedNote.Id, note);
-    }*
 
-    /*[JSInvokable]
-    public async Task AttachBeforeUnloadListener()
-    {
-    //    await JSRuntime.InvokeVoidAsync("window.addEventListener", "beforeunload", DotNetObjectReference.Create(this), "SaveNoteBeforeUnload");
-    }
-    */
 
     async void IDisposable.Dispose()
     {
+        //note.Title = "lllllllllllllllllllll";
         await NoteService.UpdateNote(userid, NoteService.selectedNote.Id, note);
- }
+    }
 }

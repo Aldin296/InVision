@@ -17,7 +17,7 @@ namespace InVision.Data.Service
 
         public async Task<List<TodoItem>> GetAllItemsAsync(string userid, string kboardid)
         {
-            string requestUrl = $"{baseurl}/api/User";
+            string requestUrl = $"{baseurl}/api/ToDoItem";
             var data = await client.GetAsync($"{requestUrl}/{userid}/{kboardid}");
             KBoard kboard = null;
             if (data.StatusCode != System.Net.HttpStatusCode.NoContent)

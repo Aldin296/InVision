@@ -47,17 +47,21 @@
 	TodoItem model = new TodoItem();
 
 	string validationText;
-	string userid;
-	List<TodoItem> items = new List<TodoItem>();
+	string userId;
+	string boardId;
+	List<KBoard> boards = new List<KBoard>();
+	List<TodoItem> ?items = new List<TodoItem>();
+	KBoard board;
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 
-			userid = await Localstore.GetItemAsync<string>("UserId");
-			Console.WriteLine(KBoardService.selectedBoard.Name);
-			Console.WriteLine(KBoardService.selectedBoard.Id);
+		userId = await Localstore.GetItemAsync<string>("UserId");
 
-			items = await TodoItemService.GetAllItemsAsync(userid, KBoardService.selectedBoard.Id);
+		board = KBoardService.selectedBoard;
+		items = board.Items;
+
+		//items = await TodoItemService.GetAllItemsAsync(userid, KBoardService.selectedBoard.Id);
 	}
 
 	protected override void OnParametersSet()

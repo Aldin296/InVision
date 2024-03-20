@@ -141,7 +141,7 @@
 				{
 					MyFirstList.Add(item);
 				}
-				if (item.State != 1)
+				if (item.State == 1)
 				{
 					MySecondList.Add(item);
 				}
@@ -256,8 +256,6 @@
 
 	public async void Itemdropcall(string dropzoneId, TodoItem item)
 	{
-
-
 		Console.WriteLine(dropzoneId);
 		if (dropzoneId == "ToDo")
 		{

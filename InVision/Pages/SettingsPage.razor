@@ -5,7 +5,7 @@
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 @inject UserService userservice
 @inject NotificationService notificationService
-
+@inject KBoardService boardservice
 
 <RadzenPanel>
     <HeaderTemplate>
@@ -102,8 +102,11 @@
                 <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Do you want to receive emails?</RadzenText>
             </RadzenColumn>
             <RadzenColumn Size="10" Style="display: flex; align-items: center; height:60px">
-                <RadzenToggleButton @bind-Value=@recieveEmails Change=@OnChange Text="@(recieveEmails ? "Turn off Notifications" : "Turn on Notifications" )" ButtonStyle="ButtonStyle.Primary"
-                                    ToggleButtonStyle="ButtonStyle.Light" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Turn off Notifications" }})" />
+                <RadzenToggleButton @bind-Value=@recieveEmails Change=@OnChange Text="@(recieveEmails ? "Turn off Notifications" : "Turn on Notifications")"
+                                    ButtonStyle="@(recieveEmails ? ButtonStyle.Primary : ButtonStyle.Light)"
+                                    ToggleButtonStyle="ButtonStyle.Light"
+                                    InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Turn off Notifications" }})" />
+
             </RadzenColumn>
         </RadzenRow>
 
@@ -131,13 +134,14 @@
     bool passwordVisibleNew = true;
     bool passwordVisibleOld = true;
 
-    bool recieveEmails = false;
+    bool recieveEmails;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         userid = await localstore.GetItemAsync<string>("UserId");
         user = await userservice.GetUserById(userid);
-
+        user.KBoards = await boardservice.GetAllKBoardsAsync(userid);
+        recieveEmails = user.Notification;
 
         if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
         {
@@ -178,7 +182,7 @@
             }
             catch (Exception ex)
             {
-                // Handle any exceptions here, such as logging the error or displaying a message to the user
+                //Catching any possible errors along the way
                 Console.WriteLine($"Error converting image to byte array: {ex.Message}");
             }
         }
@@ -199,6 +203,12 @@
         if (username != null)
         {
             user.Name = username;
+            //When the username is changed the CreatedBy Value in each KBoard needs to be updated
+            foreach(KBoard k in user.KBoards)
+            {
+                k.CreatedBy = username;
+            }
+            
         }
         if (imageBytes != null)
         {
@@ -213,6 +223,7 @@
             user.Password = hashpass.Hashed;
             user.salt = hashpass.Salt;
         }
+        user.Notification = recieveEmails;
         await userservice.UpdateUser(userid, user);
     }
 
@@ -228,12 +239,14 @@
 
     private void OnChange(bool newValue)
     {
+        recieveEmails = newValue;
+
         if (newValue)
         {
             notificationService.Notify(new NotificationMessage
                 {
                     Severity = NotificationSeverity.Success,
-                    Summary = "you are receiving emails"
+                    Summary = "You are now receiving emails"
                 });
         }
         else
@@ -241,8 +254,9 @@
             notificationService.Notify(new NotificationMessage
                 {
                     Severity = NotificationSeverity.Error,
-                    Summary ="you are NOT receiving emails"
+                    Summary = "You are NOT receiving emails"
                 });
         }
     }
 }
+

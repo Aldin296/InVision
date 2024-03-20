@@ -23,7 +23,7 @@ namespace InVision_API.Controllers
 			_logger = logger;
 		}
 
-		[HttpGet("{userId:length(24)}")]
+		[HttpGet("{userId}")]
 		public async Task<ActionResult<List<KBoard>>> GetKBoards(string userId)
 		{
 			var kboards = await _kboardService.GetAllKBoardsAsync(userId);
@@ -55,7 +55,7 @@ namespace InVision_API.Controllers
 			}
 		}
 
-		[HttpPost("{userId:length(24)}")]
+		[HttpPost("{userId}")]
 		public async Task<IActionResult> PostKBoard(string userId, KBoard newKboard)
 		{
 			try
@@ -69,12 +69,12 @@ namespace InVision_API.Controllers
 			}
 		}
 
-		[HttpPut("{userId:length(24)}/{kboardId:length(24)}")]
+		[HttpPut("{userId}/{kboardId}")]
 		public async Task<IActionResult> UpdateKBoard(string userId, string kboardId, KBoard updatedKBoard)
 		{
 			try
 			{
-				await _kboardService.UpdateKboardAsync (userId, kboardId, updatedKBoard);
+				await _kboardService.UpdateKboardAsync(userId, kboardId, updatedKBoard);
 				return NoContent();
 			}
 			catch (Exception ex)
@@ -84,7 +84,7 @@ namespace InVision_API.Controllers
 		}
 
 
-		[HttpDelete]
+		[HttpDelete("{userId}/{kboardId}")]
 		public async Task<IActionResult> DeleteKBoard(string userId, string kboardId)
 		{
 			try

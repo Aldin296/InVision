@@ -195,18 +195,18 @@
 			if (dropzone == "ToDo")
 			{
 				MyFirstList.Remove(item);
-				await todoitemservice.DeleteItem(userId, item.Id);
+				await todoitemservice.DeleteItem(userId,boardId, item.Id);
 			}
 			if (dropzone == "InProgress")
 			{
 				MySecondList.Remove(item);
-				await todoitemservice.DeleteItem(userId, item.Id);
+				await todoitemservice.DeleteItem(userId, boardId, item.Id);
 
 			}
 			if (dropzone == "Done")
 			{
 				MyThirdList.Remove(item);
-				await todoitemservice.DeleteItem(userId, item.Id);
+				await todoitemservice.DeleteItem(userId, boardId, item.Id);
 
 			}
 		}
@@ -261,18 +261,18 @@
 		{
 			Console.WriteLine(item.State);
 			item.State = 0;
-			await todoitemservice.UpdateItem(item.Id, item);
+			await todoitemservice.UpdateItem(userId,boardId, item.Id, item);
 			Console.WriteLine(item.State);
 		}
 		if (dropzoneId == "InProgress")
 		{
 			item.State = 1;
-			await todoitemservice.UpdateItem(item.Id, item);
+			await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
 		}
 		if (dropzoneId == "Done")
 		{
 			item.State = 2;
-			await todoitemservice.UpdateItem(item.Id, item);
+			await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
 		}
 
 	}

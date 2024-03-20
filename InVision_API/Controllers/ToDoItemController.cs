@@ -23,10 +23,10 @@ namespace InVision_API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{userId}/{itemId}")]
-        public async Task<ActionResult<List<TodoItem>>> GetItems(string userId,string itemId)
+        [HttpGet("{userId}/{kboardId}")]
+        public async Task<ActionResult<List<TodoItem>>> GetItems(string userId,string kboardId)
         {
-            var items = await _todoService.GetAllToDoItemsAsync(userId,itemId);
+            var items = await _todoService.GetAllToDoItemsAsync(userId,kboardId);
 
             return Ok(items);
         }
@@ -45,12 +45,12 @@ namespace InVision_API.Controllers
             }
         }
         
-        [HttpPut("{itemId}")]
-        public async Task<IActionResult> UpdateItem(string itemId, TodoItem newItem)
+        [HttpPut("{userId}/{kboardId}/{itemId}")]
+        public async Task<IActionResult> UpdateItem(string userId, string kboardId, string itemId, TodoItem newItem)
         {
             try
             {
-                await _todoService.UpdateItemAsync(itemId, newItem);
+                await _todoService.UpdateItemAsync(userId, kboardId, itemId, newItem);
                 return NoContent();
             }
             catch (Exception ex)
@@ -60,7 +60,7 @@ namespace InVision_API.Controllers
         }
 
 
-        [HttpDelete]
+        [HttpDelete("{userId}/{kboardId}/{itemId}")]
         public async Task<IActionResult> DeleteItem(string userId, string kboardId,string itemId)
         {
             try

@@ -7,7 +7,6 @@ namespace InVision.Data.Service
     {
         private readonly string baseurl = "http://localhost:80";
         HttpClient client = new HttpClient();
-        public TodoItem selectedAppointment { get; set; }
         List<TodoItem> todoitems = new List<TodoItem>() { };
 
         public async Task CreateItem(string userid, string kboardid,TodoItem item)

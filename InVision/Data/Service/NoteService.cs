@@ -10,7 +10,7 @@ namespace InVision.Data.Service
         HttpClient client = new HttpClient();
         public Note selectedNote { get; set; }
 
-        public List<Note> Notes = new List<Note>(){};
+        public List<Note> notes = new List<Note>(){};
 
 
         public async Task<List<Note>> GetAllNotesAsync(string userid)
@@ -31,12 +31,12 @@ namespace InVision.Data.Service
         }
         public Note GetNoteByName(string title)
         {
-            return Notes.Where(note => note.Title == title).FirstOrDefault();
+            return notes.Where(note => note.Title == title).FirstOrDefault();
         }
 
         public Note GetNoteById(string id)
         {
-            return Notes.Where(note => note.Id == id).FirstOrDefault();
+            return notes.Where(note => note.Id == id).FirstOrDefault();
         }
 
         public async Task CreateNote(string userid, Note note)

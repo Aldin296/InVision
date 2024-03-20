@@ -123,8 +123,6 @@
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-
-
 		if (firstRender)
 		{
 			string userId = await localstore.GetItemAsync<string>("UserId");
@@ -133,7 +131,7 @@
 			board = boards.Where(board => board.Id == boardId).FirstOrDefault();
 			//board = service.GetBoardById(boardId);
 
-		listOfItems = board.Items;
+			listOfItems = board.Items;
 
 			foreach (TodoItem item in listOfItems)
 			{
@@ -227,12 +225,12 @@
 				OnDeleteitem("ToDo", item);
 				ContextMenuService.Close();
 			}
-			else if(item.State == 0)
+			else if(item.State == 1)
 			{
 				OnDeleteitem("InProgress", item);
 				ContextMenuService.Close();
 			}
-			else if(item.State == 0)
+			else if(item.State == 2)
 			{
 				OnDeleteitem("Done", item);
 				ContextMenuService.Close();
@@ -257,17 +255,17 @@
 		if (dropzoneId == "ToDo")
 		{
 			item.State = 0;
-			await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
+			//await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
 		}
 		if (dropzoneId == "InProgress")
 		{
 			item.State = 1;
-			await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
+			//await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
 		}
 		if (dropzoneId == "Done")
 		{
 			item.State = 2;
-			await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
+			//await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
 		}
 	}
 }

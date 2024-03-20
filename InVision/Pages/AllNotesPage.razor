@@ -121,7 +121,6 @@ else
 
     private async void OnDeleteNote(Note note)
     {
-        //notes.Remove(note);
         await NoteService.DeleteNote(userid,note.Id);
         filteredNotes.Remove(note);
         UpdateFilteredNotes();

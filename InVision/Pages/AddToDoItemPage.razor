@@ -1,51 +1,92 @@
-﻿@inject DialogService DialogService
-@using InVision.Data;
+﻿@using InVision.Data;
 @using InVision.Data.Model
+@using InVision.Data.Service
+@inject ToDoItemService TodoItemService
+@inject DialogService DialogService
+@inject KBoardService KBoardService
+@inject ILocalStorageService Localstore
+
+
 
 
 <RadzenTemplateForm TItem="TodoItem" Data="@model" Submit=@OnSubmit>
-    <div class="row" style="margin-bottom: 16px">
-        <div class="col-md-3">
-            <RadzenLabel Text="Title" />
-        </div>
-        <div class="col">
-            <RadzenTextBox @bind-Value="@model.Title" Name="Title" />
-            <RadzenRequiredValidator Text="Title is required" Component="Title" />
-        </div>
-    </div>
-    <div class="row" style="margin-bottom: 16px">
-        <div class="col-md-3">
-            <RadzenLabel Text="Description" />
-        </div>
-        <div class="col">
-            <RadzenTextBox @bind-Value="@model.Description" Name="Description" ShowTime="true" />
-            <RadzenRequiredValidator Text="Description is required" Component="Description" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col">
-            <RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
-        </div>
-    </div>
+	<div class="row" style="margin-bottom: 16px">
+		<div class="col-md-3">
+			<RadzenLabel Text="Title" />
+		</div>
+		<div class="col">
+			<RadzenTextBox @bind-Value="@model.Title" Name="Title" />
+			<RadzenRequiredValidator Text="Title is required" Component="Title" />
+			<RadzenCustomValidator Component="Title" Text="@validationText" Validator="@(() => TitleValidator(model.Title))" />
+
+		</div>
+	</div>
+	<div class="row" style="margin-bottom: 16px">
+		<div class="col-md-3">
+			<RadzenLabel Text="Description" />
+		</div>
+		<div class="col">
+			<RadzenTextBox @bind-Value="@model.Description" Name="Description" ShowTime="true" />
+			<RadzenRequiredValidator Text="Description is required" Component="Description" />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col">
+			<RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
+		</div>
+	</div>
 </RadzenTemplateForm>
 @code {
-    [Parameter]
-    public string Title { get; set; }
+	[Parameter]
+	public string Title { get; set; }
 
-    [Parameter]
-    public string Description { get; set; }
+	[Parameter]
+	public string Description { get; set; }
 
-    TodoItem model = new TodoItem();
+	TodoItem model = new TodoItem();
 
-    protected override void OnParametersSet()
-    {
-        model.Title = Title;
-        model.Description = Description;
-    }
+	string validationText;
+	string userid;
+	List<TodoItem> items = new List<TodoItem>();
 
-    void OnSubmit(TodoItem model)
-    {
-        DialogService.Close(model);
-    }
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+
+			userid = await Localstore.GetItemAsync<string>("UserId");
+			Console.WriteLine(KBoardService.selectedBoard.Name);
+			Console.WriteLine(KBoardService.selectedBoard.Id);
+
+			items = await TodoItemService.GetAllItemsAsync(userid, KBoardService.selectedBoard.Id);
+	}
+
+	protected override void OnParametersSet()
+	{
+		model.Title = Title;
+		model.Description = Description;
+	}
+
+	void OnSubmit(TodoItem model)
+	{
+		DialogService.Close(model);
+	}
+
+	public bool TitleValidator(string input)
+	{
+		bool valid = false;
+		foreach (var item in items)
+		{
+			if (input != item.Title)
+			{
+				valid = true;
+			}
+			else
+			{
+				validationText = $"There already is a note withe the Title {item.Title}";
+				return false;
+			}
+		}
+		return valid;
+
+	}
 }

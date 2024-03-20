@@ -40,11 +40,12 @@ namespace InVision_API.Services
         }
 
 
-        public async Task UpdateItemAsync(string itemId, TodoItem updatedItem)
+        public async Task UpdateItemAsync(string userId,string kboardId, string itemId, TodoItem updatedItem)
         {
             var filter = Builders<User>.Filter.And(
-                Builders<User>.Filter.Eq(x => x.Id, itemId),
-                Builders<User>.Filter.Eq("Items._id", updatedItem)
+                Builders<User>.Filter.Eq(x => x.Id, userId),
+                Builders<User>.Filter.Eq("KBoards._id", kboardId),
+                Builders<User>.Filter.Eq("Items._id", itemId)
             );
 
             var update = Builders<User>.Update

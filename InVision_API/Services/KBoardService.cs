@@ -49,8 +49,8 @@ namespace InVision_API.Services
 			);
 
 			var update = Builders<User>.Update
-				.Set("KBoards.$.Title", updatedKBoard.Name)
-				.Set("KBoards.$.Content", updatedKBoard.Description);
+				.Set("KBoards.$.Name", updatedKBoard.Name)
+				.Set("KBoards.$.Description", updatedKBoard.Description);
 				
 
 			await _userCollection.UpdateOneAsync(filter, update);

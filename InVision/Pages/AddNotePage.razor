@@ -58,7 +58,7 @@
     bool TitleValidator(string input)
     {
         bool valid = false;
-        foreach(var note in NoteService.notes)
+        foreach(var note in NoteService.Notes)
         {
             if(input != note.Title)
             {

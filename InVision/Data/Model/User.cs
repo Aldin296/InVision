@@ -16,6 +16,7 @@ namespace InVision.Data.Model
         public List<KBoard>? KBoards { get; set; }
         public List<Appointment>? Appointments { get; set; }
         public byte[]? ProfilePicture { get; set; }
+        public bool Notification { get; set; } = false;
         public byte[] salt { get; set; }
 
         public User()
@@ -28,7 +29,5 @@ namespace InVision.Data.Model
             Password = password;
             Email = email;
         }
-
-
     }
 }

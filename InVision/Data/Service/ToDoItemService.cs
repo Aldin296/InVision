@@ -18,7 +18,7 @@ namespace InVision.Data.Service
 
         public async Task<List<TodoItem>> GetAllItemsAsync(string userid, string kboardid)
         {
-            string requestUrl = $"{baseurl}/api/User";
+            string requestUrl = $"{baseurl}/api/ToDoItem";
             var data = await client.GetAsync($"{requestUrl}/{userid}/{kboardid}");
             KBoard kboard = null;
             if (data.StatusCode != System.Net.HttpStatusCode.NoContent)
@@ -32,16 +32,16 @@ namespace InVision.Data.Service
 
             return kboard?.Items ?? new List<TodoItem>();
         }
-            public async Task DeleteItem(string userid, string itemid)
+            public async Task DeleteItem(string userid, string kboardId, string itemid)
             {
-                string requestUrl = $"{baseurl}/api/ToDoItem";
+                string requestUrl = $"{baseurl}/api/ToDoItem/{userid}/{kboardId}/{itemid}";
                 await client.DeleteAsync(requestUrl);
             }
 
 
-		    public async Task UpdateItem(string itemid,TodoItem item)
+		    public async Task UpdateItem(string userId, string kboardId, string itemid,TodoItem item)
 		    {
-			    string requestUrl = $"{baseurl}/api/ToDoItem/{itemid}";
+			    string requestUrl = $"{baseurl}/api/ToDoItem/{userId}/{kboardId}/{itemid}";
 			    await client.PutAsJsonAsync(requestUrl, item);
 		    }
 	}

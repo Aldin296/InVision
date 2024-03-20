@@ -14,7 +14,7 @@
 <RadzenPanel>
     <HeaderTemplate>
         <RadzenIcon Icon="@NoteService.selectedNote.Icon" Style="padding-right: 0px; font-size:2em"></RadzenIcon>
-        <input @bind="@note.Title" @oninput="OnTitleChange" class="custom-h4" />
+        <input @bind="@note.Title" @oninput="OnTitleChange" class="custom-h4" style="width:90%"/>
         <RadzenIcon @onclick="()=>OpenSideDialog()" Icon="more_horiz" Style="cursor: pointer; padding-right: 20px; font-size: 2em" class="add-todoitem-icon"></RadzenIcon>
     </HeaderTemplate>
     <ChildContent>

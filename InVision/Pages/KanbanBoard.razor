@@ -7,6 +7,7 @@
 @inject ContextMenuService ContextMenuService
 @inject ToDoItemService todoitemservice
 @inject Blazored.LocalStorage.ILocalStorageService localstore
+@implements IDisposable
 
 
 <h1>@board.Name</h1>
@@ -125,7 +126,8 @@
 	{
 		if (firstRender)
 		{
-			string userId = await localstore.GetItemAsync<string>("UserId");
+
+			userId = await localstore.GetItemAsync<string>("UserId");
 			boards = await Task.Run(() => boardService.GetAllKBoardsAsync(userId));
 
 			board = boards.Where(board => board.Id == boardId).FirstOrDefault();
@@ -193,14 +195,19 @@
 			if (dropzone == "ToDo")
 			{
 				MyFirstList.Remove(item);
+				await todoitemservice.DeleteItem(userId, item.Id);
 			}
 			if (dropzone == "InProgress")
 			{
 				MySecondList.Remove(item);
+				await todoitemservice.DeleteItem(userId, item.Id);
+
 			}
 			if (dropzone == "Done")
 			{
 				MyThirdList.Remove(item);
+				await todoitemservice.DeleteItem(userId, item.Id);
+
 			}
 		}
 		StateHasChanged();
@@ -247,25 +254,37 @@
 
 
 
-	public void Itemdropcall(string dropzoneId, TodoItem item)
+	public async void Itemdropcall(string dropzoneId, TodoItem item)
 	{
 
 
 		Console.WriteLine(dropzoneId);
 		if (dropzoneId == "ToDo")
 		{
+			Console.WriteLine(item.State);
 			item.State = 0;
-			//await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
+			await todoitemservice.UpdateItem(item.Id, item);
+			Console.WriteLine(item.State);
 		}
 		if (dropzoneId == "InProgress")
 		{
 			item.State = 1;
-			//await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
+			await todoitemservice.UpdateItem(item.Id, item);
 		}
 		if (dropzoneId == "Done")
 		{
 			item.State = 2;
-			//await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
+			await todoitemservice.UpdateItem(item.Id, item);
 		}
+
+	}
+
+	async void IDisposable.Dispose()
+	{
+		foreach(TodoItem x in board.Items)
+		{
+			Console.WriteLine("Desc:" + x.Description + "State:" +  x.State + "\n");
+		}
+		await boardService.UpdateKBoard(userId, board.Id, board);
 	}
 }

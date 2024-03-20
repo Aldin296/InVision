@@ -27,7 +27,6 @@ namespace InVision.Data.Model
             Name = name;
             Password = password;
             Email = email;
-
         }
 
 

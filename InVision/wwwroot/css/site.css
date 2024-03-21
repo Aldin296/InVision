@@ -96,3 +96,10 @@ a, .btn-link {
 .custom-row-spacing {
     margin-bottom: 1rem; 
 }
+.custom-h4 {
+    font-size: 2em;
+    margin-bottom: 0.5rem;
+    border: none;
+    background-color: transparent;
+    text-align:center
+}

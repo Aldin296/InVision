@@ -14,7 +14,7 @@
 <RadzenPanel>
     <HeaderTemplate>
         <RadzenIcon Icon="@NoteService.selectedNote.Icon" Style="padding-right: 0px; font-size:2em"></RadzenIcon>
-        <RadzenText TextStyle="TextStyle.H4" @bind-Value=@note.Title Text="@note.Title" Style="max-width: 90%" contenteditable="true" onchange="@UpdateTitle" />
+        <input @bind="@note.Title" @oninput="OnTitleChange" class="custom-h4" style="width:90%"/>
         <RadzenIcon @onclick="()=>OpenSideDialog()" Icon="more_horiz" Style="cursor: pointer; padding-right: 20px; font-size: 2em" class="add-todoitem-icon"></RadzenIcon>
     </HeaderTemplate>
     <ChildContent>
@@ -56,9 +56,22 @@
     public string noteId { get; set; }
     string userid;
 
-
     public Note note = new Note();
     public string? selectedIcon;
+
+    string noteTitle;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userid = await localstore.GetItemAsync<string>("UserId");
+
+        note.Title = NoteService.selectedNote.Title;
+        //note.Content = @"<link rel=""stylesheet"" href=""https://fonts.googleapis.com/icon?family=Material+Icons"">";
+        note.Content = NoteService.selectedNote.Content;
+
+        selectedIcon = IconService.GetSelectedIcon();
+        note.Icon = selectedIcon;
+    }
 
     async Task OnExecute(HtmlEditorExecuteEventArgs args)
     {
@@ -68,10 +81,6 @@
         }
     }
 
-    async Task UpdateTitle(/*HtmlEditorExecuteEventArgs args*/)
-    {
-        
-    }
 
     async Task LinkDiffrentNote(RadzenHtmlEditor editor)
     {
@@ -87,6 +96,12 @@
         }
     }
 
+    private void OnTitleChange(ChangeEventArgs e)
+    {
+        note.Title = e.Value.ToString();
+    }
+
+
     void HandleIconClick(string iconName)
     {
         // Handle the click event here
@@ -100,24 +115,15 @@
         await DialogService.OpenSideAsync<IconSelectDialog>("",options: new SideDialogOptions { CloseDialogOnOverlayClick = true, Position = DialogPosition.Right, ShowMask = true, });
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        userid = await localstore.GetItemAsync<string>("UserId");
 
-        note.Title = NoteService.selectedNote.Title;
-        note.Content = @"<link rel=""stylesheet"" href=""https://fonts.googleapis.com/icon?family=Material+Icons"">";
-
-
-        selectedIcon = IconService.GetSelectedIcon();
-        note.Icon = selectedIcon;
-    }
 
 
 
 
     async void IDisposable.Dispose()
     {
-        //note.Title = "lllllllllllllllllllll";
+        Console.WriteLine(note.Title);
         await NoteService.UpdateNote(userid, NoteService.selectedNote.Id, note);
+        Console.WriteLine(note.Title);
     }
 }

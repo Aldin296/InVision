@@ -83,14 +83,14 @@
 	bool TitleValidator(string input)
 
 	{
-		bool valid = false;
+		bool valid = true;
 		foreach (var note in notes)
 		{
 			if (input != note.Title)
 			{
 				valid = true;
 			}
-			else
+			else if( input == note.Title)
 			{
 				validationText = $"There already is a note withe the Title {note.Title}";
 				return false;

@@ -49,9 +49,9 @@ namespace InVision_API.Services
             );
 
             var update = Builders<User>.Update
-                .Set("ToDoItems.$.Title", updatedItem.Title)
-                .Set("ToDoItems.$.Description", updatedItem.Description)
-                .Set("ToDoItems.$.State", updatedItem.State);
+                .Set("Items.$.Title", updatedItem.Title)
+                .Set("Items.$.Description", updatedItem.Description)
+                .Set("Items.$.State", updatedItem.State);
 
 
             await _userCollection.UpdateOneAsync(filter, update);

@@ -2,6 +2,7 @@
 @using InVision.Data
 @using InVision.Data.Model
 @using InVision.Data.Service
+@using System.Text.RegularExpressions
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 @inject UserService userservice
 @inject NotificationService notificationService
@@ -14,113 +15,115 @@
         </RadzenText>
     </HeaderTemplate>
     <ChildContent>
-        <br />
-        <RadzenRow Style="height: 100%" Gap="2rem">
-            <RadzenColumn Size="3">
-                <h3 style="text-align: left; margin-left: 20px;">Avatar</h3>
-            </RadzenColumn>
-        </RadzenRow>
-        <hr />
-        <RadzenRow Gap="2rem">
-            <RadzenColumn Style="display: flex; align-items: center; margin-left: 20px;" Size="3">
-                <label for="fileInput" style="cursor: pointer;">
-                    <RadzenImage Path="@selectedImagePath" Style="width: 8rem;" />
-                </label>
-                <InputFile type="file" id="fileInput" style="display: none;" accept="image/*" OnChange="@HandleFileChange" multiple />
-            </RadzenColumn>
-        </RadzenRow>
+        <RadzenTemplateForm TItem="Model" Data="@model">
+            <br />
+            <RadzenRow Style="height: 100%" Gap="2rem">
+                <RadzenColumn Size="3">
+                    <h3 style="text-align: left; margin-left: 20px;">Avatar</h3>
+                </RadzenColumn>
+            </RadzenRow>
+            <hr />
+            <RadzenRow Gap="2rem">
+                <RadzenColumn Style="display: flex; align-items: center; margin-left: 20px;" Size="3">
+                    <label for="fileInput" style="cursor: pointer;">
+                        <RadzenImage Path="@selectedImagePath" Style="width: 8rem;" />
+                    </label>
+                    <InputFile type="file" id="fileInput" style="display: none;" accept="image/*" OnChange="@HandleFileChange" multiple />
+                </RadzenColumn>
+            </RadzenRow>
 
-        <br />
-        <br />
+            <br />
+            <br />
 
-        <RadzenRow Style="height: 100%; margin: 10,10,10,10">
-            <RadzenColumn Size="3">
-                <h3 style="text-align: left; margin-left: 20px;">User Details</h3>
-            </RadzenColumn>
+            <RadzenRow Style="height: 100%; margin: 10,10,10,10">
+                <RadzenColumn Size="3">
+                    <h3 style="text-align: left; margin-left: 20px;">User Details</h3>
+                </RadzenColumn>
 
-        </RadzenRow>
-        <hr />
+            </RadzenRow>
+            <hr />
 
-        <RadzenRow Style="margin-bottom: 10px;">
-            <RadzenColumn Size="2" Style="display: flex; align-items: center;">
-                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Name</RadzenText>
-            </RadzenColumn>
-            <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%" Placeholder=@user?.Name @bind-Value="username"></RadzenTextBox>
-            </RadzenColumn>
-        </RadzenRow>
+            <RadzenRow Style="margin-bottom: 10px;">
+                <RadzenColumn Size="2" Style="display: flex; align-items: center;">
+                    <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Name</RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="10">
+                    <RadzenTextBox Style="width:50%" Placeholder=@user?.Name @bind-Value="username"></RadzenTextBox>
+                </RadzenColumn>
+            </RadzenRow>
 
-        <RadzenRow Style="margin-bottom: 10px;">
-            <RadzenColumn Size="2" Style="display: flex; align-items: center;">
-                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">E-Mail</RadzenText>
-            </RadzenColumn>
-            <RadzenColumn Size="10">
-                <RadzenTextBox Style="width:50%" Placeholder=@user?.Email @bind-Value="useremail"></RadzenTextBox>
-            </RadzenColumn>
-        </RadzenRow>
+            <RadzenRow Style="margin-bottom: 10px;">
+                <RadzenColumn Size="2" Style="display: flex; align-items: center;">
+                    <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">E-Mail</RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="10">
+                    <RadzenTextBox Style="width:50%" Placeholder=@user?.Email @bind-Value="useremail"></RadzenTextBox>
+                </RadzenColumn>
+            </RadzenRow>
 
 
-        <RadzenRow Style="margin-bottom: 10px;">
-            <RadzenColumn Size="2" Style="display: flex; align-items: center;">
-                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Old Password</RadzenText>
-            </RadzenColumn>
-            <RadzenColumn Size="10">
-                <!--
-                <RadzenPassword Style="width:50%" @bind-Value=@oldPassword Placeholder="Enter old password..." AutoComplete="false" aria-label="enter password" />
-                -->
-                <RadzenFormField Variant="Variant.Outlined" Style="width: 50%">
-                    <ChildContent>
-                        <RadzenTextBox @bind-Value="@oldPassword" Visible="@(!passwordVisibleOld)" Placeholder="Enter old Password" />
-                        <RadzenPassword @bind-Value="@oldPassword" Visible="@passwordVisibleOld" />
-                    </ChildContent>
-                    <End>
-                        <RadzenButton Icon="@(passwordVisibleOld ? "visibility" : "visibility_off")" Click="TogglePasswordOld" Variant="Variant.Text" Size="ButtonSize.Small" />
-                    </End>
-                </RadzenFormField>
-            </RadzenColumn>
-        </RadzenRow>
+            <RadzenRow Style="margin-bottom: 10px;">
+                <RadzenColumn Size="2" Style="display: flex; align-items: center;">
+                    <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Old Password</RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="10">
+                    <!--
+                    <RadzenPassword Style="width:50%" @bind-Value=@oldPassword Placeholder="Enter old password..." AutoComplete="false" aria-label="enter password" />
+                    -->
+                    <RadzenFormField Variant="Variant.Outlined" Style="width: 50%">
+                        <ChildContent>
+                            <RadzenTextBox Name="oldPassword" @bind-Value="@oldPassword" Placeholder="Enter old Password" />
+                            <RadzenCustomValidator Component="oldPassword" Text="@validationText" Validator="@(() => PasswordCompareValidation(oldPassword))" Popup="true" Style="margin-top:50px" />
+                        </ChildContent>
+                    </RadzenFormField>
+                </RadzenColumn>
+            </RadzenRow>
 
-        <RadzenRow Style="margin-bottom: 10px;">
-            <RadzenColumn Size="2" Style="display: flex; align-items: center;">
-                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">New Password</RadzenText>
-            </RadzenColumn>
-            <RadzenColumn Size="10">
-                <RadzenFormField Variant="Variant.Outlined" Style="width: 50%">
-                    <ChildContent>
-                        <RadzenTextBox @bind-Value="@newPassword" Visible="@(!passwordVisibleNew)" Placeholder="Enter new Password" />
-                        <RadzenPassword @bind-Value="@newPassword" Visible="@passwordVisibleNew" />
-                    </ChildContent>
-                    <End>
-                        <RadzenButton Icon="@(passwordVisibleNew ? "visibility" : "visibility_off")" Click="TogglePasswordNew" Variant="Variant.Text" Size="ButtonSize.Small" />
-                    </End>
-                </RadzenFormField>
-            </RadzenColumn>
-        </RadzenRow>
+            <RadzenRow Style="margin-bottom: 10px;">
+                <RadzenColumn Size="2" Style="display: flex; align-items: center;">
+                    <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">New Password</RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="10">
+                    <RadzenFormField Variant="Variant.Outlined" Style="width: 50%">
+                        <ChildContent>
+                            <RadzenTextBox Name="newPassword" @bind-Value="@newPassword" Placeholder="Enter new Password" />
+                            <RadzenCustomValidator Component="newPassword" Text="@validationText" Validator="@(() => PasswordValidation(newPassword))" Popup="true" Style="margin-top:50px" />
+                        </ChildContent>
+                    </RadzenFormField>
+                </RadzenColumn>
+            </RadzenRow>
 
-        <RadzenRow>
-            <RadzenColumn Size="2" Style="margin-bottom: 10px; height:60px">
-                <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Do you want to receive emails?</RadzenText>
-            </RadzenColumn>
-            <RadzenColumn Size="10" Style="display: flex; align-items: center; height:60px">
-                <RadzenToggleButton @bind-Value=@recieveEmails Change=@OnChange Text="@(recieveEmails ? "Turn off Notifications" : "Turn on Notifications")"
-                                    ButtonStyle="@(recieveEmails ? ButtonStyle.Primary : ButtonStyle.Light)"
-                                    ToggleButtonStyle="ButtonStyle.Light"
-                                    InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Turn off Notifications" }})" />
+            <RadzenRow>
+                <RadzenColumn Size="2" Style="margin-bottom: 10px; height:60px">
+                    <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Do you want to receive emails?</RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="10" Style="display: flex; align-items: center; height:60px">
+                    <RadzenToggleButton @bind-Value=@recieveEmails Change=@OnChange Text="@(recieveEmails ? "Turn off Notifications" : "Turn on Notifications")"
+                                        ButtonStyle="@(recieveEmails ? ButtonStyle.Primary : ButtonStyle.Light)"
+                                        InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Turn off Notifications" }})" />
 
-            </RadzenColumn>
-        </RadzenRow>
+                </RadzenColumn>
+            </RadzenRow>
 
-        <hr />
-        <div style="display:flex; justify-content: flex-end">
-            <RadzenButton Click="SaveProfile">Save</RadzenButton>
-        </div>
+            <hr />
+            <div style="display:flex; justify-content: flex-end">
+                <RadzenButton Click="SaveProfile">Save</RadzenButton>
+            </div>
 
+        </RadzenTemplateForm>
+        
     </ChildContent>
 </RadzenPanel>
 
 
 
 @code {
+
+    class Model
+    {
+        public string password { get; set; }
+    }
+    Model model = new Model();
 
     User? user;
     public string? userid;
@@ -135,6 +138,8 @@
     bool passwordVisibleOld = true;
 
     bool recieveEmails;
+
+    string validationText;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -208,7 +213,7 @@
             {
                 k.CreatedBy = username;
             }
-            
+
         }
         if (imageBytes != null)
         {
@@ -257,6 +262,57 @@
                     Summary = "You are NOT receiving emails"
                 });
         }
+    }
+
+
+    bool PasswordValidation(string input)
+    {
+        Regex regex_lowerCase = new Regex(@"^(?=.*[a-z]).{1,}$");
+        Regex regex_uperCase = new Regex(@"^(?=.*[A-Z]).{1,}$");
+        Regex regex_charackter = new Regex(@"(?=.*[!\#$%^&*@._+*/=?><|()]).{1,}$");
+        Regex regex_number = new Regex(@"(?=.*\d).{1,}$");
+
+        if (input is null)
+        {
+            validationText = "Password field is empty!";
+            return false;
+        }
+        else if (!regex_lowerCase.IsMatch(input))
+        {
+            validationText = "Please use at least one lower case letter!";
+            return false;
+        }
+        else if (!regex_uperCase.IsMatch(input))
+        {
+            validationText = "Please use at least one upper case letter!";
+            return false;
+
+        }
+        else if (!regex_charackter.IsMatch(input))
+        {
+            validationText = "Please use at least one non-alphanumeric character!";
+            return false;
+        }
+        else if (!regex_number.IsMatch(input))
+        {
+            validationText = "Please use at least one number!";
+            return false;
+        }
+        else if (input.Length < 6)
+        {
+            validationText = "Password needs to be at least 6 characters long!";
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    bool PasswordCompareValidation(string input)
+    {
+        //get the password from the db and compare the hash values to the input
+        return true;
     }
 }
 

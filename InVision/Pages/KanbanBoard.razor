@@ -10,7 +10,7 @@
 @implements IDisposable
 
 
-<h1>@board.Name</h1>
+<input @bind="@board.Name" @oninput="OnTitleChange" style="width:100%" class="custom-h4" />
 <div class="row">
 	<div class="col">
 		<RadzenCard style="border-radius:0px; border-left: 6px solid #AA4A44;  border-bottom: 2px solid #AA4A44">
@@ -29,9 +29,7 @@
 			<ChildContent >
 				<RadzenCard ContextMenu=@(args => ShowContextMenuWithItems(args,context)) style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px; max-width:100%; margin-bottom: 5px">
 					<div style="width: 325px">
-						<RadzenText contenteditable="true" style="white-space: pre-wrap;">
-							<strong>@context.Title </strong>
-						</RadzenText>
+						<input class="custom-h6" @bind="@context.Title" style="white-space: pre-wrap; width: 100%"/>
 					</div>
 					<RadzenRow>
 						<RadzenColumn Size="12">
@@ -252,6 +250,11 @@
 
 	}
 
+
+	private void OnTitleChange(ChangeEventArgs e)
+	{
+		board.Name = e.Value.ToString();
+	}
 
 
 	public async void Itemdropcall(string dropzoneId, TodoItem item)

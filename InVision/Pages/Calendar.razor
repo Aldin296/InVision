@@ -58,6 +58,7 @@
             if (data != null)
             {
                 appointments.Add(data);
+                StateHasChanged();
                 await scheduler.Reload();
             }
         }
@@ -90,7 +91,7 @@
                 StateHasChanged(); 
             }
         }
-
+        StateHasChanged();
         await scheduler.Reload();
     }
 

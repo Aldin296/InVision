@@ -103,3 +103,12 @@ a, .btn-link {
     background-color: transparent;
     text-align:center
 }
+
+.custom-h6 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    border: none;
+    background-color: transparent;
+    text-align: left;
+    font-weight: bold;
+}

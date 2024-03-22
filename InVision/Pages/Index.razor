@@ -10,6 +10,8 @@
 @inject CalendarService calendarservice
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
+
+
 <RadzenCard>
     <RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
         <RadzenIcon Icon="dashboard" class="rz-mr-1" /><b>Dashboard</b>
@@ -31,13 +33,13 @@
         </RadzenColumn>
     </RadzenRow>
 
-    <RadzenRow Class="custom-row-spacing" Style="height:30vh; margin-bottom: 3rem">
+    <RadzenRow Class="custom-row-spacing" Style="height:30vh; margin-bottom: 2rem">
         <RadzenColumn Size="4">
             <RadzenCard Style="height:70%">
                 <h6>Open Items</h6>
-                <h2 style="color:#3700b3">@sumOpenItemsAllBoards</h2>
+                <h2 style="color:red">@sumOpenItemsAllBoards</h2>
                 <RadzenChart Style="height:80%">
-                    <RadzenColumnSeries Data="@openItems" CategoryProperty="KboardName" Title="Open Items" LineType="LineType.Dashed" ValueProperty="SumOpenItems">
+                    <RadzenColumnSeries Fill="red" Data="@openItems" CategoryProperty="KboardName" Title="Open Items" LineType="LineType.Dashed" ValueProperty="SumOpenItems">
                         <RadzenSeriesDataLabels Visible="false" />
                     </RadzenColumnSeries>
                     <RadzenColumnOptions Radius="5" />
@@ -54,10 +56,10 @@
         <RadzenColumn Size="4">
             <RadzenCard Style="height:70%">
                 <h6>Closed Items</h6>
-                <h2 style="color:red">@sumClosedItemsAllBoards</h2>
+                <h2 style="color:green">@sumClosedItemsAllBoards</h2>
 
                 <RadzenChart Style="height:80%">
-                    <RadzenColumnSeries Fill="red" Data="@closedItems" CategoryProperty="KboardName" Title="Closed Items" LineType="LineType.Dashed" ValueProperty="SumClosedItmes">
+                    <RadzenColumnSeries Fill="green" Data="@closedItems" CategoryProperty="KboardName" Title="Closed Items" LineType="LineType.Dashed" ValueProperty="SumClosedItmes">
                         <RadzenSeriesDataLabels Visible="false" />
                     </RadzenColumnSeries>
                     <RadzenColumnOptions Radius="5" />
@@ -149,7 +151,14 @@
 
     public string imagepath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
 
-    List<Appointment> appointmentsThisMonth = new List<Appointment> { };
+    List<Appointment> appointmentsThisMonth = new List<Appointment>
+    {
+        new Appointment { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
+        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(12), Text = "Online meeting" },
+        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(13), Text = "Skype call" },
+        new Appointment { Start = DateTime.Today.AddHours(14), End = DateTime.Today.AddHours(14).AddMinutes(30), Text = "Dentist appointment" },
+        new Appointment { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
+    };
 
     public class KboardItme
     {
@@ -242,7 +251,7 @@
     {
         //string userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
         string userId = await localstore.GetItemAsync<string>("UserId");
-        appointmentsThisMonth = await calendarservice.GetAllAppointmentsAsync(userId);
+        //appointmentsThisMonth = await calendarservice.GetAllAppointmentsAsync(userId);
 
         if (!string.IsNullOrEmpty(userId))
         {

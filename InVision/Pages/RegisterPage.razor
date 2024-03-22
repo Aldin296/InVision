@@ -10,7 +10,7 @@
 
 <RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
 	<div style="text-align:center;">
-		<h2>Sign Up</h2> 
+		<h2>Sign Up</h2>
 	</div>
 	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
 		<div style="text-align: center">
@@ -49,7 +49,7 @@
 				</div>
 				<br />
 				<RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
-					<RadzenButton ButtonType="ButtonType.Submit" Click="Register" style="width: 150px">Register</RadzenButton>
+					<RadzenButton ButtonType="ButtonType.Submit" style="width: 150px">Register</RadzenButton>
 				</RadzenStack>
 			</RadzenTemplateForm>
 		</div>
@@ -71,10 +71,6 @@
 	}
 	Model model = new Model();
 
-	bool usernameValid = false;
-	bool emailValid = false;
-	bool passwordValid = false;
-
 	string passwordValue = "";
 	string usernameValue = "";
 	string emailValue = "";
@@ -82,27 +78,21 @@
 
 	void OnSubmit(Model model)
 	{
-		usernameValid = true;
-		emailValid = true;
-		passwordValid = true;
+		Register();
 		NavManager.NavigateTo("/");
 		Console.WriteLine("valid submit");
 	}
 
 	void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
 	{
-		usernameValid = false;
-		emailValid = false;
-		passwordValid = false;
 		Console.WriteLine("invalid submit");
 	}
 
 	async Task Register()
 	{
-		if (emailValid == true && usernameValid == true)
-		{
-			await userservice.CreateUser(usernameValue, passwordValue, emailValue);
-		}
+
+		await userservice.CreateUser(usernameValue, passwordValue, emailValue);
+
 	}
 
 
@@ -110,7 +100,7 @@
 	{
 		Regex regex_lowerCase = new Regex(@"^(?=.*[a-z]).{1,}$");
 		Regex regex_uperCase = new Regex(@"^(?=.*[A-Z]).{1,}$");
-		Regex regex_charackter = new Regex(@"(?=.*[!\#$%^&*@._+*/=?><|()]).{1,}$");
+		Regex regex_charackter = new Regex(@"(?=.*[!\#$%^&*@._+/=?><|()]).{1,}$");
 		Regex regex_number = new Regex(@"(?=.*\d).{1,}$");
 
 		if (input is null)

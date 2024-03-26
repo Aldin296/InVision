@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Plk.Blazor.DragDrop;
 using Radzen;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

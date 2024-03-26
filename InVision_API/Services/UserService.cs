@@ -23,8 +23,8 @@ public class UserService
 
     //GetAll
     public async Task<List<User>> GetAsync() =>
-        await _userCollection.Find(_ => true).ToListAsync();
-    //Anstatt void geb ich task zurück
+        await _userCollection.Find(x => true).ToListAsync();
+    
 
     //GetById
     public async Task<User?> GetAsync(string id) =>
@@ -58,8 +58,8 @@ public class UserService
             updatedUser.KBoards != null ? updateBuilder.Set(x => x.KBoards, updatedUser.KBoards) : null,
             updatedUser.Appointments != null ? updateBuilder.Set(x => x.Appointments, updatedUser.Appointments) : null,
             updatedUser.ProfilePicture != null ? updateBuilder.Set(x => x.ProfilePicture, updatedUser.ProfilePicture) : null,
-            // Assuming you also want to update the Notification
-            updatedUser.Notification != null ? updateBuilder.Set(x => x.Notification, updatedUser.Notification) : null
+            updatedUser.Notification != null ? updateBuilder.Set(x => x.Notification, updatedUser.Notification) : null,
+            updatedUser.salt != null ? updateBuilder.Set(x => x.salt, updatedUser.salt) : null
         ) ;
 
         await _userCollection.UpdateOneAsync(filter, updateDefinition);
@@ -69,31 +69,6 @@ public class UserService
     public async Task RemoveAsync(string id) =>
         await _userCollection.DeleteOneAsync(x => x.Id == id);
 
-    //Login User
-    public async Task<User?> LoginAsync(string email, string password)
-    {
-        // Find the user with the provided email
-        var user = await _userCollection.Find(x => x.Email == email).FirstOrDefaultAsync();
-
-        if (user != null)
-        {
-            // Validate the password (you might want to use a more secure password hashing method)
-            if (user.Password == password)
-            {
-                // Password is correct, return the user
-                return user;
-            }
-            else
-            {
-                // Password is incorrect, handle accordingly (e.g., return an error).
-                throw new Exception("Incorrect password.");
-            }
-        }
-        else
-        {
-            // User with the provided email not found, handle accordingly (e.g., return an error).
-            throw new Exception("User not found.");
-        }
-    }
+    
 
 }

@@ -71,18 +71,8 @@
         bool loginSuccessful = await userservice.LoginUser(emailValue, passwordValue);
         if (loginSuccessful)
         {
-
-
             Console.WriteLine("Angemeldet");
             user = await userservice.GetUserByEmail(emailValue);
-            //HttpContextAccessor.HttpContext.Session.SetString("UserId", user.Id.ToString());
-            //ISession session = HttpContextAccessor.HttpContext.Session;
-            //session.SetString("UserId", user.Id.ToString());
-            //HttpContext.Session.SetString(SessionKeyName, "The Doctor");
-            // Perform session-related operations on the server side
-
-            // Navigate to the index page
-
             await localstore.SetItemAsync("UserId", user.Id);
 
             NavManager.NavigateTo("/index");

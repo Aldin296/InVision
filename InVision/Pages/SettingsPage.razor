@@ -174,7 +174,6 @@
         {
             try
             {
-                // Read the selected image file as a byte array
                 using (var stream = imageFile.OpenReadStream())
                 {
                     using (var memoryStream = new MemoryStream())
@@ -226,7 +225,7 @@
             //Und dessen werte dann dem user geben damit diese geupdated werden
             HashPassword hashpass = userservice.hashPassword(newPassword);
             user.Password = hashpass.Hashed;
-            user.salt = hashpass.Salt;
+            user.Salt = hashpass.Salt;
         }
         user.Notification = recieveEmails;
         await userservice.UpdateUser(userid, user);

@@ -22,10 +22,10 @@ namespace InVision_API.Controllers
         public async Task<List<User>> Get() =>
             await _userService.GetAsync();
 
-        [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<User>> Get(string id)
+        [HttpGet("{userid}")]
+        public async Task<ActionResult<User>> Get(string userid)
         {
-            var user = await _userService.GetAsync(id);
+            var user = await _userService.GetAsync(userid);
 
             if (user == null)
             {
@@ -50,10 +50,10 @@ namespace InVision_API.Controllers
             }
         }
 
-        [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> Update(string id, User updatedUser)
+        [HttpPut("{userid}")]
+        public async Task<IActionResult> Update(string userid, User updatedUser)
         {
-            var user = await _userService.GetAsync(id);
+            var user = await _userService.GetAsync(userid);
 
             if (user == null)
             {
@@ -62,45 +62,24 @@ namespace InVision_API.Controllers
 
             updatedUser.Id = user.Id;
 
-            await _userService.UpdateAsync(id, updatedUser);
+            await _userService.UpdateAsync(userid, updatedUser);
 
             return NoContent();
         }
 
-        [HttpDelete("{id:length(24)}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("{userid}")]
+        public async Task<IActionResult> Delete(string userid)
         {
-            var user = await _userService.GetAsync(id);
+            var user = await _userService.GetAsync(userid);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            await _userService.RemoveAsync(id);
+            await _userService.RemoveAsync(userid);
 
             return NoContent();
-        }
-
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User loginModel)
-        {
-            try
-            {
-                var user = await _userService.LoginAsync(loginModel.Email, loginModel.Password);
-
-                if (user == null)
-                {
-                    return Unauthorized(new { message = "Invalid email or password" });
-                }
-
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
         }
     }
 }

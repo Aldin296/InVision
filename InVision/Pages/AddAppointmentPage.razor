@@ -3,6 +3,7 @@
 @using InVision.Data.Model
 @inject InVision.Data.Service.CalendarService calendarService
 @inject ILocalStorageService localstore
+@attribute [Authorize]
 
 <RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
     <div class="row" style="margin-bottom: 16px">

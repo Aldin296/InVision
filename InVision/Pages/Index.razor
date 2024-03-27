@@ -9,9 +9,18 @@
 @inject UserService userservice
 @inject CalendarService calendarservice
 @inject Blazored.LocalStorage.ILocalStorageService localstore
+@attribute [Authorize]
 
 
-
+<AuthorizeView>
+    <Authorized>
+        <h1>Hello, @context.User.Identity.Name!</h1>
+    </Authorized>
+    <NotAuthorized>
+        <h1>Hello, Guest!</h1>
+    </NotAuthorized>
+</AuthorizeView>
+<AuthorizeView>
 <RadzenCard>
     <RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
         <RadzenIcon Icon="dashboard" class="rz-mr-1" /><b>Dashboard</b>
@@ -137,11 +146,16 @@
         </RadzenColumn>
     </RadzenRow>
 </RadzenCard>
-
+</AuthorizeView>
 
 
 
 @code {
+
+    //[CascadingParameter]
+    //private Task<AuthenticationState> authenticationState { get; set; }
+    
+
     int sumOpenItemsAllBoards;
     int sumClosedItemsAllBoards;
     int sumAllItemsAllBoards;

@@ -6,6 +6,7 @@
 @inject ContextMenuService ContextMenuService
 @inject InVision.Data.Service.CalendarService calendarService
 @inject Blazored.LocalStorage.ILocalStorageService localstore
+@attribute [Authorize]
 
 
 	<RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"

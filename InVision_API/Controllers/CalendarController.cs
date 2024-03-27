@@ -16,7 +16,7 @@ namespace InVision_API.Controllers
 				_calendarService = calendarService;
 			}
 
-			[HttpGet("{userId:length(24)}")]
+			[HttpGet("{userId}")]
 			public async Task<ActionResult<List<Appointment>>> GetAppointments(string userId)
 			{
 				var appointments = await _calendarService.GetAllAppointmentsAsync(userId);

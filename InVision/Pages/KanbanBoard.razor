@@ -8,7 +8,7 @@
 @inject ToDoItemService todoitemservice
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 @implements IDisposable
-
+@attribute [Authorize]
 
 <input @bind="@board.Name" @oninput="OnTitleChange" style="width:100%" class="custom-h4" />
 <div class="row">

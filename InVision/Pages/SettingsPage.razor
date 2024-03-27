@@ -7,6 +7,8 @@
 @inject UserService userservice
 @inject NotificationService notificationService
 @inject KBoardService boardservice
+@attribute [Authorize]
+
 
 <RadzenPanel>
     <HeaderTemplate>
@@ -227,7 +229,7 @@
             user.Password = hashpass.Hashed;
             user.Salt = hashpass.Salt;
         }
-        user.Notification = recieveEmails;
+        
         await userservice.UpdateUser(userid, user);
     }
 

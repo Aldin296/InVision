@@ -10,6 +10,7 @@ namespace InVision_API.Models
 		public string? Id { get; set; }
 		public string Name { get; set; }
 		public string Password { get; set; }
+		public string Role { get; set; } = "user";
 		public string Email { get; set; }
 		public List<Note>? Notes { get; set; }
 		public List<KBoard>? KBoards { get; set; }

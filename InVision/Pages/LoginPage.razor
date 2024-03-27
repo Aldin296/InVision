@@ -3,6 +3,8 @@
 @inject NavigationManager NavManager
 @inject InVision.Data.Service.UserService userservice 
 @inject Blazored.LocalStorage.ILocalStorageService localstore
+@inject AuthenticationStateProvider authStateProvider
+@using InVision.Authentication
 @using InVision.Data.Model
 
 
@@ -74,8 +76,13 @@
             Console.WriteLine("Angemeldet");
             user = await userservice.GetUserByEmail(emailValue);
             await localstore.SetItemAsync("UserId", user.Id);
-
-            NavManager.NavigateTo("/index");
+            var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+            await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+                {
+                    UserName = user.Name,
+                    Role = user.Role
+        });
+            NavManager.NavigateTo("/index", true);
         }
         else
         {

@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace InVision.Data.Model
 {
-	public class User
+	public class User : IdentityUser
 	{
 		[BsonId]
 		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get; set; }
 		public string Name { get; set; }
+		public string Role { get; set; }
 		public string Password { get; set; }
 		public string Email { get; set; }
 		public List<Note> Notes { get; set; }
@@ -25,6 +27,7 @@ namespace InVision.Data.Model
 			Notes = new List<Note>();
 			KBoards = new List<KBoard>();
 			Appointments = new List<Appointment>();
+			
 		}
 
 		public User(string name, string password, string email)
@@ -32,6 +35,7 @@ namespace InVision.Data.Model
 			Name = name;
 			Password = password;
 			Email = email;
+			Role = "user";
 			// Initialize lists
 			Notes = new List<Note>();
 			KBoards = new List<KBoard>();

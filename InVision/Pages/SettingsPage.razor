@@ -100,7 +100,7 @@
                     <RadzenText style="text-align: left; margin-left: 20px;" TextStyle="TextStyle.H6">Do you want to receive emails?</RadzenText>
                 </RadzenColumn>
                 <RadzenColumn Size="10" Style="display: flex; align-items: center; height:60px">
-                    <RadzenToggleButton @bind-Value=@recieveEmails Change=@OnChange Text="@(recieveEmails ? "Turn off Notifications" : "Turn on Notifications")"
+                    <RadzenToggleButton Click="ChangeNotification" @bind-Value=@recieveEmails Change=@OnChange Text="@(recieveEmails ? "Turn off Notifications" : "Turn on Notifications")"
                                         ButtonStyle="@(recieveEmails ? ButtonStyle.Primary : ButtonStyle.Light)"
                                         InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Turn off Notifications" }})" />
 
@@ -166,6 +166,13 @@
         }
     }
 
+    public async Task ChangeNotification()
+    {
+        Console.WriteLine("Before:\t" + user.Notification);
+        user.Notification = !user.Notification;
+        Console.WriteLine("After:\t" + user.Notification);
+        await userservice.UpdateUser(userid, user);
+    }
 
     //Handling the image input and converting it to byte code for saving it in the database
     private async Task HandleFileChange(InputFileChangeEventArgs e)
@@ -245,7 +252,6 @@
 
     private void OnChange(bool newValue)
     {
-        recieveEmails = newValue;
 
         if (newValue)
         {

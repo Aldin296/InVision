@@ -187,7 +187,7 @@
 
 	public async void OnDeleteitem(string dropzone, TodoItem item)
 	{
-		var confirmationResult = await this.DialogService.Confirm("Are you sure?", "Dialog Title", new ConfirmOptions { OkButtonText = "Yes", CancelButtonText = "No" });
+		var confirmationResult = await this.DialogService.Confirm("Are you sure?", "Dialog Title", new ConfirmOptions { CancelButtonText = "Yes", OkButtonText = "No" });
 		if (confirmationResult == true)
 		{
 			if (dropzone == "ToDo")

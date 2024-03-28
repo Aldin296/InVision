@@ -92,7 +92,7 @@
     {
         await calendarService.DeleteAppointmentAsync(userId, model.Id);
         StateHasChanged();
-        model.Delete = true;
+        //model.Delete = true;
         OnSubmit(model);
     }
 }

@@ -88,12 +88,12 @@
 			args.Data.End = data.End;
 			args.Data.Text = data.Text;
 			args.Data.Color = data.Color;
-			if (data.Delete == true)
+			/*if (data.Delete == true)
 			{
 				appointments.Remove(data);
 				Console.WriteLine("Appointment gelöscht");
 				StateHasChanged();
-			}
+			}*/
 		}
 		StateHasChanged();
 		await scheduler.Reload();

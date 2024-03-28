@@ -48,7 +48,7 @@
                 <h6>Open Items</h6>
                 <h2 style="color:red">@sumOpenItemsAllBoards</h2>
                 <RadzenChart Style="height:80%">
-                    <RadzenColumnSeries Fill="red" Data="@openItems" CategoryProperty="KboardName" Title="Open Items" LineType="LineType.Dashed" ValueProperty="SumOpenItems">
+                    <RadzenColumnSeries Fill="red" Data="@kboards" CategoryProperty="KboardName" Title="Open Items" LineType="LineType.Dashed" ValueProperty="SumOpenItems">
                         <RadzenSeriesDataLabels Visible="false" />
                     </RadzenColumnSeries>
                     <RadzenColumnOptions Radius="5" />
@@ -68,7 +68,7 @@
                 <h2 style="color:green">@sumClosedItemsAllBoards</h2>
 
                 <RadzenChart Style="height:80%">
-                    <RadzenColumnSeries Fill="green" Data="@closedItems" CategoryProperty="KboardName" Title="Closed Items" LineType="LineType.Dashed" ValueProperty="SumClosedItmes">
+                    <RadzenColumnSeries Fill="green" Data="@kboards" CategoryProperty="KboardName" Title="Closed Items" LineType="LineType.Dashed" ValueProperty="SumClosedItmes">
                         <RadzenSeriesDataLabels Visible="false" />
                     </RadzenColumnSeries>
                     <RadzenColumnOptions Radius="5" />
@@ -88,7 +88,7 @@
 
                 <RadzenArcGauge Style="width: 100%">
                     <RadzenArcGaugeScale Min="0" Max="100" Radius="1" Margin="0">
-                        <RadzenArcGaugeScaleValue Fill="#3700b3" Value=@sumAllItemsAllBoardsPrecentage ShowValue="true">
+                        <RadzenArcGaugeScaleValue Fill="#3700b3" Value=@sumAllItemsAllBoardsPrecentage ShowValue=showValue>
                             <Template Context="pointer">
                                 <h4>
                                     @pointer.Value.ToString("0.00") <sup>%</sup>
@@ -154,131 +154,75 @@
 
     //[CascadingParameter]
     //private Task<AuthenticationState> authenticationState { get; set; }
-    
+
 
     int sumOpenItemsAllBoards;
     int sumClosedItemsAllBoards;
     int sumAllItemsAllBoards;
     float sumAllItemsAllBoardsPrecentage;
+    bool showValue = false;
+    int currentMonth = DateTime.Now.Month;
+
 
     private User user;
 
     public string imagepath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
 
-    List<Appointment> appointmentsThisMonth = new List<Appointment>
-    {
-        new Appointment { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
-        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(12), Text = "Online meeting" },
-        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(13), Text = "Skype call" },
-        new Appointment { Start = DateTime.Today.AddHours(14), End = DateTime.Today.AddHours(14).AddMinutes(30), Text = "Dentist appointment" },
-        new Appointment { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
-    };
+    List<Appointment> appointmentsThisMonth = new List<Appointment> { };
 
-    public class KboardItme
+    public class KboardItem
     {
         public string KboardName { get; set; }
         public int SumOpenItems { get; set; }
         public int SumClosedItmes { get; set; }
     }
 
-    List<KboardItme> openItems = new List<KboardItme>
-    {
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 1",
-            SumOpenItems = 24,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 2",
-            SumOpenItems = 15,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 3",
-            SumOpenItems = 10,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 4",
-            SumOpenItems = 33,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 5",
-            SumOpenItems = 25,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 6",
-            SumOpenItems = 31,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 7",
-            SumOpenItems = 21,
-        },
-    };
-
-
-    List<KboardItme> closedItems = new List<KboardItme>
-    {
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 1",
-            SumClosedItmes = 34,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 2",
-            SumClosedItmes = 11,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 3",
-            SumClosedItmes = 38,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 4",
-            SumClosedItmes = 12,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 5",
-            SumClosedItmes = 38,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 6",
-            SumClosedItmes = 27,
-        },
-        new KboardItme
-        {
-            KboardName = "Kanbanboard 7",
-            SumClosedItmes = 11,
-        },
-    };
-
-
+    List<KboardItem> kboards = new List<KboardItem>{};
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         //string userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
         string userId = await localstore.GetItemAsync<string>("UserId");
+       
         //appointmentsThisMonth = await calendarservice.GetAllAppointmentsAsync(userId);
+
 
         if (!string.IsNullOrEmpty(userId))
         {
             user = await userservice.GetUserById(userId);
-            foreach (var citem in closedItems)
+            foreach (Appointment a in user.Appointments)
+            {
+                //Add every upcoming appointment this month
+                if (a.Start.Month == currentMonth)
+                {
+                    appointmentsThisMonth.Add(a);
+                }
+            }
+            foreach (KBoard k in user.KBoards)
+            {
+                KboardItem board = new KboardItem
+                    {
+                        KboardName = k.Name,
+                    };
+                foreach (TodoItem i in k.Items)
+                {
+                    showValue = true;
+                    if(i.State != 2)
+                    {
+                        board.SumOpenItems++;
+                    }
+                    else
+                    {
+                        board.SumClosedItmes++;
+                    }
+                }
+                kboards.Add(board);
+            }
+            foreach (var citem in kboards)
             {
                 sumClosedItemsAllBoards += citem.SumClosedItmes;
                 sumAllItemsAllBoards += citem.SumClosedItmes;
-            }
-            foreach (var oitem in openItems)
-            {
-                sumOpenItemsAllBoards += oitem.SumOpenItems;
-                sumAllItemsAllBoards += oitem.SumOpenItems;
+                sumOpenItemsAllBoards += citem.SumOpenItems;
+                sumAllItemsAllBoards += citem.SumOpenItems;
             }
 
             sumAllItemsAllBoardsPrecentage = (100f / sumAllItemsAllBoards) * sumClosedItemsAllBoards;

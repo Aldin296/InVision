@@ -12,14 +12,14 @@
 @attribute [Authorize]
 
 
-<AuthorizeView>
+<!--<AuthorizeView>
     <Authorized>
         <h1>Hello, @context.User.Identity.Name!</h1>
     </Authorized>
     <NotAuthorized>
         <h1>Hello, Guest!</h1>
     </NotAuthorized>
-</AuthorizeView>
+</AuthorizeView>-->
 <AuthorizeView>
 <RadzenCard>
     <RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
@@ -152,10 +152,6 @@
 
 @code {
 
-    //[CascadingParameter]
-    //private Task<AuthenticationState> authenticationState { get; set; }
-
-
     int sumOpenItemsAllBoards;
     int sumClosedItemsAllBoards;
     int sumAllItemsAllBoards;
@@ -224,6 +220,7 @@
                 sumOpenItemsAllBoards += citem.SumOpenItems;
                 sumAllItemsAllBoards += citem.SumOpenItems;
             }
+
 
             sumAllItemsAllBoardsPrecentage = (100f / sumAllItemsAllBoards) * sumClosedItemsAllBoards;
 

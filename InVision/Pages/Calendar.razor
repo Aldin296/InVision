@@ -2,10 +2,12 @@
 @using InVision.Data
 @using InVision.Data.Model
 @using InVision.Pages
+@using InVision.Data.Service
 @inject DialogService DialogService
 @inject ContextMenuService ContextMenuService
 @inject InVision.Data.Service.CalendarService calendarService
 @inject Blazored.LocalStorage.ILocalStorageService localstore
+@inject EmailService emailService
 @attribute [Authorize]
 
 
@@ -16,10 +18,6 @@
 		<RadzenMonthView />
 		<RadzenYearView />
 	</RadzenScheduler>
-
-
-
-
 
 @code {
 	RadzenScheduler<Appointment> scheduler;

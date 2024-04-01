@@ -65,7 +65,7 @@ namespace InVision_API.Controllers
 			}
 		}
 
-		[HttpDelete]
+		[HttpDelete("{userId}/{appointmentId}")]
 		public async Task<IActionResult> DeleteAppointment(string userId, string appointmentId)
 		{
 			try

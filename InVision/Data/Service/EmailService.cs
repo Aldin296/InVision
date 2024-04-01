@@ -1,31 +1,45 @@
 ﻿using System;
+using System.Net;
 using System.Net.Mail;
-using Mailgun;
-using Mailgun.Messages;
-using System.Threading.Tasks;
+namespace InVision.Data.Service;
 
 public class EmailService
 {
-    private readonly string _apiKey;
-    private readonly string _domain;
-
-    public EmailService(string apiKey, string domain)
+    public void SendEmail(string recipientEmail, string subject, string body)
     {
-        _apiKey = apiKey;
-        _domain = domain;
+        // Sender's email address and SMTP server details
+        string senderEmail = "your_email@example.com";
+        string password = "your_password"; // if you're using SMTP authentication
+        string smtpServer = "smtp.example.com";
+        int port = 587; // SMTP port (usually 587 for TLS/STARTTLS or 465 for SSL)
+
+        // Create an instance of the SmtpClient
+        SmtpClient smtpClient = new SmtpClient(smtpServer, port);
+
+        // Enable SSL/TLS
+        smtpClient.EnableSsl = true;
+
+        // Provide credentials for the SMTP server if required
+        smtpClient.Credentials = new NetworkCredential(senderEmail, password);
+
+        // Create a MailMessage object
+        MailMessage mailMessage = new MailMessage(senderEmail, recipientEmail, subject, body);
+
+        try
+        {
+            // Send the email
+            smtpClient.Send(mailMessage);
+            Console.WriteLine("Email sent successfully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Failed to send email. Error: " + ex.Message);
+        }
+        finally
+        {
+            // Clean up resources
+            mailMessage.Dispose();
+            smtpClient.Dispose();
+        }
     }
-    /*
-    public async Task SendEmailAsync(string recipientEmail, string recipientName, string subject, string body)
-    {
-        var message = new MailMessage();
-        message.From = new MailAddress("your_email@example.com", "Your Name");
-        message.To.Add(new MailAddress(recipientEmail, recipientName));
-        message.Subject = subject;
-        message.Body = body;
-        message.IsBodyHtml = true; // Optionally, set to false if the body is plain text
-
-        var client = new MailgunClient(_apiKey, _domain);
-        var response = await client.SendEmailAsync(_domain, message);
-        // Check response for any errors or handle as necessary
-    }*/
 }

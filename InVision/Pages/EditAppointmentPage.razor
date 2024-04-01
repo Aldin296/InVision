@@ -63,7 +63,7 @@
     [Parameter]
     public Appointment Appointment { get; set; }
 
-    string userId = "";
+    string userId;
     Appointment model = new Appointment();
 
     bool showHSV = true;
@@ -76,14 +76,14 @@
         Console.WriteLine("Color changed");
     }
 
-    protected override void OnParametersSet()
+    protected override async void OnParametersSet()
     {
         model = Appointment;
+        userId = await localstore.GetItemAsync<string>("UserId");
     }
 
     async void OnSubmit(Appointment model)
     {
-        userId = await localstore.GetItemAsync<string>("UserId");
         await calendarService.UpdateAppointmentAsync(userId, model.Id, model);
         DialogService.Close(model);
     }

@@ -56,7 +56,6 @@ namespace InVision.Authentication
                 claimsPrincipal = _anonymous;
             }
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
-
         }
     }
 }

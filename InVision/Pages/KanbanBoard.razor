@@ -18,80 +18,23 @@
 else
 {
     <input @bind="@board.Name" @oninput="OnTitleChange" style="width:100%" class="custom-h4" />
-    <div class="row">
-        <div class="col">
-            <RadzenCard style="border-radius:0px; border-left: 6px solid #AA4A44;  border-bottom: 2px solid #AA4A44">
-                <RadzenText TextStyle="TextStyle.H6">
-                    <RadzenRow>
-                        <RadzenColumn Size="10">
-                            <strong>To Do</strong>
-                        </RadzenColumn>
-                        <RadzenColumn Size="2">
-                            <RadzenIcon @onclick="()=>OnAddItem(todo)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
-                        </RadzenColumn>
-                    </RadzenRow>
-                </RadzenText>
-            </RadzenCard>
-            <Dropzone Items="MyFirstList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(todo, tdi))" Class="h-100">
-                <ChildContent>
-                    <RadzenCard ContextMenu=@(args => ShowContextMenuWithItems(args,context)) style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px; max-width:100%; margin-bottom: 5px">
-                        <div style="width: 325px">
-                            <input @oninput="@(e => OnItemTitleChange(e, context))" class="custom-h6" @bind="@context.Title" style="white-space: pre-wrap; width: 100%" />
-                        </div>
-                        <RadzenRow>
-                            <RadzenColumn Size="12">
-                                <RadzenTextArea Change="@((string newValue) => OnItemDescriptionChange(newValue, context))" Style="width: 100%" Value="@context.Description"></RadzenTextArea>
-                            </RadzenColumn>
-                        </RadzenRow>
-                    </RadzenCard>
-                </ChildContent>
-            </Dropzone>
-        </div>
-
-        <div class="col">
-            <RadzenCard style="border-radius:0px; border-left: 6px solid orange;  border-bottom: 2px solid orange">
-                <RadzenText TextStyle="TextStyle.H6">
-                    <RadzenRow>
-                        <RadzenColumn Size="10">
-                            <strong>In Progress</strong>
-                        </RadzenColumn>
-                        <RadzenColumn Size="2">
-                            <RadzenIcon @onclick="()=>OnAddItem(inProgress)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
-                        </RadzenColumn>
-                    </RadzenRow>
-                </RadzenText>
-            </RadzenCard>
-            <Dropzone Items="MySecondList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(inProgress, tdi))" Class="h-100" Id="Progress">
-                <ChildContent>
-                    <RadzenCard ContextMenu=@(args => ShowContextMenuWithItems(args,context)) style="border-left: 6px solid orange; border-color: orange; border-radius: 0px; max-width:100%; margin-bottom: 5px">
-                        <div style="width: 325px">
-                            <input @oninput="@(e => OnItemTitleChange(e, context))" class="custom-h6" @bind="@context.Title" style="white-space: pre-wrap; width: 100%" />
-                        </div>
-                        <RadzenRow>
-                            <RadzenColumn Size="12">
-                                <RadzenTextArea Change="@((string newValue) => OnItemDescriptionChange(newValue, context))" Style="width: 100%" Value="@context.Description"></RadzenTextArea>
-                            </RadzenColumn>
-                        </RadzenRow>
-                    </RadzenCard>
-                </ChildContent>
-            </Dropzone>
-        </div>
-
-        <div class="col">
-            <RadzenCard style="border-radius:0px; border-left: 6px solid green;  border-bottom: 2px solid green">
-                <RadzenText TextStyle="TextStyle.H6">
-                    <RadzenRow>
-                        <RadzenColumn Size="10">
-                            <strong>Done</strong>
-                        </RadzenColumn>
-                        <RadzenColumn Size="2">
-                            <RadzenIcon @onclick="()=>OnAddItem(done)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
-                        </RadzenColumn>
-                    </RadzenRow>
-                </RadzenText>
-            </RadzenCard>
-            <Dropzone Items="MyThirdList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(done, tdi))" Class="h-100" Id="done">
-                <RadzenCard ContextMenu=@(args => ShowContextMenuWithItems(args,context)) style="border-left: 6px solid green; border-color: green; border-radius: 0px; max-width:100%; margin-bottom: 5px">
+<div class="row">
+    <div class="col">
+        <RadzenCard style="border-radius:0px; border-left: 6px solid #AA4A44;  border-bottom: 2px solid #AA4A44">
+            <RadzenText TextStyle="TextStyle.H6">
+                <RadzenRow>
+                    <RadzenColumn Size="10">
+                        <strong>To Do</strong>
+                    </RadzenColumn>
+                    <RadzenColumn Size="2">
+                        <RadzenIcon @onclick="()=>OnAddItem(todo)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenText>
+        </RadzenCard>
+        <Dropzone Items="MyFirstList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(todo, tdi))" Class="h-100">
+            <ChildContent>
+                <RadzenCard ContextMenu=@(args => ShowContextMenuWithItems(args,context)) style="border-left: 6px solid #AA4A44; border-color: #AA4A44; border-radius: 0px; max-width:100%; margin-bottom: 5px">
                     <div style="width: 325px">
                         <input @oninput="@(e => OnItemTitleChange(e, context))" class="custom-h6" @bind="@context.Title" style="white-space: pre-wrap; width: 100%" />
                     </div>
@@ -101,9 +44,66 @@ else
                         </RadzenColumn>
                     </RadzenRow>
                 </RadzenCard>
-            </Dropzone>
-        </div>
+            </ChildContent>
+        </Dropzone>
     </div>
+
+    <div class="col">
+        <RadzenCard style="border-radius:0px; border-left: 6px solid orange;  border-bottom: 2px solid orange">
+            <RadzenText TextStyle="TextStyle.H6">
+                <RadzenRow>
+                    <RadzenColumn Size="10">
+                        <strong>In Progress</strong>
+                    </RadzenColumn>
+                    <RadzenColumn Size="2">
+                        <RadzenIcon @onclick="()=>OnAddItem(inProgress)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenText>
+        </RadzenCard>
+        <Dropzone Items="MySecondList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(inProgress, tdi))" Class="h-100" Id="Progress">
+            <ChildContent>
+                <RadzenCard ContextMenu=@(args => ShowContextMenuWithItems(args,context)) style="border-left: 6px solid orange; border-color: orange; border-radius: 0px; max-width:100%; margin-bottom: 5px">
+                    <div style="width: 325px">
+                        <input @oninput="@(e => OnItemTitleChange(e, context))" class="custom-h6" @bind="@context.Title" style="white-space: pre-wrap; width: 100%" />
+                    </div>
+                    <RadzenRow>
+                        <RadzenColumn Size="12">
+                            <RadzenTextArea Change="@((string newValue) => OnItemDescriptionChange(newValue, context))" Style="width: 100%" Value="@context.Description"></RadzenTextArea>
+                        </RadzenColumn>
+                    </RadzenRow>
+                </RadzenCard>
+            </ChildContent>
+        </Dropzone>
+    </div>
+
+    <div class="col">
+        <RadzenCard style="border-radius:0px; border-left: 6px solid green;  border-bottom: 2px solid green">
+            <RadzenText TextStyle="TextStyle.H6">
+                <RadzenRow>
+                    <RadzenColumn Size="10">
+                        <strong>Done</strong>
+                    </RadzenColumn>
+                    <RadzenColumn Size="2">
+                        <RadzenIcon @onclick="()=>OnAddItem(done)" Icon="add_circle_outline" Style="cursor: pointer;" class="add-todoitem-icon"></RadzenIcon>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenText>
+        </RadzenCard>
+        <Dropzone Items="MyThirdList" TItem="TodoItem" OnItemDrop="@((tdi)=>Itemdropcall(done, tdi))" Class="h-100" Id="done">
+            <RadzenCard ContextMenu=@(args => ShowContextMenuWithItems(args,context)) style="border-left: 6px solid green; border-color: green; border-radius: 0px; max-width:100%; margin-bottom: 5px">
+                <div style="width: 325px">
+                    <input @oninput="@(e => OnItemTitleChange(e, context))" class="custom-h6" @bind="@context.Title" style="white-space: pre-wrap; width: 100%" />
+                </div>
+                <RadzenRow>
+                    <RadzenColumn Size="12">
+                        <RadzenTextArea Change="@((string newValue) => OnItemDescriptionChange(newValue, context))" Style="width: 100%" Value="@context.Description"></RadzenTextArea>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenCard>
+        </Dropzone>
+    </div>
+</div>
 }
 
 
@@ -191,107 +191,107 @@ else
     }
 
 
-    public async void OnDeleteitem(string dropzone, TodoItem item)
-    {
-        var confirmationResult = await this.DialogService.Confirm("Are you sure?", "Dialog Title", new ConfirmOptions { CancelButtonText = "Yes", OkButtonText = "No" });
-        if (confirmationResult == true)
-        {
-            if (dropzone == "ToDo")
-            {
-                MyFirstList.Remove(item);
-                await todoitemservice.DeleteItem(userId, boardId, item.Id);
-            }
-            if (dropzone == "InProgress")
-            {
-                MySecondList.Remove(item);
-                await todoitemservice.DeleteItem(userId, boardId, item.Id);
+	public async void OnDeleteitem(string dropzone, TodoItem item)
+	{
+		var confirmationResult = await this.DialogService.Confirm("Are you sure?", "Dialog Title", new ConfirmOptions { CancelButtonText = "Yes", OkButtonText = "No" });
+		if (confirmationResult == true)
+		{
+			if (dropzone == "ToDo")
+			{
+				MyFirstList.Remove(item);
+				await todoitemservice.DeleteItem(userId,boardId, item.Id);
+			}
+			if (dropzone == "InProgress")
+			{
+				MySecondList.Remove(item);
+				await todoitemservice.DeleteItem(userId, boardId, item.Id);
 
-            }
-            if (dropzone == "Done")
-            {
-                MyThirdList.Remove(item);
-                await todoitemservice.DeleteItem(userId, boardId, item.Id);
+			}
+			if (dropzone == "Done")
+			{
+				MyThirdList.Remove(item);
+				await todoitemservice.DeleteItem(userId, boardId, item.Id);
 
-            }
-        }
-        StateHasChanged();
-    }
+			}
+		}
+		StateHasChanged();
+	}
 
-    void ShowContextMenuWithItems(MouseEventArgs args, TodoItem item)
-    {
+	void ShowContextMenuWithItems(MouseEventArgs args, TodoItem item)
+	{
 
-        ContextMenuService.Open(args,
-            new List<ContextMenuItem> {
-                new ContextMenuItem(){ Text = "Delete", Value = 1, Icon = "delete" },},
-            (MenuItemEventArgs eventArgs) => OnMenuItemClick(eventArgs, item));
+		ContextMenuService.Open(args,
+			new List<ContextMenuItem> {
+				new ContextMenuItem(){ Text = "Delete", Value = 1, Icon = "delete" },},
+			(MenuItemEventArgs eventArgs) => OnMenuItemClick(eventArgs, item));
 
-    }
+	}
 
-    void OnMenuItemClick(MenuItemEventArgs args, TodoItem item)
-    {
-        if (args.Value.Equals(1))
-        {
-            if (item.State == 0)
-            {
-                OnDeleteitem("ToDo", item);
-                ContextMenuService.Close();
-            }
-            else if (item.State == 1)
-            {
-                OnDeleteitem("InProgress", item);
-                ContextMenuService.Close();
-            }
-            else if (item.State == 2)
-            {
-                OnDeleteitem("Done", item);
-                ContextMenuService.Close();
-            }
+	void OnMenuItemClick(MenuItemEventArgs args, TodoItem item)
+	{
+		if (args.Value.Equals(1))
+		{
+			if(item.State == 0)
+			{
+				OnDeleteitem("ToDo", item);
+				ContextMenuService.Close();
+			}
+			else if(item.State == 1)
+			{
+				OnDeleteitem("InProgress", item);
+				ContextMenuService.Close();
+			}
+			else if(item.State == 2)
+			{
+				OnDeleteitem("Done", item);
+				ContextMenuService.Close();
+			}
 
-        }
-    }
-
-
-    public async void OnEditItem(TodoItem item)
-    {
-
-    }
+		}
+	}
 
 
-    private void OnTitleChange(ChangeEventArgs e)
-    {
-        board.Name = e.Value.ToString();
-    }
+	public async void OnEditItem(TodoItem item)
+	{
+
+	}
 
 
-    public async void Itemdropcall(string dropzoneId, TodoItem item)
-    {
-        Console.WriteLine(dropzoneId);
-        if (dropzoneId == "ToDo")
-        {
-            Console.WriteLine(item.State);
-            item.State = 0;
-            await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
-            Console.WriteLine(item.State);
-        }
-        if (dropzoneId == "InProgress")
-        {
-            item.State = 1;
-            await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
-        }
-        if (dropzoneId == "Done")
-        {
-            item.State = 2;
-            await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
-        }
+	private void OnTitleChange(ChangeEventArgs e)
+	{
+		board.Name = e.Value.ToString();
+	}
 
-    }
 
-    async void IDisposable.Dispose()
-    {
-        foreach (TodoItem x in board.Items)
-        {
-            Console.WriteLine("Desc:" + x.Description + "State:" + x.State + "\n");
-        }
-        await boardService.UpdateKBoard(userId, board.Id, board);
-    }
+	public async void Itemdropcall(string dropzoneId, TodoItem item)
+	{
+		Console.WriteLine(dropzoneId);
+		if (dropzoneId == "ToDo")
+		{
+			Console.WriteLine(item.State);
+			item.State = 0;
+			await todoitemservice.UpdateItem(userId,boardId, item.Id, item);
+			Console.WriteLine(item.State);
+		}
+		if (dropzoneId == "InProgress")
+		{
+			item.State = 1;
+			await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
+		}
+		if (dropzoneId == "Done")
+		{
+			item.State = 2;
+			await todoitemservice.UpdateItem(userId, boardId, item.Id, item);
+		}
+
+	}
+
+	async void IDisposable.Dispose()
+	{
+		foreach(TodoItem x in board.Items)
+		{
+			Console.WriteLine("Desc:" + x.Description + "State:" +  x.State + "\n");
+		}
+		await boardService.UpdateKBoard(userId, board.Id, board);
+	}
 }

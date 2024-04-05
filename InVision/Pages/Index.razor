@@ -9,8 +9,8 @@
 @inject UserService userservice
 @inject CalendarService calendarservice
 @inject Blazored.LocalStorage.ILocalStorageService localstore
+@inject IJSRuntime JSRuntime
 
-<<<<<<< HEAD
 
 <AuthorizeView>
     <RadzenCard Style="margin-right:32px">
@@ -29,29 +29,11 @@
                             <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">E-Mail</RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1"><b>@user?.Email</b></RadzenText>
                         </RadzenStack>
-=======
-<RadzenCard>
-    <RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
-        <RadzenIcon Icon="dashboard" class="rz-mr-1" /><b>Dashboard</b>
-    </RadzenText>
-    <br />
-    <RadzenRow Class="custom-row-spacing">
-        <RadzenColumn Size="4">
-            <RadzenCard>
-                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
-                    <RadzenImage Path="@imagepath" Style="width:6rem; height: 6rem; border-radius: 50%;" />
-                    <RadzenStack Gap="0">
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">User</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@user?.Name</b></RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">E-Mail</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@user?.Email</b></RadzenText>
->>>>>>> parent of 56cfa6c (merge 1)
                     </RadzenStack>
                 </RadzenCard>
             </RadzenColumn>
         </RadzenRow>
 
-<<<<<<< HEAD
         <RadzenRow Class="custom-row-spacing" Style="height:30vh; margin-bottom: 2rem">
             <RadzenColumn Size="4">
                 <RadzenCard Style="height:70%">
@@ -155,112 +137,6 @@
                     }
                     else
                     {
-=======
-    <RadzenRow Class="custom-row-spacing" Style="height:30vh; margin-bottom: 3rem">
-        <RadzenColumn Size="4">
-            <RadzenCard Style="height:70%">
-                <h6>Open Items</h6>
-                <h2 style="color:#3700b3">@sumOpenItemsAllBoards</h2>
-                <RadzenChart Style="height:80%">
-                    <RadzenColumnSeries Data="@openItems" CategoryProperty="KboardName" Title="Open Items" LineType="LineType.Dashed" ValueProperty="SumOpenItems">
-                        <RadzenSeriesDataLabels Visible="false" />
-                    </RadzenColumnSeries>
-                    <RadzenColumnOptions Radius="5" />
-                    <RadzenValueAxis>
-                        <RadzenGridLines Visible="false" />
-                        <RadzenCategoryAxis Visible="false" />
-                        <RadzenValueAxis Visible="false" />
-                        <RadzenLegend Visible="false" />
-                    </RadzenValueAxis>
-                </RadzenChart>
-            </RadzenCard>
-        </RadzenColumn>
-
-        <RadzenColumn Size="4">
-            <RadzenCard Style="height:70%">
-                <h6>Closed Items</h6>
-                <h2 style="color:red">@sumClosedItemsAllBoards</h2>
-
-                <RadzenChart Style="height:80%">
-                    <RadzenColumnSeries Fill="red" Data="@closedItems" CategoryProperty="KboardName" Title="Closed Items" LineType="LineType.Dashed" ValueProperty="SumClosedItmes">
-                        <RadzenSeriesDataLabels Visible="false" />
-                    </RadzenColumnSeries>
-                    <RadzenColumnOptions Radius="5" />
-                    <RadzenValueAxis Visible="false">
-                        <RadzenGridLines Visible="false" />
-                        <RadzenCategoryAxis Visible="false" />
-                        <RadzenValueAxis Visible="false" />
-                        <RadzenLegend Visible="false" />
-                    </RadzenValueAxis>
-                </RadzenChart>
-            </RadzenCard>
-        </RadzenColumn>
-
-        <RadzenColumn Size="4">
-            <RadzenCard Style="height:70%">
-                <h6>Progress</h6>
-
-                <RadzenArcGauge Style="width: 100%">
-                    <RadzenArcGaugeScale Min="0" Max="100" Radius="1" Margin="0">
-                        <RadzenArcGaugeScaleValue Fill="#3700b3" Value=@sumAllItemsAllBoardsPrecentage ShowValue="true">
-                            <Template Context="pointer">
-                                <h4>
-                                    @pointer.Value.ToString("0.00") <sup>%</sup>
-                                </h4>
-                            </Template>
-                        </RadzenArcGaugeScaleValue>
-                    </RadzenArcGaugeScale>
-                </RadzenArcGauge>
-
-            </RadzenCard>
-        </RadzenColumn>
-    </RadzenRow>
-
-    <RadzenRow Class="custom-row-spacing">
-        <RadzenColumn>
-            <RadzenCard>
-                <h6>Appointments this Month</h6>
-                <RadzenTimeline Orientation="Orientation.Horizontal">
-                    <Items>
-                        @foreach (var appointment in appointmentsThisMonth)
-                        {
-                            <RadzenTimelineItem PointStyle="PointStyle.Primary">
-                                <LabelContent>
-                                    @if (appointment.Start.Date != appointment.End.Date)
-                                    {
-                                        @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
-                                        {
-                                            <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
-                                        }
-                                        else
-                                        {
-                                            <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@($"{appointment.Start.ToString("dd.MM.yy")} - {appointment.End.ToString("dd.MM.yy")}")</RadzenText>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
-                                        {
-                                            <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
-                                        }
-                                        else
-                                        {
-                                            <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@appointment.Start.ToString("dd.MM.yy")</RadzenText>
-                                        }
-                                    }
-                                </LabelContent>
-                                <ChildContent>
-                                    @appointment.Text
-                                </ChildContent>
-                            </RadzenTimelineItem>
-                        }
-                    </Items>
-                </RadzenTimeline>
-            </RadzenCard>
-        </RadzenColumn>
-    </RadzenRow>
-</RadzenCard>
->>>>>>> parent of 56cfa6c (merge 1)
 
                         <RadzenTimeline Orientation="Orientation.Vertical">
                             <Items>
@@ -306,8 +182,6 @@
     </RadzenCard>
 </AuthorizeView>
 
-
-
 @code {
 
     int sumOpenItemsAllBoards;
@@ -320,9 +194,16 @@
 
     private User user;
 
-    public string imagepath = "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png";
+    public string imagepath;
 
-    List<Appointment> appointmentsThisMonth = new List<Appointment> { };
+    List<Appointment> appointmentsThisMonth = new List<Appointment>
+    {
+        new Appointment { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
+        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(12), Text = "Online meeting" },
+        new Appointment { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(13), Text = "Skype call" },
+        new Appointment { Start = DateTime.Today.AddHours(14), End = DateTime.Today.AddHours(14).AddMinutes(30), Text = "Dentist appointment" },
+        new Appointment { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
+    };
 
     public class KboardItem
     {
@@ -336,12 +217,8 @@
     {
         //string userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
         string userId = await localstore.GetItemAsync<string>("UserId");
-<<<<<<< HEAD
 
         //appointmentsThisMonth = await calendarservice.GetAllAppointmentsAsync(userId);
-=======
-        appointmentsThisMonth = await calendarservice.GetAllAppointmentsAsync(userId);
->>>>>>> parent of 56cfa6c (merge 1)
 
 
         if (!string.IsNullOrEmpty(userId))
@@ -402,38 +279,51 @@
 
             if (firstRender)
             {
+
                 StateHasChanged();
+                await JSRuntime.InvokeVoidAsync("blazorWindowSize.registerResizeListener", DotNetObjectReference.Create(this));
+                await UpdateWindowSize();
             }
+
+
         }
         else
         {
             // Handle the case when the UserId is not in the session
         }
-
     }
 
-    private void onSeeMoreClick()
+    int windowWidth;
+    int windowHeight;
+
+    [JSInvokable]
+    public void OnResize(int width, int height)
     {
-        if (user != null)
-        {
-            Console.WriteLine(user.Name + user.Email);
-            NavManager.NavigateTo("/calendar");
-        }
-        else
-        {
-            // Handle the case when the user is not loaded
-        }
+        windowWidth = width;
+        windowHeight = height;
+        StateHasChanged();
     }
 
-    private void EditProfileClick()
+    async Task UpdateWindowSize()
     {
-        if (user != null)
-        {
-            NavManager.NavigateTo("/settings");
-        }
-        else
-        {
-            // Handle the case when the user is not loaded
-        }
+        windowWidth = await JSRuntime.InvokeAsync<int>("blazorWindowSize.getWidth");
+        windowHeight = await JSRuntime.InvokeAsync<int>("blazorWindowSize.getHeight");
+        StateHasChanged();
     }
 }
+
+<script>
+    window.blazorWindowSize = {
+        getWidth: function () {
+            return window.innerWidth;
+        },
+        getHeight: function () {
+            return window.innerHeight;
+        },
+        registerResizeListener: function (dotnetObjRef) {
+            window.addEventListener('resize', function () {
+                dotnetObjRef.invokeMethodAsync('OnResize', window.innerWidth, window.innerHeight);
+            });
+        }
+    };
+</script>

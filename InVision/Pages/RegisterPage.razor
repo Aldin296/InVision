@@ -12,7 +12,8 @@
 	<div style="text-align:center;">
 		<h2>Sign Up</h2>
 	</div>
-	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center" Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
+	<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End" JustifyContent="JustifyContent.Center"
+	Wrap="FlexWrap.Wrap" Gap="1rem" Class="rz-p-sm-7">
 		<div style="text-align: center">
 			<RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
 				<RadzenFormField Text="Username" Variant="Variant.Flat" style="width: 300px; margin-bottom:25px">
@@ -49,7 +50,7 @@
 				</div>
 				<br />
 				<RadzenStack JustifyContent="JustifyContent.Center" Orientation="Orientation.Horizontal">
-					<RadzenButton ButtonType="ButtonType.Submit" Click="Register" style="width: 150px">Register</RadzenButton>
+					<RadzenButton ButtonType="ButtonType.Submit" style="width: 150px">Register</RadzenButton>
 				</RadzenStack>
 			</RadzenTemplateForm>
 		</div>
@@ -76,15 +77,9 @@
 	string emailValue = "";
 
 
-	void OnSubmit(Model model)
+	async void OnSubmit(Model model)
 	{
-<<<<<<< HEAD
 		Register();
-=======
-		usernameValid = true;
-		emailValid = true;
-		passwordValid = true;
->>>>>>> parent of 56cfa6c (merge 1)
 		NavManager.NavigateTo("/");
 		Console.WriteLine("valid submit");
 	}
@@ -96,16 +91,9 @@
 
 	async Task Register()
 	{
-<<<<<<< HEAD
 
 		await userservice.CreateUser(usernameValue, passwordValue, emailValue);
 
-=======
-		if (emailValid == true && usernameValid == true)
-		{
-			await userservice.CreateUser(usernameValue, passwordValue, emailValue);
-		}
->>>>>>> parent of 56cfa6c (merge 1)
 	}
 
 

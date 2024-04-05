@@ -12,7 +12,6 @@ namespace InVision.Data.Service
 
         public List<Note> notes = new List<Note>(){};
 
-
         public async Task<List<Note>> GetAllNotesAsync(string userid)
         {
             string requestUrl = $"{baseurl}/api/User";

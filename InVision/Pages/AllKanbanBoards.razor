@@ -8,7 +8,7 @@
 @inject ContextMenuService ContextMenuService
 @inject TooltipService tooltipService
 @inject Blazored.LocalStorage.ILocalStorageService localstore
-
+@attribute [Authorize]
 
 
 @if (filteredBoards == null)
@@ -68,6 +68,11 @@ else
     {
         userId = await localstore.GetItemAsync<string>("UserId");
         boards = await Task.Run(() => kboardService.GetAllKBoardsAsync(userId));
+
+        foreach(KBoard x in boards)
+        {
+            Console.WriteLine("ID:" + x.Id + "Name:" + x.Name + "\n");
+        }
         filteredBoards = boards;
 
         if (firstRender)

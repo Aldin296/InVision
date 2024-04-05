@@ -1,6 +1,10 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager NavManager
+@inject ILocalStorageService localstore
+@inject AuthenticationStateProvider authStateProvider
+@using InVision.Authentication
 @using Radzen.Blazor
+
 
 
 <RadzenDialog></RadzenDialog>
@@ -14,11 +18,13 @@
         <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" Style="color:black" />
         <RadzenPanelMenu DisplayStyle="@(sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
             <RadzenPanelMenuItem Text="Dashboard" Path="/index" Icon="dashboard"></RadzenPanelMenuItem>
+            <AuthorizeView Roles="user">
             <RadzenPanelMenuItem Text="Calendar" Path="/calendar" Icon="event"></RadzenPanelMenuItem>
             <RadzenPanelMenuItem Text="Kanban" Path="/allKanbanBoards" Icon="dns"></RadzenPanelMenuItem>
             <RadzenPanelMenuItem Text="Notes" Path="/allNotesPage" Icon="assignment"></RadzenPanelMenuItem>
             <RadzenPanelMenuItem Text="Settings" Path="/settings" Icon="settings"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="LogOut" Path="/" Icon="logout"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Click="Click_Logout" Text="LogOut" Path="/" Icon="logout"></RadzenPanelMenuItem>
+            </AuthorizeView>
         </RadzenPanelMenu>
     </RadzenSidebar>
 
@@ -31,4 +37,13 @@
 
 @code {
     bool sidebarExpanded = true;
+
+    public async void Click_Logout()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(null);
+        await localstore.ClearAsync();
+        NavManager.NavigateTo("/");
+
+    }
 }

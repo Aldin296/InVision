@@ -7,6 +7,8 @@
 @inject UserService userservice
 @inject NotificationService notificationService
 @inject KBoardService boardservice
+@attribute [Authorize]
+
 
 @if (user == null)
 {
@@ -164,6 +166,13 @@ else
         }
     }
 
+    public async Task ChangeNotification()
+    {
+        Console.WriteLine("Before:\t" + user.Notification);
+        user.Notification = !user.Notification;
+        Console.WriteLine("After:\t" + user.Notification);
+        await userservice.UpdateUser(userid, user);
+    }
 
     //Handling the image input and converting it to byte code for saving it in the database
     private async Task HandleFileChange(InputFileChangeEventArgs e)
@@ -174,7 +183,6 @@ else
         {
             try
             {
-                // Read the selected image file as a byte array
                 using (var stream = imageFile.OpenReadStream())
                 {
                     using (var memoryStream = new MemoryStream())
@@ -226,15 +234,14 @@ else
             //Und dessen werte dann dem user geben damit diese geupdated werden
             HashPassword hashpass = userservice.hashPassword(newPassword);
             user.Password = hashpass.Hashed;
-            user.salt = hashpass.Salt;
+            user.Salt = hashpass.Salt;
         }
-        user.Notification = recieveEmails;
+        
         await userservice.UpdateUser(userid, user);
     }
 
     private void OnChange(bool newValue)
     {
-        recieveEmails = newValue;
 
         if (newValue)
         {

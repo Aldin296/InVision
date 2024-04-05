@@ -5,51 +5,51 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InVision_API.Controllers
 {
-		[Route("api/[controller]")]
-		[ApiController]
-		public class CalendarController : ControllerBase
+	[Route("api/[controller]")]
+	[ApiController]
+	public class CalendarController : ControllerBase
+	{
+		private readonly CalendarService _calendarService;
+
+		public CalendarController(CalendarService calendarService)
 		{
-			private readonly CalendarService _calendarService;
+			_calendarService = calendarService;
+		}
 
-			public CalendarController(CalendarService calendarService)
+		[HttpGet("{userId}")]
+		public async Task<ActionResult<List<Appointment>>> GetAppointments(string userId)
+		{
+			var appointments = await _calendarService.GetAllAppointmentsAsync(userId);
+
+			return Ok(appointments);
+		}
+
+		[HttpGet]
+		public async Task<ActionResult<Appointment>> GetAppointmentById(string userId, string appointmentId)
+		{
+			var appointment = await _calendarService.GetAppointmentAsync(userId, appointmentId);
+
+			if (appointment == null)
 			{
-				_calendarService = calendarService;
+				return NotFound();
 			}
 
-			[HttpGet("{userId:length(24)}")]
-			public async Task<ActionResult<List<Appointment>>> GetAppointments(string userId)
+			return Ok(appointment);
+		}
+
+		[HttpPost("{userId}")]
+		public async Task<IActionResult> PostAppointment(string userId, Appointment newAppointment)
+		{
+			try
 			{
-				var appointments = await _calendarService.GetAllAppointmentsAsync(userId);
-
-				return Ok(appointments);
+				await _calendarService.CreateAppointmentAsync(userId, newAppointment);
+				return CreatedAtAction(nameof(PostAppointment), new { userId, appointmentId = newAppointment }, newAppointment);
 			}
-
-			[HttpGet]
-			public async Task<ActionResult<Appointment>> GetAppointmentById(string userId, string appointmentId)
+			catch (Exception ex)
 			{
-				var appointment = await _calendarService.GetAppointmentAsync(userId, appointmentId);
-
-				if (appointment == null)
-				{
-					return NotFound();
-				}
-
-				return Ok(appointment);
+				return BadRequest(new { message = ex.Message });
 			}
-
-			[HttpPost("{userId:length(24)}")]
-			public async Task<IActionResult> PostAppointment(string userId, Appointment newAppointment)
-			{
-				try
-				{
-					await _calendarService.CreateAppointmentAsync(userId, newAppointment);
-					return CreatedAtAction(nameof(PostAppointment), new { userId, appointmentId = newAppointment }, newAppointment);
-				}
-				catch (Exception ex)
-				{
-					return BadRequest(new { message = ex.Message });
-				}
-			}
+		}
 
 		[HttpPut("{userId}/{appointmentId}")]
 		public async Task<IActionResult> UpdateAppointment(string userId, string appointmentId, Appointment updatedAppointment)
@@ -65,7 +65,7 @@ namespace InVision_API.Controllers
 			}
 		}
 
-		[HttpDelete]
+		[HttpDelete("{userId}/{appointmentId}")]
 		public async Task<IActionResult> DeleteAppointment(string userId, string appointmentId)
 		{
 			try
@@ -80,33 +80,6 @@ namespace InVision_API.Controllers
 		}
 	}
 
-	/*[HttpPut("{userId:length(24)}/{appointmentId:length(24)}")]
-	public async Task<IActionResult> UpdateKBoard(string userId, string appointmentId, Appointment updatedAppointment)
-	{
-		try
-		{
-			await _calendarService.UpdateAppointmentAsync(userId, appointmentId, updatedAppointment);
-			return NoContent();
-		}
-		catch (Exception ex)
-		{
-			return BadRequest(new { message = ex.Message });
-		}
-	}*/
-
-	/*[HttpDelete("{userId:length(24)}/{appointmentId:length(24)}")]
-	public async Task<IActionResult> DeleteKBoard(string userId, string appointmentId)
-	{
-		try
-		{
-			await _calendarService.DeleteAppointmentAsync(userId, appointmentId);
-			return NoContent();
-		}
-		catch (Exception ex)
-		{
-			return BadRequest(new { message = ex.Message });
-		}
-	}*/
 }
 
 	

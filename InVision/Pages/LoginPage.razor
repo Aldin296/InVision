@@ -3,6 +3,8 @@
 @inject NavigationManager NavManager
 @inject InVision.Data.Service.UserService userservice 
 @inject Blazored.LocalStorage.ILocalStorageService localstore
+@inject CustomAuthenticationStateProvider customAuthStateProvider
+@using InVision.Authentication
 @using InVision.Data.Model
 
 
@@ -71,23 +73,18 @@
         bool loginSuccessful = await userservice.LoginUser(emailValue, passwordValue);
         if (loginSuccessful)
         {
-            Console.WriteLine("Angemeldet");
+            Console.WriteLine("Valid");
             user = await userservice.GetUserByEmail(emailValue);
-            //HttpContextAccessor.HttpContext.Session.SetString("UserId", user.Id.ToString());
-            //ISession session = HttpContextAccessor.HttpContext.Session;
-            //session.SetString("UserId", user.Id.ToString());
-            //HttpContext.Session.SetString(SessionKeyName, "The Doctor");
-            // Perform session-related operations on the server side
-
-            // Navigate to the index page
-
             await localstore.SetItemAsync("UserId", user.Id);
-
-            NavManager.NavigateTo("/index");
+            await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+                {
+                    UserName = user.Name,
+                    Role = user.Role
+                });
+            NavManager.NavigateTo("/index", true);
         }
         else
         {
-            Console.WriteLine("Anmelden fehlgeschlagen");
             Console.WriteLine("invalid submit");
         }
     }

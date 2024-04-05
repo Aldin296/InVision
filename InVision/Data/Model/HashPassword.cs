@@ -8,7 +8,6 @@
         public HashPassword()
         {
         }
-
         public HashPassword(string? hashed, byte[]? salt)
         {
             Hashed = hashed;

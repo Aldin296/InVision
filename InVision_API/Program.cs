@@ -10,7 +10,7 @@ namespace InVision_API
 
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add services to the container
             //Verbindung zur Datenbank
             builder.Services.Configure<InVisionDatabaseSettings>
             (builder.Configuration.GetSection("InVisionDatabase"));

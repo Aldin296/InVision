@@ -3,6 +3,7 @@
 @inject ILocalStorageService localstore
 @using InVision.Data.Service
 @using InVision.Data.Model
+@attribute [Authorize]
 
 
 
@@ -62,6 +63,7 @@
 	}
 
 	bool TitleValidator(string input)
+
 	{
 		bool valid = true;
 		foreach (var note in notes)
@@ -79,4 +81,5 @@
 		return valid;
 
 	}
+
 }

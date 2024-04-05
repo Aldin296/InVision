@@ -15,8 +15,10 @@ namespace InVision.Data.Service
         public HashPassword hashPassword(string password)
         {
 
-            //Salt wird generiert um bei dem selben Passwort von verschiedenen Benutzern einen anderen Hashwert zu generieren
-            byte[] salt = RandomNumberGenerator.GetBytes(128 / 8); // divide by 8 to convert bits to bytes
+            //Salt wird generiert um bei dem selben Passwort 
+            //von verschiedenen Benutzern einen anderen Hashwert zu generieren
+            // Durch 8 dividieren um von bits in bytes umzuwandeln
+            byte[] salt = RandomNumberGenerator.GetBytes(128 / 8); 
             Console.WriteLine($"Salt: {Convert.ToBase64String(salt)}");
 
             // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
@@ -42,7 +44,7 @@ namespace InVision.Data.Service
         {
             string requestUrl = $"{baseurl}/api/User/{userid}";
             User u = await client.GetFromJsonAsync<User>(requestUrl);
-            byte[] salt = u.salt;
+            byte[] salt = u.Salt;
 
             // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
             string controllhashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -68,11 +70,8 @@ namespace InVision.Data.Service
 
             HashPassword hashPass = hashPassword(userPassword);
 
-            //Console.WriteLine(usernameValue + emailValue + passwordValue);
             User newUser = new User(userName, hashPass.Hashed, userEmail);
-            newUser.salt = hashPass.Salt;
-
-
+            newUser.Salt = hashPass.Salt;
 
             await client.PostAsJsonAsync(requestUrl, newUser);
         }
@@ -81,7 +80,6 @@ namespace InVision.Data.Service
         {
             string requestUrl = $"{baseurl}/api/User/{id}";
             await client.PutAsJsonAsync(requestUrl, newUser);
-
         }
 
 
@@ -103,7 +101,7 @@ namespace InVision.Data.Service
                     {
                         if (email == u.Email)
                         {
-                            byte[] salt = u.salt;
+                            byte[] salt = u.Salt;
 
                             // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
                             string controllhashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(

@@ -1,4 +1,9 @@
-﻿@inject NavigationManager NavManager
+﻿@using InVision.Authentication
+@inject NavigationManager NavManager
+@inject AuthenticationStateProvider authStateProvider
+@inject ILocalStorageService localstore
+
+
 
 <RadzenStack AlignItems="AlignItems.Center">
 
@@ -9,9 +14,11 @@
 
 	<RadzenPanelMenu Style="width:250px" Multiple="false">
 		<RadzenPanelMenuItem Text="Dashboard" Path="/index" Icon="dashboard"></RadzenPanelMenuItem>
+		<AuthorizeView Roles="User">
 		<RadzenPanelMenuItem Text="Calendar" Path="/calendar" Icon="event"></RadzenPanelMenuItem>
 		<RadzenPanelMenuItem Text="Kanban" Path="/allKanbanBoards" Icon="dns"></RadzenPanelMenuItem>
 		<RadzenPanelMenuItem Text="Notes" Path="/notes" Icon="assignment"></RadzenPanelMenuItem>
+		</AuthorizeView>
 	</RadzenPanelMenu>
 	<RadzenStack >
         <RadzenButton Click="Click_Logout">Log out</RadzenButton>
@@ -19,8 +26,13 @@
 </RadzenStack>
 @code {
 
-	public void Click_Logout()
+	public async void Click_Logout()
 	{
+		var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+		await customAuthStateProvider.UpdateAuthenticationState(null);
+		await localstore.RemoveItemAsync("UserId");
+		await localstore.ClearAsync();
 		NavManager.NavigateTo("/");
+
 	}
 }

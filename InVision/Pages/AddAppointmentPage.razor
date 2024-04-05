@@ -3,6 +3,7 @@
 @using InVision.Data.Model
 @inject InVision.Data.Service.CalendarService calendarService
 @inject ILocalStorageService localstore
+@attribute [Authorize]
 
 <RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
     <div class="row" style="margin-bottom: 16px">
@@ -78,13 +79,21 @@
         Console.WriteLine("Color changed");
     }
 
-
     protected override void OnParametersSet()
     {
         model.Text = Text;
         model.Start = Start;
         model.End = End;
-        model.Color = Color;
+        //Added a nullcheck because the default color is null and the appointment isn't saved if the color is null
+        if (Color != null)
+        {
+            model.Color = Color;
+        }
+        else
+        {
+            //If the default color is picked it will be the signature website color 
+            model.Color = "3700b3";
+        }
     }
 
     async void OnSubmit(Appointment model)

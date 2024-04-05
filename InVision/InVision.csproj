@@ -8,8 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
-=======
     <Compile Remove="NewFolder\**" />
     <Content Remove="NewFolder\**" />
     <EmbeddedResource Remove="NewFolder\**" />
@@ -17,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
->>>>>>> parent of 56cfa6c (merge 1)
     <None Include="wwwroot\Images\user.png" />
   </ItemGroup>
 

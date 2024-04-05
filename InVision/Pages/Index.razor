@@ -11,6 +11,7 @@
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <AuthorizeView>
     <RadzenCard Style="margin-right:32px">
@@ -31,12 +32,19 @@
                         </RadzenStack>
 =======
 <RadzenCard>
+=======
+<RadzenCard Style="margin-right:32px">
+>>>>>>> parent of 4d13f40 (merge fixes)
     <RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
         <RadzenIcon Icon="dashboard" class="rz-mr-1" /><b>Dashboard</b>
     </RadzenText>
     <br />
     <RadzenRow Class="custom-row-spacing">
+<<<<<<< HEAD
         <RadzenColumn Size="4">
+=======
+        <RadzenColumn Size="12" SizeXS="12" SizeSM="12" SizeMD="6" SizeLG="6" SizeXL="6">
+>>>>>>> parent of 4d13f40 (merge fixes)
             <RadzenCard>
                 <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
                     <RadzenImage Path="@imagepath" Style="width:6rem; height: 6rem; border-radius: 50%;" />
@@ -45,12 +53,17 @@
                         <RadzenText TextStyle="TextStyle.Body1"><b>@user?.Name</b></RadzenText>
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">E-Mail</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1"><b>@user?.Email</b></RadzenText>
+<<<<<<< HEAD
 >>>>>>> parent of 56cfa6c (merge 1)
+=======
+>>>>>>> parent of 4d13f40 (merge fixes)
                     </RadzenStack>
-                </RadzenCard>
-            </RadzenColumn>
-        </RadzenRow>
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         <RadzenRow Class="custom-row-spacing" Style="height:30vh; margin-bottom: 2rem">
             <RadzenColumn Size="4">
@@ -71,79 +84,89 @@
                     </RadzenChart>
                 </RadzenCard>
             </RadzenColumn>
+=======
+    <RadzenRow Class="custom-row-spacing" Style="height:30vh; margin-bottom: 2rem">
+        <RadzenColumn Size="4">
+            <RadzenCard Style="height:70%">
+                <h6>Open Items</h6>
+                <h2 style="color:red">@sumOpenItemsAllBoards</h2>
+                <RadzenChart Style="height:80%">
+                    <RadzenColumnSeries Fill="red" Data="@kboards" CategoryProperty="KboardName" Title="Open Items" LineType="LineType.Dashed" ValueProperty="SumOpenItems">
+                        <RadzenSeriesDataLabels Visible="false" />
+                    </RadzenColumnSeries>
+                    <RadzenColumnOptions Radius="5" />
+                    <RadzenValueAxis>
+                        <RadzenGridLines Visible="false" />
+                        <RadzenCategoryAxis Visible="false" />
+                        <RadzenValueAxis Visible="false" />
+                        <RadzenLegend Visible="false" />
+                    </RadzenValueAxis>
+                </RadzenChart>
+            </RadzenCard>
+        </RadzenColumn>
+>>>>>>> parent of 4d13f40 (merge fixes)
 
-            <RadzenColumn Size="12" SizeXS="12" SizeSM="12" SizeMD="4" SizeLG="4" SizeXL="4">
-                <RadzenCard>
-                    <h6>Closed Items</h6>
-                    <h2 style="color:green">@sumClosedItemsAllBoards</h2>
+        <RadzenColumn Size="12" SizeXS="12" SizeSM="12" SizeMD="4" SizeLG="4" SizeXL="4">
+            <RadzenCard>
+                <h6>Closed Items</h6>
+                <h2 style="color:green">@sumClosedItemsAllBoards</h2>
 
-                    <RadzenChart Style="height:80%">
-                        <RadzenColumnSeries Fill="green" Data="@kboards" CategoryProperty="KboardName" Title="Closed Items" LineType="LineType.Dashed" ValueProperty="SumClosedItmes">
-                            <RadzenSeriesDataLabels Visible="false" />
-                        </RadzenColumnSeries>
-                        <RadzenColumnOptions Radius="5" />
-                        <RadzenValueAxis Visible="false">
-                            <RadzenGridLines Visible="false" />
-                            <RadzenCategoryAxis Visible="false" />
-                            <RadzenValueAxis Visible="false" />
-                            <RadzenLegend Visible="false" />
-                        </RadzenValueAxis>
-                    </RadzenChart>
-                </RadzenCard>
-            </RadzenColumn>
+                <RadzenChart Style="height:80%">
+                    <RadzenColumnSeries Fill="green" Data="@kboards" CategoryProperty="KboardName" Title="Closed Items" LineType="LineType.Dashed" ValueProperty="SumClosedItmes">
+                        <RadzenSeriesDataLabels Visible="false" />
+                    </RadzenColumnSeries>
+                    <RadzenColumnOptions Radius="5" />
+                    <RadzenValueAxis Visible="false">
+                        <RadzenGridLines Visible="false" />
+                        <RadzenCategoryAxis Visible="false" />
+                        <RadzenValueAxis Visible="false" />
+                        <RadzenLegend Visible="false" />
+                    </RadzenValueAxis>
+                </RadzenChart>
+            </RadzenCard>
+        </RadzenColumn>
 
-            <RadzenColumn Size="12" SizeXS="12" SizeSM="12" SizeMD="4" SizeLG="4" SizeXL="4">
-                <RadzenCard Style="height:100%">
-                    <h6>Progress</h6>
-                    <RadzenArcGauge Style="width: 100%; height: 120%">
-                        <RadzenArcGaugeScale Min="0" Max="100" Radius="1" Margin="0">
-                            <RadzenArcGaugeScaleValue Fill="#3700b3" Value=@sumAllItemsAllBoardsPrecentage ShowValue=showValue>
-                                <Template Context="pointer">
-                                    <h4>
-                                        @sumAllItemsAllBoardsPrecentage.ToString("0.00") <sup>%</sup>
-                                    </h4>
-                                </Template>
-                            </RadzenArcGaugeScaleValue>
-                        </RadzenArcGaugeScale>
-                    </RadzenArcGauge>
-                </RadzenCard>
-            </RadzenColumn>
-        </RadzenRow>
+        <RadzenColumn Size="12" SizeXS="12" SizeSM="12" SizeMD="4" SizeLG="4" SizeXL="4">
+            <RadzenCard Style="height:100%">
+                <h6>Progress</h6>
+                <RadzenArcGauge Style="width: 100%; height: 120%">
+                    <RadzenArcGaugeScale Min="0" Max="100" Radius="1" Margin="0">
+                        <RadzenArcGaugeScaleValue Fill="#3700b3" Value=@sumAllItemsAllBoardsPrecentage ShowValue=showValue>
+                            <Template Context="pointer">
+                                <h4>
+                                    @sumAllItemsAllBoardsPrecentage.Value.ToString("0.00") <sup>%</sup>
+                                </h4>
+                            </Template>
+                        </RadzenArcGaugeScaleValue>
+                    </RadzenArcGaugeScale>
+                </RadzenArcGauge>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
 
-        <RadzenRow Class="custom-row-spacing">
-            <RadzenColumn Size="12">
-                <RadzenCard>
-                    <h6>Appointments this Month</h6>
-                    @if (windowWidth >= 1024)
-                    {
-                        <RadzenTimeline Orientation="Orientation.Horizontal">
-                            <Items>
-                                @foreach (var appointment in appointmentsThisMonth)
-                                {
-                                    <RadzenTimelineItem PointStyle="PointStyle.Primary">
-                                        <LabelContent>
-                                            @if (appointment.Start.Date != appointment.End.Date)
+    <RadzenRow Class="custom-row-spacing">
+        <RadzenColumn Size="12">
+            <RadzenCard>
+                <h6>Appointments this Month</h6>
+                @if (windowWidth >= 1024)
+                {
+                    <RadzenTimeline Orientation="Orientation.Horizontal">
+                        <Items>
+                            @foreach (var appointment in appointmentsThisMonth)
+                            {
+                                <RadzenTimelineItem PointStyle="PointStyle.Primary">
+                                    <LabelContent>
+                                        @if (appointment.Start.Date != appointment.End.Date)
+                                        {
+                                            @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
                                             {
-                                                @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
-                                                {
-                                                    <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
-                                                }
-                                                else
-                                                {
-                                                    <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@($"{appointment.Start.ToString("dd.MM.yy")} - {appointment.End.ToString("dd.MM.yy")}")</RadzenText>
-                                                }
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
                                             }
                                             else
                                             {
-                                                @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
-                                                {
-                                                    <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
-                                                }
-                                                else
-                                                {
-                                                    <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@appointment.Start.ToString("dd.MM.yy")</RadzenText>
-                                                }
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@($"{appointment.Start.ToString("dd.MM.yy")} - {appointment.End.ToString("dd.MM.yy")}")</RadzenText>
                                             }
+<<<<<<< HEAD
                                         </LabelContent>
                                         <ChildContent>
                                             @appointment.Text
@@ -269,41 +292,73 @@
                                     <RadzenTimelineItem PointStyle="PointStyle.Primary">
                                         <LabelContent>
                                             @if (appointment.Start.Date != appointment.End.Date)
+=======
+                                        }
+                                        else
+                                        {
+                                            @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
+>>>>>>> parent of 4d13f40 (merge fixes)
                                             {
-                                                @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
-                                                {
-                                                    <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
-                                                }
-                                                else
-                                                {
-                                                    <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@($"{appointment.Start.ToString("dd.MM.yy")} - {appointment.End.ToString("dd.MM.yy")}")</RadzenText>
-                                                }
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
                                             }
                                             else
                                             {
-                                                @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
-                                                {
-                                                    <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
-                                                }
-                                                else
-                                                {
-                                                    <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@appointment.Start.ToString("dd.MM.yy")</RadzenText>
-                                                }
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@appointment.Start.ToString("dd.MM.yy")</RadzenText>
                                             }
-                                        </LabelContent>
-                                        <ChildContent>
-                                            @appointment.Text
-                                        </ChildContent>
-                                    </RadzenTimelineItem>
-                                }
-                            </Items>
-                        </RadzenTimeline>
-                    }
-
-                </RadzenCard>
-            </RadzenColumn>
-        </RadzenRow>
-    </RadzenCard>
+                                        }
+                                    </LabelContent>
+                                    <ChildContent>
+                                        @appointment.Text
+                                    </ChildContent>
+                                </RadzenTimelineItem>
+                            }
+                        </Items>
+                    </RadzenTimeline>
+                }
+                else{
+                
+                    <RadzenTimeline Orientation="Orientation.Vertical">
+                        <Items>
+                            @foreach (var appointment in appointmentsThisMonth)
+                            {
+                                <RadzenTimelineItem PointStyle="PointStyle.Primary">
+                                    <LabelContent>
+                                        @if (appointment.Start.Date != appointment.End.Date)
+                                        {
+                                            @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
+                                            }
+                                            else
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@($"{appointment.Start.ToString("dd.MM.yy")} - {appointment.End.ToString("dd.MM.yy")}")</RadzenText>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
+                                            }
+                                            else
+                                            {
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@appointment.Start.ToString("dd.MM.yy")</RadzenText>
+                                            }
+                                        }
+                                    </LabelContent>
+                                    <ChildContent>
+                                        @appointment.Text
+                                    </ChildContent>
+                                </RadzenTimelineItem>
+                            }
+                        </Items>
+                    </RadzenTimeline>
+                }
+                    
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenCard>
 </AuthorizeView>
 
 
@@ -331,13 +386,17 @@
         public int SumClosedItmes { get; set; }
     }
 
-    List<KboardItem> kboards = new List<KboardItem> { };
+    List<KboardItem> kboards = new List<KboardItem>{};
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         //string userId = HttpContextAccessor.HttpContext.Session.GetString("UserId");
         string userId = await localstore.GetItemAsync<string>("UserId");
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+       
+>>>>>>> parent of 4d13f40 (merge fixes)
         //appointmentsThisMonth = await calendarservice.GetAllAppointmentsAsync(userId);
 =======
         appointmentsThisMonth = await calendarservice.GetAllAppointmentsAsync(userId);
@@ -364,7 +423,7 @@
                 foreach (TodoItem i in k.Items)
                 {
                     showValue = true;
-                    if (i.State != 2)
+                    if(i.State != 2)
                     {
                         board.SumOpenItems++;
                     }

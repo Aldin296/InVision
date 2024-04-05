@@ -7,7 +7,18 @@
 @inject InVision.Data.Service.CalendarService calendarService
 @inject Blazored.LocalStorage.ILocalStorageService localstore
 
+@if (appointments == null)
+{
+    <div class="loading-overlay">
+        <div class="loader"></div>
+    </div>
 
+}
+else
+{
+
+
+}
 
 <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
                  TextProperty="Text" SelectedIndex="2" SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender>
@@ -22,11 +33,12 @@
     Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
     string userId = "";
 
-    List<Appointment> appointments = new List<Appointment>{};
+    List<Appointment>? appointments;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         userId = await localstore.GetItemAsync<string>("UserId");
+        await Task.Delay(5000);
         appointments = await calendarService.GetAllAppointmentsAsync(userId);
         if (firstRender)
         {
@@ -50,10 +62,10 @@
         {
             Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
                 new Dictionary<string, object>
-                {
+                        {
                     { "Start", args.Start },
                     { "End", args.End }
-                });
+                        });
 
             if (data != null)
             {
@@ -84,11 +96,11 @@
             args.Data.End = data.End;
             args.Data.Text = data.Text;
             args.Data.Color = data.Color;
-            if(data.Delete == true)
+            if (data.Delete == true)
             {
                 appointments.Remove(data);
                 Console.WriteLine("Appointment gelöscht");
-                StateHasChanged(); 
+                StateHasChanged();
             }
         }
         StateHasChanged();
@@ -109,3 +121,4 @@
         }
     }
 }
+

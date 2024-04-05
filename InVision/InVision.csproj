@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Compile Remove="NewFolder\**" />
+    <Compile Remove="wwwroot\upload\**" />
     <Content Remove="NewFolder\**" />
+    <Content Remove="wwwroot\upload\**" />
     <EmbeddedResource Remove="NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\upload\**" />
     <None Remove="NewFolder\**" />
+    <None Remove="wwwroot\upload\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,11 +34,6 @@
     <None Update="user.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\upload\image\" />
-    <Folder Include="wwwroot\upload\" />
   </ItemGroup>
 
 </Project>

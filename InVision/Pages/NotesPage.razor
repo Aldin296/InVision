@@ -19,34 +19,31 @@
     </HeaderTemplate>
     <ChildContent>
         <hr />
-
-        <RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" Execute="@OnExecute">
-            <RadzenHtmlEditorUndo />
-            <RadzenHtmlEditorRedo />
-            <RadzenHtmlEditorSeparator />
-            <RadzenHtmlEditorBold />
-            <RadzenHtmlEditorItalic />
-            <RadzenHtmlEditorUnderline />
-            <RadzenHtmlEditorStrikeThrough />
-            <RadzenHtmlEditorAlignLeft/>
-            <RadzenHtmlEditorAlignCenter/>
-            <RadzenHtmlEditorAlignRight />
-            <RadzenHtmlEditorJustify />
-            <RadzenHtmlEditorUnorderedList />
-            <RadzenHtmlEditorOrderedList />
-            <RadzenHtmlEditorSeparator />
-            <RadzenHtmlEditorColor />
-            <RadzenHtmlEditorBackground />
-            <RadzenHtmlEditorRemoveFormat />
-            <RadzenHtmlEditorSubscript />
-            <RadzenHtmlEditorSuperscript />
-            <RadzenHtmlEditorSource/>
-            <RadzenHtmlEditorLink/>
-            <RadzenHtmlEditorFontSize/>
-            <RadzenHtmlEditorCustomTool CommandName="LinkDiffrentNote" Icon="control_point" />
-
-
-        </RadzenHtmlEditor>
+<RadzenHtmlEditor @bind-Value=@note.Content style="height: 80vh;" Execute="@OnExecute">
+    <RadzenHtmlEditorUndo />
+    <RadzenHtmlEditorRedo />
+    <RadzenHtmlEditorSeparator />
+    <RadzenHtmlEditorBold />
+    <RadzenHtmlEditorItalic />
+    <RadzenHtmlEditorUnderline />
+    <RadzenHtmlEditorStrikeThrough />
+    <RadzenHtmlEditorAlignLeft/>
+    <RadzenHtmlEditorAlignCenter/>
+    <RadzenHtmlEditorAlignRight />
+    <RadzenHtmlEditorJustify />
+    <RadzenHtmlEditorUnorderedList />
+    <RadzenHtmlEditorOrderedList />
+    <RadzenHtmlEditorSeparator />
+    <RadzenHtmlEditorColor />
+    <RadzenHtmlEditorBackground />
+    <RadzenHtmlEditorRemoveFormat />
+    <RadzenHtmlEditorSubscript />
+    <RadzenHtmlEditorSuperscript />
+    <RadzenHtmlEditorSource/>
+    <RadzenHtmlEditorLink/>
+    <RadzenHtmlEditorFontSize/>
+    <RadzenHtmlEditorCustomTool CommandName="LinkDiffrentNote" Icon="control_point" />
+</RadzenHtmlEditor>
     </ChildContent>
 </RadzenPanel>
 
@@ -114,11 +111,6 @@
     {
         await DialogService.OpenSideAsync<IconSelectDialog>("",options: new SideDialogOptions { CloseDialogOnOverlayClick = true, Position = DialogPosition.Right, ShowMask = true, });
     }
-
-
-
-
-
 
     async void IDisposable.Dispose()
     {

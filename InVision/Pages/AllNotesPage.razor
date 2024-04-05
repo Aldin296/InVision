@@ -14,11 +14,13 @@
 
 @if (filteredNotes == null)
 {
-    <p>Loading...</p>
+    <div class="loading-overlay">
+        <div class="loader"></div>
+    </div>
 }
 else
 {
-    <RadzenPanel>
+    <RadzenPanel Style="margin-right:32px">
         <HeaderTemplate>
             <RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
                 <RadzenIcon Icon="description" class="rz-mr-1" /><b>Notes</b>
@@ -77,9 +79,8 @@ else
         {
             if (note.Title != null)
             {
-                //notes.Add(note);
-                await NoteService.CreateNote(userid,note);
-                StateHasChanged();
+                notes.Add(note);
+                //StateHasChanged();
             }
             else
             {
@@ -101,7 +102,6 @@ else
 
     void ShowContextMenuWithItems(MouseEventArgs args, Note note)
     {
-
         ContextMenuService.Open(args,
             new List<ContextMenuItem> {
                 new ContextMenuItem(){ Text = "Delete", Value = 1, Icon = "delete" },},

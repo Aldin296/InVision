@@ -71,8 +71,6 @@
         bool loginSuccessful = await userservice.LoginUser(emailValue, passwordValue);
         if (loginSuccessful)
         {
-
-
             Console.WriteLine("Angemeldet");
             user = await userservice.GetUserByEmail(emailValue);
             //HttpContextAccessor.HttpContext.Session.SetString("UserId", user.Id.ToString());

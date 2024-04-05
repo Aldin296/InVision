@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <Compile Remove="NewFolder\**" />
+    <Content Remove="NewFolder\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <None Remove="NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+>>>>>>> parent of 56cfa6c (merge 1)
     <None Include="wwwroot\Images\user.png" />
   </ItemGroup>
 
@@ -26,6 +36,11 @@
     <None Update="user.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\upload\image\" />
+    <Folder Include="wwwroot\upload\" />
   </ItemGroup>
 
 </Project>

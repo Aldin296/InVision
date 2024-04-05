@@ -10,12 +10,17 @@
 @inject EmailService emailService
 @attribute [Authorize]
 
+<<<<<<< HEAD
 @if (appointments == null)
 {
     <div class="loading-overlay">
         <div class="loader"></div>
     </div>
 }
+=======
+
+
+>>>>>>> parent of 56cfa6c (merge 1)
 <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
                  TextProperty="Text" SelectedIndex="2" SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender>
     <RadzenDayView />
@@ -31,8 +36,12 @@
     Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
     string userId = "";
 
+<<<<<<< HEAD
     List<Appointment> appointments = new List<Appointment>() { };
 
+=======
+    List<Appointment> appointments = new List<Appointment>{};
+>>>>>>> parent of 56cfa6c (merge 1)
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -60,10 +69,17 @@
         {
             Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
                 new Dictionary<string, object>
+<<<<<<< HEAD
                                         {
                     { "Start", args.Start },
                     { "End", args.End }
                                         });
+=======
+                {
+                    { "Start", args.Start },
+                    { "End", args.End }
+                });
+>>>>>>> parent of 56cfa6c (merge 1)
 
             if (data != null)
             {
@@ -94,12 +110,21 @@
             args.Data.End = data.End;
             args.Data.Text = data.Text;
             args.Data.Color = data.Color;
+<<<<<<< HEAD
             /*if (data.Delete == true)
             {
                 appointments.Remove(data);
                 Console.WriteLine("Appointment gelöscht");
                 StateHasChanged();
             }*/
+=======
+            if(data.Delete == true)
+            {
+                appointments.Remove(data);
+                Console.WriteLine("Appointment gelöscht");
+                StateHasChanged(); 
+            }
+>>>>>>> parent of 56cfa6c (merge 1)
         }
         StateHasChanged();
         await scheduler.Reload();
@@ -118,4 +143,8 @@
 
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> parent of 56cfa6c (merge 1)

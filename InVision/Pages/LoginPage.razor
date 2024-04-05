@@ -73,7 +73,13 @@
         bool loginSuccessful = await userservice.LoginUser(emailValue, passwordValue);
         if (loginSuccessful)
         {
+<<<<<<< HEAD
             Console.WriteLine("Valid");
+=======
+
+
+            Console.WriteLine("Angemeldet");
+>>>>>>> parent of 56cfa6c (merge 1)
             user = await userservice.GetUserByEmail(emailValue);
             await localstore.SetItemAsync("UserId", user.Id);
             await customAuthStateProvider.UpdateAuthenticationState(new UserSession

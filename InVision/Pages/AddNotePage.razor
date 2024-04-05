@@ -51,8 +51,8 @@
 
 	async void OnSubmit(Note model)
 	{
-		userid = await localstore.GetItemAsync<string>("UserId");
-		await NoteService.CreateNote(userid,model);
+		//userid = await localstore.GetItemAsync<string>("UserId");
+		//await NoteService.CreateNote(userid,model);
 		DialogService.Close(model);
 		Console.WriteLine("Valid submit");
 	}

@@ -12,17 +12,20 @@
 
 @if (appointments == null)
 {
-    <div class="loading-overlay">
-        <div class="loader"></div>
-    </div>
+	<div class="loading-overlay">
+		<div class="loader"></div>
+	</div>
+}
+else{
+<RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
+                 TextProperty="Text" SelectedIndex="2" SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender>
+    <RadzenDayView />
+    <RadzenWeekView />
+    <RadzenMonthView />
+    <RadzenYearView />
+</RadzenScheduler>
+}
 
-	<RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px;" TItem="Appointment" Data=@appointments StartProperty="Start" EndProperty="End"
-					 TextProperty="Text" SelectedIndex="2" SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender>
-		<RadzenDayView />
-		<RadzenWeekView />
-		<RadzenMonthView />
-		<RadzenYearView />
-	</RadzenScheduler>
 
 @code {
 	RadzenScheduler<Appointment> scheduler;

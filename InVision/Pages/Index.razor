@@ -9,7 +9,6 @@
 @inject UserService userservice
 @inject CalendarService calendarservice
 @inject Blazored.LocalStorage.ILocalStorageService localstore
-@inject IJSRuntime JSRuntime
 
 <RadzenCard Style="margin-right:32px">
     <RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
@@ -32,12 +31,12 @@
         </RadzenColumn>
     </RadzenRow>
 
-    <RadzenRow Class="custom-row-spacing" Style="height:30vh; margin-bottom: 2rem">
-        <RadzenColumn Size="4">
-            <RadzenCard Style="height:70%">
+    <RadzenRow Class="custom-row-spacing">
+        <RadzenColumn Size="12" SizeXS="12" SizeSM="12" SizeMD="4" SizeLG="4" SizeXL="4">
+            <RadzenCard>
                 <h6>Open Items</h6>
                 <h2 style="color:red">@sumOpenItemsAllBoards</h2>
-                <RadzenChart Style="height:80%">
+                <RadzenChart Style="height: 100%; width: 100%">
                     <RadzenColumnSeries Fill="red" Data="@kboards" CategoryProperty="KboardName" Title="Open Items" LineType="LineType.Dashed" ValueProperty="SumOpenItems">
                         <RadzenSeriesDataLabels Visible="false" />
                     </RadzenColumnSeries>
@@ -56,8 +55,7 @@
             <RadzenCard>
                 <h6>Closed Items</h6>
                 <h2 style="color:green">@sumClosedItemsAllBoards</h2>
-
-                <RadzenChart Style="height:80%">
+                <RadzenChart Style="height: 100%; width: 100%">
                     <RadzenColumnSeries Fill="green" Data="@kboards" CategoryProperty="KboardName" Title="Closed Items" LineType="LineType.Dashed" ValueProperty="SumClosedItmes">
                         <RadzenSeriesDataLabels Visible="false" />
                     </RadzenColumnSeries>
@@ -80,7 +78,6 @@
                         <RadzenArcGaugeScaleValue Fill="#3700b3" Value=@sumAllItemsAllBoardsPrecentage ShowValue=showValue>
                             <Template Context="pointer">
                                 <h4>
-                                    @sumAllItemsAllBoardsPrecentage.Value.ToString("0.00") <sup>%</sup>
                                 </h4>
                             </Template>
                         </RadzenArcGaugeScaleValue>
@@ -94,8 +91,6 @@
         <RadzenColumn Size="12">
             <RadzenCard>
                 <h6>Appointments this Month</h6>
-                @if (windowWidth >= 1024)
-                {
                     <RadzenTimeline Orientation="Orientation.Horizontal">
                         <Items>
                             @foreach (var appointment in appointmentsThisMonth)
@@ -131,53 +126,11 @@
                                 </RadzenTimelineItem>
                             }
                         </Items>
-                    </RadzenTimeline>
-                }
-                else{
-                
-                    <RadzenTimeline Orientation="Orientation.Vertical">
-                        <Items>
-                            @foreach (var appointment in appointmentsThisMonth)
-                            {
-                                <RadzenTimelineItem PointStyle="PointStyle.Primary">
-                                    <LabelContent>
-                                        @if (appointment.Start.Date != appointment.End.Date)
-                                        {
-                                            @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
-                                            {
-                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
-                                            }
-                                            else
-                                            {
-                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@($"{appointment.Start.ToString("dd.MM.yy")} - {appointment.End.ToString("dd.MM.yy")}")</RadzenText>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            @if (appointment.Start.TimeOfDay != TimeSpan.Zero)
-                                            {
-                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@((MarkupString)$"{appointment.Start.ToString("dd.MM.yy")}<br>{appointment.Start.ToString("HH:mm")} - {appointment.End.ToString("HH:mm")}")</RadzenText>
-                                            }
-                                            else
-                                            {
-                                                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-m-0">@appointment.Start.ToString("dd.MM.yy")</RadzenText>
-                                            }
-                                        }
-                                    </LabelContent>
-                                    <ChildContent>
-                                        @appointment.Text
-                                    </ChildContent>
-                                </RadzenTimelineItem>
-                            }
-                        </Items>
-                    </RadzenTimeline>
-                }
-                    
+                    </RadzenTimeline>   
             </RadzenCard>
         </RadzenColumn>
     </RadzenRow>
 </RadzenCard>
-</AuthorizeView>
 
 @code {
 
@@ -221,14 +174,19 @@
         if (!string.IsNullOrEmpty(userId))
         {
             user = await userservice.GetUserById(userId);
+            
             foreach (Appointment a in user.Appointments)
             {
                 //Add every upcoming appointment this month
+                //doesnt work if the user doesnt have any appointments
+                
                 if (a.Start.Month == currentMonth)
                 {
                     appointmentsThisMonth.Add(a);
                 }
+                
             }
+            
             foreach (KBoard k in user.KBoards)
             {
                 KboardItem board = new KboardItem
@@ -278,8 +236,6 @@
             {
 
                 StateHasChanged();
-                await JSRuntime.InvokeVoidAsync("blazorWindowSize.registerResizeListener", DotNetObjectReference.Create(this));
-                await UpdateWindowSize();
             }
 
 
@@ -289,38 +245,4 @@
             // Handle the case when the UserId is not in the session
         }
     }
-
-    int windowWidth;
-    int windowHeight;
-
-    [JSInvokable]
-    public void OnResize(int width, int height)
-    {
-        windowWidth = width;
-        windowHeight = height;
-        StateHasChanged();
-    }
-
-    async Task UpdateWindowSize()
-    {
-        windowWidth = await JSRuntime.InvokeAsync<int>("blazorWindowSize.getWidth");
-        windowHeight = await JSRuntime.InvokeAsync<int>("blazorWindowSize.getHeight");
-        StateHasChanged();
-    }
 }
-
-<script>
-    window.blazorWindowSize = {
-        getWidth: function () {
-            return window.innerWidth;
-        },
-        getHeight: function () {
-            return window.innerHeight;
-        },
-        registerResizeListener: function (dotnetObjRef) {
-            window.addEventListener('resize', function () {
-                dotnetObjRef.invokeMethodAsync('OnResize', window.innerWidth, window.innerHeight);
-            });
-        }
-    };
-</script>
